@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">rust-keylock</string>
+    <string name="welcome">Welcome to rust-keylock</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

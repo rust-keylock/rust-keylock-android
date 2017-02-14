@@ -1,0 +1,11 @@
+/bin/
+/gen/
+/.externalToolBuilders/
+/.settings/
+/.classpath
+/.project
+/build_rust.sh
+/proguard-project.txt
+/project.properties
+/target/
+/libs/armeabi/librustkeylockandroid.so

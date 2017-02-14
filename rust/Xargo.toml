@@ -1,0 +1,3 @@
+[target.arm-linux-androideabi.dependencies.std]
+# Uncomment if building with nightly
+#features = ["jemalloc"]
