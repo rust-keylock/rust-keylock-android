@@ -65,7 +65,15 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
 			numberText.setText("");
 			numberText.setError("Required Field");
 		} else {
-			InterfaceWithRust.INSTANCE.set_password(pass, new Integer(numString));
+			try {
+				int num = new Integer(numString);
+				InterfaceWithRust.INSTANCE.set_password(pass, num);
+			} catch (Exception error) {
+				String message = "Incorrect number";
+				Log.e(TAG, message, error);
+				numberText.setText("");
+				numberText.setError(message);
+			}
 		}
 
 	}
