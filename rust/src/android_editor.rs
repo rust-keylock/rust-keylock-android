@@ -1,4 +1,4 @@
-use rust_keylock::{ Entry, Editor, UserSelection, Menu };
+use rust_keylock::{ Editor, UserSelection, Menu, Safe };
 use super::{StringCallback, ShowEntryCallback, ShowEntriesSetCallback, LogCallback, logger, JavaEntriesSet, JavaEntry};
 use std::sync::mpsc::Receiver;
 
@@ -48,27 +48,27 @@ impl Editor for AndroidImpl {
 		user_selection
 	}
 
-	fn show_menu(&self, menu: &Menu, entries: &[Entry]) -> UserSelection {
-		debug!("Opening menu '{:?}' with entries size {}", menu, entries.len());
+	fn show_menu(&self, menu: &Menu, safe: &Safe) -> UserSelection {
+		debug!("Opening menu '{:?}' with entries size {}", menu, safe.get_entries().len());
 
 		match menu {
 			&Menu::Main => (self.show_menu_cb)(super::to_java_string(Menu::Main.get_name())),
 			&Menu::EntriesList => {
-					let java_entries_set = if entries.len() == 0 {
+					let java_entries_set = if safe.get_entries().len() == 0 {
 					JavaEntriesSet::with_nulls()
 				} else {
-					JavaEntriesSet::from(entries)
+					JavaEntriesSet::from(safe.get_entries())
 				};
 
 				(self.show_entries_set_cb)(java_entries_set);
 			},
 			&Menu::ShowEntry(index) => {
-				let ref entry = entries[index];
-				(self.show_entry_cb)(Box::new(JavaEntry::new(entry)), index as i32, false, false);
+				let entry = safe.get_entry_decrypted(index);
+				(self.show_entry_cb)(Box::new(JavaEntry::new(&entry)), index as i32, false, false);
 			},
 			&Menu::DeleteEntry(index) => {
-				let ref entry = entries[index];
-				(self.show_entry_cb)(Box::new(JavaEntry::new(entry)), index as i32, false, true);
+				let ref entry = safe.get_entry(index);
+				(self.show_entry_cb)(Box::new(JavaEntry::new(&entry)), index as i32, false, true);
 			},
 			&Menu::NewEntry => {
 				let empty_entry = JavaEntry::empty();
@@ -76,7 +76,7 @@ impl Editor for AndroidImpl {
 				(self.show_entry_cb)(Box::new(empty_entry), -1, true, false);
 			},
 			&Menu::EditEntry(index) => {
-				let ref selected_entry = entries[index];
+				let ref selected_entry = safe.get_entry_decrypted(index);
 				(self.show_entry_cb)(Box::new(JavaEntry::new(selected_entry)), index as i32, true, false);
 			},
 			&Menu::ExportEntries => {
