@@ -1,7 +1,6 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import java.io.File;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,12 +11,10 @@ import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +24,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SelectPath extends Fragment implements BackButtonHandler, SaveStateHandler, OnClickListener {
 	private static final long serialVersionUID = 1503736744138963548L;
 	private final String TAG = getClass().getName();
 	private boolean export;
 	private transient EditText editPath;
+	private transient EditText editFileName;
 	private transient EditText editPassword;
 	private transient EditText editNumber;
+	private String workingDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+	private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
+	private int FRAGMENT_CODE_DIR = 11;
+	private int FRAGMENT_CODE_FILE = 33;
 
 	public SelectPath() {
 	}
@@ -45,9 +46,17 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	}
 
 	@Override
+	public void onStart() {
+		if(editPath != null && editFileName != null) {
+			editPath.setText(workingDirectoryPath);
+			editFileName .setText(filename);
+		}
+		super.onStart();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_select_path, container, false);
-
 		TextView title = (TextView) rootView.findViewById(R.id.selectPathLabel);
 		if (export) {
 			title.setText("Where to export?");
@@ -57,13 +66,18 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 
 		ImageButton bib = (ImageButton) rootView.findViewById(R.id.browseButton);
 		bib.setOnClickListener(this);
+		ImageButton bfb = (ImageButton) rootView.findViewById(R.id.browseFileButton);
+		bfb.setOnClickListener(this);
+		bfb.setVisibility(export ? View.GONE : View.VISIBLE);
 
 		EditText editPath = (EditText) rootView.findViewById(R.id.editCustomPath);
-		File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmm");
-		String proposedFilename = sdf.format(new Date()) + "_rust_keylock.exported";
-		editPath.setText(downloads.getAbsolutePath() + File.separator + proposedFilename);
+		editPath.setText(workingDirectoryPath);
 		this.editPath = editPath;
+
+		EditText editFilename = (EditText) rootView.findViewById(R.id.editFileName);
+		editFilename.setText(filename);
+		editFilename.setEnabled(export);
+		this.editFileName = editFilename;
 
 		TextView editPasswordLabel = (TextView) rootView.findViewById(R.id.selectPathPasswordLabel);
 		editPasswordLabel.setVisibility(export ? View.GONE : View.VISIBLE);
@@ -86,22 +100,21 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.browseButton) {
-			try {
-				Log.d(TAG, "Selecting a file");
-				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-				intent.setType("*/*");
-				intent.addCategory(Intent.CATEGORY_OPENABLE);
-				intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-				startActivityForResult(intent, 11);
-			} catch (RuntimeException error) {
-				Log.e(TAG, "Could not set Intent for choosing directory", error);
-				Toast toast = Toast.makeText(getActivity(),
-						"Could not locate a File Explorer application in the device. Please consider installing one.",
-						Toast.LENGTH_LONG);
-				toast.show();
-			}
+			FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+			ft.addToBackStack(this.getClass().getName());
+			DirectorySelector ds = new DirectorySelector();
+			ds.setTargetFragment(this, FRAGMENT_CODE_DIR);
+			ft.replace(R.id.container, ds);
+			ft.commit();
+		} else if (view.getId() == R.id.browseFileButton) {
+			FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+			ft.addToBackStack(this.getClass().getName());
+			FileSelector fs = new FileSelector(workingDirectoryPath);
+			fs.setTargetFragment(this, FRAGMENT_CODE_FILE);
+			ft.replace(R.id.container, fs);
+			ft.commit();
 		} else if (view.getId() == R.id.setPathButton) {
-			String path = editPath.getText().toString();
+			String path = editPath.getText().toString() + File.separator + editFileName.getText().toString();
 			String pwd = !export ? editPassword.getText().toString() : "DUMMY";
 			String num = !export ? editNumber.getText().toString() : "-1";
 			Log.d(TAG, (export ? "Exporting" : "Importing") + ". Path: " + path);
@@ -119,54 +132,17 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		if (intent != null) {
-			String retrievedPath = intent.getDataString();
-			String realPath = null;
-			// Try retrieving the path form content (Android Uri)
-			try {
-				Uri androidUri = Uri.parse(retrievedPath);
-				realPath = getRealPathFromUri(androidUri);
-				File f = new File(realPath);
-				Log.d(TAG, "Selected path from Android Uri: " + f.getAbsolutePath());
-				editPath.setText(f.getAbsolutePath());
-			} catch (Exception error1) {
-				// ignore
-			}
-			// If the path is not retrieved yet, try retrieving it from Java URI
-			if (realPath == null) {
-				try {
-					URI javaUri = new URI(retrievedPath);
-					File f = new File(javaUri);
-					realPath = f.getAbsolutePath();
-					Log.d(TAG, "Selected path from Java URI: " + realPath);
-					editPath.setText(realPath);
-				} catch (Exception e) {
-					// ignore
-				}
-			}
-			// If the path is still not retrieved yet, change the layout for
-			// manual path input
-			if (realPath == null) {
-				Log.e(TAG, "The path is not valid");
-				Toast toast = Toast.makeText(getActivity(), "The path is not valid", Toast.LENGTH_LONG);
-				toast.show();
-			}
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == FRAGMENT_CODE_DIR) {
+			workingDirectoryPath = data.getStringExtra("directory");
+			editPath.setText(workingDirectoryPath);
+			filename = "";
+			editFileName.setText(filename);
+		} else if (requestCode == FRAGMENT_CODE_FILE) {
+			filename = data.getStringExtra("file");
+			editFileName.setText(filename);
 		}
-	}
-
-	public String getRealPathFromUri(Uri contentUri) {
-		String res = null;
-		String[] proj = { MediaStore.MediaColumns.DATA };
-		Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-		if (cursor.moveToFirst()) {
-			int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-			res = cursor.getString(column_index);
-		}
-		cursor.close();
-		return res;
 	}
 
 	@Override
