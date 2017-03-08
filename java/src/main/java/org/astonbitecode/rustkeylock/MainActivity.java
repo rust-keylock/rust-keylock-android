@@ -9,14 +9,12 @@ import org.astonbitecode.rustkeylock.callbacks.ShowMenuCb;
 import org.astonbitecode.rustkeylock.callbacks.ShowMessageCb;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandlable;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandleable;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MainActivity extends Activity implements BackButtonHandlable, SaveStateHandleable {
+public class MainActivity extends Activity implements BackButtonHandlable {
 	private static MainActivity ACTIVE_ACTIVITY;
 
 	public static MainActivity getActiveActivity() {
@@ -26,7 +24,6 @@ public class MainActivity extends Activity implements BackButtonHandlable, SaveS
 	private final String TAG = getClass().getName();
 	private Thread rustThread = null;
 	private BackButtonHandler backButtonHandler;
-	private SaveStateHandler saveStateHandler;
 	private long savedStateAt = 0;
 
 	@Override
@@ -41,9 +38,6 @@ public class MainActivity extends Activity implements BackButtonHandlable, SaveS
 			checkIdleTime();
 			// Restore the back button handler
 			backButtonHandler = (BackButtonHandler) savedInstanceState.get("backButtonHandler");
-			// Restore and invoke the state handler
-			saveStateHandler = (SaveStateHandler) savedInstanceState.get("saveStateHandler");
-			saveStateHandler.onRestore(savedInstanceState);
 		}
 	}
 
@@ -64,11 +58,6 @@ public class MainActivity extends Activity implements BackButtonHandlable, SaveS
 	protected void onSaveInstanceState(Bundle outState) {
 		// Save the back button handler
 		outState.putSerializable("backButtonHandler", backButtonHandler);
-		// Save the state handler
-		if (saveStateHandler != null) {
-			outState.putSerializable("saveStateHandler", saveStateHandler);
-			saveStateHandler.onSave(outState);
-		}
 		super.onSaveInstanceState(outState);
 		outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
 		outState.putLong("savedStateAt", System.currentTimeMillis());
@@ -87,11 +76,6 @@ public class MainActivity extends Activity implements BackButtonHandlable, SaveS
 		super.onResume();
 		checkIdleTime();
 		savedStateAt = 0;
-	}
-
-	@Override
-	public void setSaveStateHandler(SaveStateHandler saveStateHandler) {
-		this.saveStateHandler = saveStateHandler;
 	}
 
 	// @Override

@@ -3,7 +3,6 @@ package org.astonbitecode.rustkeylock.fragments;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class EnterPassword extends Fragment implements OnClickListener, BackButtonHandler, SaveStateHandler {
+public class EnterPassword extends Fragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = -9046678064745197531L;
 	private final String TAG = getClass().getName();
 	private transient EditText passwordText;
@@ -82,15 +81,5 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
 	public void onBackButton() {
 		Log.d(TAG, "Back button pressed");
 		System.exit(0);
-	}
-
-	@Override
-	public void onSave(Bundle savedInstanceState) {
-		// ignore for now
-	}
-
-	@Override
-	public void onRestore(Bundle savedInstanceState) {
-		// ignore for now
 	}
 }

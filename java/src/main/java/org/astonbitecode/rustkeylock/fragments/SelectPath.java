@@ -7,7 +7,6 @@ import java.util.Date;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.Fragment;
@@ -25,7 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class SelectPath extends Fragment implements BackButtonHandler, SaveStateHandler, OnClickListener {
+public class SelectPath extends Fragment implements BackButtonHandler, OnClickListener {
 	private static final long serialVersionUID = 1503736744138963548L;
 	private final String TAG = getClass().getName();
 	private boolean export;
@@ -37,7 +36,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
 	private int FRAGMENT_CODE_DIR = 11;
 	private int FRAGMENT_CODE_FILE = 33;
-	private BackButtonHandler backButtonHandler = this;
+	private transient BackButtonHandler backButtonHandler = this;
 
 	public SelectPath() {
 	}
@@ -48,54 +47,58 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 
 	@Override
 	public void onStart() {
-		if(editPath != null && editFileName != null) {
-			editPath.setText(workingDirectoryPath);
-			editFileName .setText(filename);
-		}
 		super.onStart();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			this.export = savedInstanceState.getBoolean("export");
+		}
+		super.onCreateView(inflater, container, savedInstanceState);
 		View rootView = inflater.inflate(R.layout.fragment_select_path, container, false);
-		TextView title = (TextView) rootView.findViewById(R.id.selectPathLabel);
+		initialize(rootView);
+		return rootView;
+	}
+
+	private void initialize(View view) {
+		TextView title = (TextView) view.findViewById(R.id.selectPathLabel);
 		if (export) {
 			title.setText("Where to export?");
 		} else {
 			title.setText("What to import?");
 		}
 
-		ImageButton bib = (ImageButton) rootView.findViewById(R.id.browseButton);
+		ImageButton bib = (ImageButton) view.findViewById(R.id.browseButton);
 		bib.setOnClickListener(this);
-		ImageButton bfb = (ImageButton) rootView.findViewById(R.id.browseFileButton);
+		ImageButton bfb = (ImageButton) view.findViewById(R.id.browseFileButton);
 		bfb.setOnClickListener(this);
 		bfb.setVisibility(export ? View.GONE : View.VISIBLE);
 
-		EditText editPath = (EditText) rootView.findViewById(R.id.editCustomPath);
+		EditText editPath = (EditText) view.findViewById(R.id.editCustomPath);
 		editPath.setText(workingDirectoryPath);
 		this.editPath = editPath;
 
-		EditText editFilename = (EditText) rootView.findViewById(R.id.editFileName);
+		EditText editFilename = (EditText) view.findViewById(R.id.editFileName);
+		filename = export ? filename : "";
 		editFilename.setText(filename);
 		editFilename.setEnabled(export);
 		this.editFileName = editFilename;
 
-		TextView editPasswordLabel = (TextView) rootView.findViewById(R.id.selectPathPasswordLabel);
+		TextView editPasswordLabel = (TextView) view.findViewById(R.id.selectPathPasswordLabel);
 		editPasswordLabel.setVisibility(export ? View.GONE : View.VISIBLE);
-		EditText editPassword = (EditText) rootView.findViewById(R.id.selectPathPassword);
+		EditText editPassword = (EditText) view.findViewById(R.id.selectPathPassword);
 		editPassword.setVisibility(export ? View.GONE : View.VISIBLE);
 		this.editPassword = editPassword;
 
-		TextView editNumberLabel = (TextView) rootView.findViewById(R.id.selectPathNumberLabel);
+		TextView editNumberLabel = (TextView) view.findViewById(R.id.selectPathNumberLabel);
 		editNumberLabel.setVisibility(export ? View.GONE : View.VISIBLE);
-		EditText editNumber = (EditText) rootView.findViewById(R.id.selectPathFavoriteNumber);
+		EditText editNumber = (EditText) view.findViewById(R.id.selectPathFavoriteNumber);
 		editNumber.setVisibility(export ? View.GONE : View.VISIBLE);
 		this.editNumber = editNumber;
 
-		Button setPathButton = (Button) rootView.findViewById(R.id.setPathButton);
+		Button setPathButton = (Button) view.findViewById(R.id.setPathButton);
 		setPathButton.setOnClickListener(this);
-
-		return rootView;
 	}
 
 	@Override
@@ -140,12 +143,9 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == FRAGMENT_CODE_DIR) {
 			workingDirectoryPath = data.getStringExtra("directory");
-			editPath.setText(workingDirectoryPath);
-			filename = "";
-			editFileName.setText(filename);
+			filename = export ? filename : "";
 		} else if (requestCode == FRAGMENT_CODE_FILE) {
 			filename = data.getStringExtra("file");
-			editFileName.setText(filename);
 		}
 	}
 
@@ -155,17 +155,16 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 		if (backButtonHandler == this) {
 			InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
 		} else {
-			backButtonHandler.onBackButton();
+			try {
+				backButtonHandler.onBackButton();
+			} catch (Exception e) {
+				InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+			}
 		}
 	}
 
 	@Override
-	public void onSave(Bundle state) {
+	public void onSaveInstanceState(Bundle state) {
 		state.putBoolean("export", export);
-	}
-
-	@Override
-	public void onRestore(Bundle state) {
-		export = state.getBoolean("export");
 	}
 }

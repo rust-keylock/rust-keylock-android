@@ -38,6 +38,9 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
 		currentDirectory = new File(directoryFullPath);
 	}
 
+	public FileSelector() {
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_file_selector, container, false);

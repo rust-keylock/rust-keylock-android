@@ -8,7 +8,6 @@ import org.astonbitecode.rustkeylock.adapters.EntriesAdapter;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.ListFragment;
@@ -18,12 +17,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class ListEntries extends ListFragment implements OnClickListener, BackButtonHandler, SaveStateHandler {
+public class ListEntries extends ListFragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = 8765819759487480794L;
 	private final String TAG = getClass().getName();
 	private List<JavaEntry> entries;
@@ -75,15 +74,5 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
 	public void onBackButton() {
 		Log.d(TAG, "Back button pressed");
 		InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
-	}
-
-	@Override
-	public void onSave(Bundle state) {
-		// ignore for now
-	}
-
-	@Override
-	public void onRestore(Bundle state) {
-		InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_ENTRIES_LIST);
 	}
 }

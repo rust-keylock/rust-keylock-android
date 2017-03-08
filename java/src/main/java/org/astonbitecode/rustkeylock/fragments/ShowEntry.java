@@ -4,7 +4,6 @@ import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.Fragment;
@@ -18,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class ShowEntry extends Fragment implements OnClickListener, BackButtonHandler, SaveStateHandler {
+public class ShowEntry extends Fragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = 163106573370997557L;
 	private final String TAG = getClass().getName();
 	private transient JavaEntry entry;
@@ -57,6 +56,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		restore(savedInstanceState);
 		View rootView = inflater.inflate(R.layout.fragment_show_entry, container, false);
 		if (this.entry != null) {
 			prepareUiElements(rootView);
@@ -155,24 +155,25 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 	}
 
 	@Override
-	public void onSave(Bundle state) {
+	public void onSaveInstanceState(Bundle state) {
 		state.putInt("entryIndex", entryIndex);
 		state.putBoolean("edit", edit);
 		state.putBoolean("delete", delete);
 	}
 
-	@Override
-	public void onRestore(Bundle state) {
-		int entryIndex = state.getInt("entryIndex");
-		boolean edit = state.getBoolean("edit");
-		boolean delete = state.getBoolean("delete");
+	private void restore(Bundle state) {
+		if (state != null) {
+			int entryIndex = state.getInt("entryIndex");
+			boolean edit = state.getBoolean("edit");
+			boolean delete = state.getBoolean("delete");
 
-		if (edit && !delete) {
-			InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_EDIT_ENTRY, entryIndex);
-		} else if (!edit && delete) {
-			InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_DELETE_ENTRY, entryIndex);
-		} else {
-			InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_SHOW_ENTRY, entryIndex);
+			if (edit && !delete) {
+				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_EDIT_ENTRY, entryIndex);
+			} else if (!edit && delete) {
+				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_DELETE_ENTRY, entryIndex);
+			} else {
+				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_SHOW_ENTRY, entryIndex);
+			}
 		}
 	}
 }

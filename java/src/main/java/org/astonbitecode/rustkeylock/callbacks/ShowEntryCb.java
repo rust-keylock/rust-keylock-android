@@ -38,7 +38,6 @@ public class ShowEntryCb implements InterfaceWithRust.EntryCallback {
 		public void run() {
 			ShowEntry se = new ShowEntry(entry, entryIndex, edit, delete);
 			mainActivity.setBackButtonHandler(se);
-			mainActivity.setSaveStateHandler(se);
 			mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, se).commitAllowingStateLoss();
 		}
 	}

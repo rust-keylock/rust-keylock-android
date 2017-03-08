@@ -3,7 +3,6 @@ package org.astonbitecode.rustkeylock.fragments;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.Fragment;
@@ -17,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-public class MainMenu extends Fragment implements OnClickListener, BackButtonHandler, SaveStateHandler {
+public class MainMenu extends Fragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = -4385132544016979748L;
 	private final String TAG = getClass().getName();
 
@@ -78,15 +77,5 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
 	public void onBackButton() {
 		Log.d(TAG, "Back button pressed");
 		InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_EXIT);
-	}
-
-	@Override
-	public void onSave(Bundle state) {
-		// ignore for now
-	}
-
-	@Override
-	public void onRestore(Bundle state) {
-		// ignore for now
 	}
 }

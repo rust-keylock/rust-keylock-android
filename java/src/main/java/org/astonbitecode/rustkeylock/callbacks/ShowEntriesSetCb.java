@@ -47,7 +47,6 @@ public class ShowEntriesSetCb implements InterfaceWithRust.EntriesSetCallback {
 		public void run() {
 			ListEntries le = new ListEntries(entries);
 			mainActivity.setBackButtonHandler(le);
-			mainActivity.setSaveStateHandler(le);
 			mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, le).commitAllowingStateLoss();
 		}
 	}

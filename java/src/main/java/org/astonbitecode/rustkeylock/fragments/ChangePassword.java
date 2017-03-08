@@ -3,7 +3,6 @@ package org.astonbitecode.rustkeylock.fragments;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.handlers.state.SaveStateHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import android.app.Fragment;
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class ChangePassword extends Fragment implements OnClickListener, BackButtonHandler, SaveStateHandler {
+public class ChangePassword extends Fragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = 8235249433565909373L;
 	private final String TAG = getClass().getName();
 	private transient EditText passwordText1;
@@ -42,6 +41,8 @@ public class ChangePassword extends Fragment implements OnClickListener, BackBut
 
 		Button b = (Button) rootView.findViewById(R.id.buttonApplyChanges);
 		b.setOnClickListener(this);
+
+		restore(savedInstanceState);
 
 		return rootView;
 	}
@@ -74,18 +75,19 @@ public class ChangePassword extends Fragment implements OnClickListener, BackBut
 	}
 
 	@Override
-	public void onSave(Bundle state) {
+	public void onSaveInstanceState(Bundle state) {
 		state.putString("passwordText1", passwordText1.getText().toString());
 		state.putString("passwordText2", passwordText2.getText().toString());
 		state.putString("numberText1", numberText1.getText().toString());
 		state.putString("numberText2", numberText2.getText().toString());
 	}
 
-	@Override
-	public void onRestore(Bundle state) {
-		passwordText1.setText(state.getString("passwordText1"));
-		passwordText2.setText(state.getString("passwordText2"));
-		numberText1.setText(state.getString("numberText1"));
-		numberText2.setText(state.getString("numberText2"));
+	private void restore(Bundle state) {
+		if (state != null) {
+			passwordText1.setText(state.getString("passwordText1"));
+			passwordText2.setText(state.getString("passwordText2"));
+			numberText1.setText(state.getString("numberText1"));
+			numberText2.setText(state.getString("numberText2"));
+		}
 	}
 }
