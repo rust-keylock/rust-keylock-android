@@ -26,6 +26,7 @@ import android.widget.TextView;
 public class FileSelector extends ListFragment implements OnClickListener, BackButtonHandler {
 	private static final long serialVersionUID = 1382314701594691684L;
 	private final String TAG = getClass().getName();
+	private final String NO_FILE_SELECTED = "No File selected";
 
 	private FilesAdapter filesAdapter;
 	private File currentDirectory;
@@ -43,10 +44,10 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
 		Button sdb = (Button) rootView.findViewById(R.id.selectFileButton);
 		sdb.setOnClickListener(this);
 		TextView cdtv = (TextView) rootView.findViewById(R.id.fileSelectorCurrent);
-		cdtv.setText("Showing files in " + currentDirectory.getName());
+		cdtv.setText("Showing files in \"" + currentDirectory.getName() + "\"");
 		currentDirectoryTextView = cdtv;
 		TextView sftv = (TextView) rootView.findViewById(R.id.fileSelectorSelectedFile);
-		sftv.setText("No file selected");
+		sftv.setText(NO_FILE_SELECTED);
 		selectedFileTextView = sftv;
 
 		// Hide the soft keyboard
@@ -62,7 +63,9 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
 		super.onActivityCreated(savedInstanceState);
 		filesAdapter = new FilesAdapter(getActivity(), R.layout.file_element, getFilesOfDirectory());
 		setListAdapter(filesAdapter);
-		currentDirectoryTextView.setText(currentDirectory.getAbsolutePath());
+		currentDirectoryTextView.setText("Showing files in \"" + currentDirectory.getName() + "\"");
+		selectedFileTextView
+				.setText(selectedFileName != null ? "Selected file: " + selectedFileName : NO_FILE_SELECTED);
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
 
 		FileEntry selectedFileEntry = filesAdapter.getItem(pos);
 		selectedFileName = selectedFileEntry.getName();
-		selectedFileTextView.setText(selectedFileName);
+		selectedFileTextView.setText("Selected file: " + selectedFileName);
 		Log.d(TAG, "Selected file " + selectedFileName);
 	}
 

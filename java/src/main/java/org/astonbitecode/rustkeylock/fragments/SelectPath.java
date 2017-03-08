@@ -37,6 +37,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
 	private int FRAGMENT_CODE_DIR = 11;
 	private int FRAGMENT_CODE_FILE = 33;
+	private BackButtonHandler backButtonHandler = this;
 
 	public SelectPath() {
 	}
@@ -106,6 +107,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 			ds.setTargetFragment(this, FRAGMENT_CODE_DIR);
 			ft.replace(R.id.container, ds);
 			ft.commit();
+			backButtonHandler = ds;
 		} else if (view.getId() == R.id.browseFileButton) {
 			FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 			ft.addToBackStack(this.getClass().getName());
@@ -113,6 +115,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 			fs.setTargetFragment(this, FRAGMENT_CODE_FILE);
 			ft.replace(R.id.container, fs);
 			ft.commit();
+			backButtonHandler = fs;
 		} else if (view.getId() == R.id.setPathButton) {
 			String path = editPath.getText().toString() + File.separator + editFileName.getText().toString();
 			String pwd = !export ? editPassword.getText().toString() : "DUMMY";
@@ -133,6 +136,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		backButtonHandler = this;
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == FRAGMENT_CODE_DIR) {
 			workingDirectoryPath = data.getStringExtra("directory");
@@ -148,7 +152,11 @@ public class SelectPath extends Fragment implements BackButtonHandler, SaveState
 	@Override
 	public void onBackButton() {
 		Log.d(TAG, "Back button pressed");
-		InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+		if (backButtonHandler == this) {
+			InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+		} else {
+			backButtonHandler.onBackButton();
+		}
 	}
 
 	@Override

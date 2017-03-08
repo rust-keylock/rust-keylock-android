@@ -19,17 +19,30 @@
         android:text="Please select a directory"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="3sp"
+        android:layout_marginBottom="3sp"
+        android:background="#CEE990" />
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </ListView>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="3sp"
+        android:layout_marginBottom="3sp"
+        android:background="#CEE990" />
+
     <TextView
         android:id="@+id/directorySelectorCurrent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33sp"
         android:text="..."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

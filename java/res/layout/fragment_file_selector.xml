@@ -17,8 +17,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Please select a File"
-        android:layout_marginBottom="20sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/fileSelectorCurrent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="3sp"
+        android:layout_marginBottom="3sp"
+        android:background="#CEE990" />
 
     <ListView
         android:id="@android:id/list"
@@ -26,13 +39,12 @@
         android:layout_height="wrap_content" >
     </ListView>
 
-    <TextView
-        android:id="@+id/fileSelectorCurrent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33sp"
-        android:text="..."
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="3sp"
+        android:layout_marginBottom="3sp"
+        android:background="#CEE990" />
 
     <TextView
         android:id="@+id/fileSelectorSelectedFile"
