@@ -38,6 +38,9 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_ENTRIES_LIST);
+		}
 		View rootView = inflater.inflate(R.layout.fragment_list_entries, container, false);
 		Button nb = (Button) rootView.findViewById(R.id.addNewButton);
 		nb.setOnClickListener(this);

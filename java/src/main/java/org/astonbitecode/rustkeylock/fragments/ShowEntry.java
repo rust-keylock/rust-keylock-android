@@ -21,6 +21,10 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 	private static final long serialVersionUID = 163106573370997557L;
 	private final String TAG = getClass().getName();
 	private transient JavaEntry entry;
+	private String entryName;
+	private String entryUser;
+	private String entryPass;
+	private String entryDesc;
 	private int entryIndex;
 	private boolean edit;
 	private boolean delete;
@@ -42,16 +46,16 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 	 */
 	public ShowEntry(JavaEntry entry, int entryIndex, boolean edit, boolean delete) {
 		this.entry = entry;
+		this.entryName = entry.getName();
+		this.entryUser = entry.getUser();
+		this.entryPass = entry.getPass();
+		this.entryDesc = entry.getDesc();
 		this.entryIndex = entryIndex;
 		this.edit = edit;
 		this.delete = delete;
 	}
 
 	public ShowEntry() {
-		this.entry = null;
-		this.entryIndex = 0;
-		this.edit = false;
-		this.delete = false;
 	}
 
 	@Override
@@ -163,17 +167,18 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
 	private void restore(Bundle state) {
 		if (state != null) {
+			this.entry = new JavaEntry();
+			this.entry.name = this.entryName;
+			this.entry.user = this.entryUser;
+			this.entry.pass = this.entryPass;
+			this.entry.desc = this.entryDesc;
+
 			int entryIndex = state.getInt("entryIndex");
 			boolean edit = state.getBoolean("edit");
 			boolean delete = state.getBoolean("delete");
-
-			if (edit && !delete) {
-				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_EDIT_ENTRY, entryIndex);
-			} else if (!edit && delete) {
-				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_DELETE_ENTRY, entryIndex);
-			} else {
-				InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_SHOW_ENTRY, entryIndex);
-			}
+			this.entryIndex = entryIndex;
+			this.edit = edit;
+			this.delete = delete;
 		}
 	}
 }
