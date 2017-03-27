@@ -12,4 +12,4 @@ xargo build --target=arm-linux-androideabi --release
 
 echo "Copying $ANDROID_CONTAINER_RUST_LIB to $ANDROID_CONTAINER_JAVA_NATIVE"
 cp $ANDROID_CONTAINER_RUST_LIB $ANDROID_CONTAINER_JAVA_NATIVE
-echo "Rust builds for rust-keylock-android completed."
+echo "Rust build for rust-keylock-android completed."
