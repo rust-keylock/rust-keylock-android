@@ -1,15 +1,16 @@
 #!/bin/bash
-# Install the latest rust stable and cargo
-`curl https://sh.rustup.rs -sSf | sh -s -- -y`
-PATH=$PATH:/root/.cargo/bin
-
-# Install xargo
-cargo install xargo
 
 BASEDIR=$(dirname "$0")
 cd $BASEDIR/../../
 BASEDIR=`pwd`
 echo Base directory is $BASEDIR
+
+# Install the latest rust stable and cargo
+`curl https://sh.rustup.rs -sSf | sh -s -- -y`
+PATH=$PATH:$HOME/.cargo/bin
+
+# Install xargo
+cargo install xargo --force
 
 # Get the directory of the toolchain
 mkdir android-toolchain
