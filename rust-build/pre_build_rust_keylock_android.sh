@@ -12,8 +12,9 @@ PATH=$PATH:$HOME/.cargo/bin
 # Install xargo
 cargo install xargo --force
 
-# Get the directory of the toolchain
-mkdir android-toolchain
+# Create an Android toolchain
+cd $BASEDIR
+sh $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain
 cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
 echo Android toolchain set in $ANDROID_TOOLCHAIN_DIR
