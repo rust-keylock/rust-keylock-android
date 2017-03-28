@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASEDIR=$(dirname "$0")
-cd $BASEDIR/../../
+cd $BASEDIR/../
 BASEDIR=`pwd`
 echo Base directory is $BASEDIR
 
@@ -18,8 +18,10 @@ cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
 echo Android toolchain set in $ANDROID_TOOLCHAIN_DIR
 
-# Go to the rust directory
+# Go to the .cargo directory
 cd $BASEDIR/rust
+mkdir .cargo
+cd .cargo
 CURR_DIR=`pwd`
 echo Entered directory $CURR_DIR
 
@@ -32,5 +34,4 @@ EOF
 
 # Install the needed custom jar (JNA)
 echo Installing custom jar jna-min-4.3.0.jar in the local Maven...
-echo Entered directory ${BASEDIR}
-mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${BASEDIR}/java/rust-build/libs/jna-min-4.3.0.jar -DgroupId=net.java.dev.jna -DartifactId=jna-min -Dversion=4.3.0 -Dpackaging=jar
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${BASEDIR}/rust-build/libs/jna-min-4.3.0.jar -DgroupId=net.java.dev.jna -DartifactId=jna-min -Dversion=4.3.0 -Dpackaging=jar
