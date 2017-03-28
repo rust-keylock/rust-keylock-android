@@ -31,7 +31,3 @@ cat > config << EOF
 [target.arm-linux-androideabi]
 linker = "${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-gcc"
 EOF
-
-# Install the needed custom jar (JNA)
-echo Installing custom jar jna-min-4.3.0.jar in the local Maven...
-mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${BASEDIR}/rust-build/libs/jna-min-4.3.0.jar -DgroupId=net.java.dev.jna -DartifactId=jna-min -Dversion=4.3.0 -Dpackaging=jar

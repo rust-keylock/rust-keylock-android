@@ -1,4 +1,5 @@
 #!/bin/bash
+
 BASEDIR=$(dirname "$0")
 cd $BASEDIR/../
 BASEDIR=`pwd`
@@ -12,9 +13,5 @@ xargo build --target=arm-linux-androideabi --release
 
 echo "Copying $ANDROID_RUST_KEYLOCK_LIB to $ANDROID_JAVA_NATIVE"
 cp $ANDROID_RUST_KEYLOCK_LIB $ANDROID_JAVA_NATIVE
-
-JNA_LIB="$BASEDIR/rust-build/libs/armeabi/libjnidispatch.so"
-echo "Copying $JNA_LIB to $ANDROID_JAVA_NATIVE"
-cp $JNA_LIB $ANDROID_JAVA_NATIVE
 
 echo "Rust build for rust-keylock-android completed."

@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<android.version></android.version>
-		<jna.version>4.3.0</jna.version>
+		<jna.version>4.4.0</jna.version>
 		<android.maven.plugin.version>4.4.3</android.maven.plugin.version>
 		<android.plugin.version>4.1.1.4</android.plugin.version>
 		<junit.version>3.8.1</junit.version>
@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-min</artifactId>
+			<artifactId>jna</artifactId>
 			<version>${jna.version}</version>
 		</dependency>
 		<dependency>
