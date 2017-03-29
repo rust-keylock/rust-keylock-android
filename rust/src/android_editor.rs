@@ -113,7 +113,7 @@ impl Editor for AndroidImpl {
 		}
 	}
 
-	fn show_message(&self, message: &'static str) -> UserSelection {
+	fn show_message(&self, message: &str) -> UserSelection {
 		debug!("Showing Message '{}'", message);
 		(self.show_message_cb)(super::to_java_string(message.to_string()));
 		let user_selection = self.rx.recv().unwrap();
