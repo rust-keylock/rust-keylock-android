@@ -84,7 +84,7 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
 
 	@Override
 	public void onClick(View view) {
-		Log.d(TAG, "Selected File " + selectedFileName);
+		Log.d(TAG, "Returning File " + selectedFileName);
 		Intent intent = new Intent(getActivity(), this.getClass());
 		intent.putExtra("file", selectedFileName);
 		getTargetFragment().onActivityResult(getTargetRequestCode(), 0, intent);

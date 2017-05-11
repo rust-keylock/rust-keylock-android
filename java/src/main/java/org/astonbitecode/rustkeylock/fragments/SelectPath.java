@@ -32,7 +32,8 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
 	private transient EditText editFileName;
 	private transient EditText editPassword;
 	private transient EditText editNumber;
-	private String workingDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+	private String workingDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+			.getAbsolutePath();
 	private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
 	private int FRAGMENT_CODE_DIR = 11;
 	private int FRAGMENT_CODE_FILE = 33;
@@ -61,6 +62,17 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
 		return rootView;
 	}
 
+	@Override
+	public void onResume() {
+		if (this.editFileName != null) {
+			this.editFileName.setText(filename);
+		}
+		if (this.editPath != null) {
+			this.editPath.setText(workingDirectoryPath);
+		}
+		super.onResume();
+	}
+
 	private void initialize(View view) {
 		TextView title = (TextView) view.findViewById(R.id.selectPathLabel);
 		if (export) {
@@ -80,7 +92,6 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
 		this.editPath = editPath;
 
 		EditText editFilename = (EditText) view.findViewById(R.id.editFileName);
-		filename = export ? filename : "";
 		editFilename.setText(filename);
 		editFilename.setEnabled(export);
 		this.editFileName = editFilename;
@@ -142,10 +153,15 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
 		backButtonHandler = this;
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == FRAGMENT_CODE_DIR) {
+			Log.d(TAG, "Directory selector returned " + data.getStringExtra("directory"));
 			workingDirectoryPath = data.getStringExtra("directory");
 			filename = export ? filename : "";
 		} else if (requestCode == FRAGMENT_CODE_FILE) {
+			Log.d(TAG, "File selector returned " + data.getStringExtra("file"));
 			filename = data.getStringExtra("file");
+		} else {
+			Log.d(TAG, "Unhandled selector request code '" + requestCode
+					+ "'. Please consider opening a bug to the developers.");
 		}
 	}
 
