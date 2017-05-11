@@ -46,20 +46,16 @@ The Editors are driven by the rust-keylock library and are responsible for inter
 
 The documentation can be found [here](https://rust-keylock.github.io/rust-keylock-lib/rust_keylock/).
 
-## Build
-
-TODO
-
 ## Install
 
-TODO
+Soon to be published in [F-Droid](https://gitlab.com/fdroid/fdroiddata/merge_requests/2141).
 
 ## Screenshots
 
-![rkl1](gh-images/rkl1.png)
+![rust-keylock-1](gh-images/rust-keylock-1.png)
 
-![rkl2](gh-images/rkl2.png)
+![rust-keylock-2](gh-images/rust-keylock-2.png)
 
-![rkl3](gh-images/rkl3.png)
+![rust-keylock-3](gh-images/rust-keylock-3.png)
 
-![rkl4](gh-images/rkl4.png)
+![rust-keylock-4](gh-images/rust-keylock-4.png)
