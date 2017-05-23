@@ -5,6 +5,11 @@ cd $BASEDIR/../
 BASEDIR=`pwd`
 echo Entered Base directory $BASEDIR
 
+# Add cargo to the path
+CARGO_HOME=$BASEDIR/tools/.cargo
+RUSTUP_HOME=$BASEDIR/tools/.rustup
+PATH=$PATH:$CARGO_HOME/bin
+
 ANDROID_RUST="$BASEDIR/rust"
 ANDROID_RUST_KEYLOCK_LIB="$ANDROID_RUST/target/arm-linux-androideabi/release/librustkeylockandroid.so"
 ANDROID_JAVA_NATIVE="$BASEDIR/java/libs/armeabi/"

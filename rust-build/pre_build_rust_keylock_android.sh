@@ -5,14 +5,18 @@ cd $BASEDIR/../
 BASEDIR=`pwd`
 echo Base directory is $BASEDIR
 
-# Save the current HOME variable and override it with a subdirectory
-mkdir home
-HOME_BAK=$HOME
-HOME=$BASEDIR/home
+# Set the home directories for cargo and rustup
+mkdir -p tools/.cargo
+mkdir -p tools/.rustup
+CARGO_HOME=$BASEDIR/tools/.cargo
+RUSTUP_HOME=$BASEDIR/tools/.rustup
 
 # Install the latest rust stable and cargo
-`curl https://sh.rustup.rs -sSf | sh -s -- -y`
-PATH=$PATH:$HOME/.cargo/bin
+`curl https://sh.rustup.rs -sSf | CARGO_HOME=$BASEDIR/tools/.cargo RUSTUP_HOME=$BASEDIR/tools/.rustup sh -s -- -y`
+PATH=$PATH:$CARGO_HOME/bin
+
+rustup default stable
+rustup target add arm-linux-androideabi
 
 # Install xargo
 cargo install xargo --force
