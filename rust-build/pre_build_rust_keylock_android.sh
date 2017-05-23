@@ -5,6 +5,11 @@ cd $BASEDIR/../
 BASEDIR=`pwd`
 echo Base directory is $BASEDIR
 
+# Save the current HOME variable and override it with a subdirectory
+mkdir home
+HOME_BAK=$HOME
+HOME=$BASEDIR/home
+
 # Install the latest rust stable and cargo
 `curl https://sh.rustup.rs -sSf | sh -s -- -y`
 PATH=$PATH:$HOME/.cargo/bin
