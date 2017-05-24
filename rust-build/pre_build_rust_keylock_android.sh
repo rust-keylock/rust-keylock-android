@@ -28,6 +28,10 @@ cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
 echo Android toolchain set in $ANDROID_TOOLCHAIN_DIR
 
+# Install the jar containing the jna native library for Android (taken from https://github.com/java-native-access/jna/tree/master/lib/native)
+echo "Installing jar android-arm.jar in the local Maven... This jar is not provided in the Maven Central, rather by the project's GitHub repo."
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${BASEDIR}/rust-build/libs/android-arm.jar -DgroupId=net.java.dev.jna -DartifactId=android-arm -Dversion=4.4.0 -Dpackaging=jar
+
 # Go to the .cargo directory
 cd $BASEDIR/rust
 mkdir .cargo
@@ -35,7 +39,7 @@ cd .cargo
 CURR_DIR=`pwd`
 echo Entered directory $CURR_DIR
 
-#Create a config file
+# Create a config file
 cat > config << EOF
 [target]
 [target.arm-linux-androideabi]

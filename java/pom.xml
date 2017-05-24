@@ -33,6 +33,11 @@
 			<version>${jna.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>android-arm</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
@@ -67,6 +72,24 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>resource-dependencies</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>android-arm</includeArtifactIds>
+							<includes>libjnidispatch.so</includes>
+							<outputDirectory>libs/armeabi</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>
