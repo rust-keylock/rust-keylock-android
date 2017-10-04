@@ -1,3 +1,5 @@
 /.project
 /.README.md.html
 /buildallandrun.sh
+/android-toolchain/
+/tools/
