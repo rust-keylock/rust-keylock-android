@@ -52,7 +52,7 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
 	public void onClick(View view) {
 		if (view.getId() == R.id.listButton) {
 			Log.d(TAG, "The User Selected to List Entries");
-			InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_ENTRIES_LIST);
+			InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_ENTRIES_LIST, Defs.EMPTY_ARG, "");
 		} else if (view.getId() == R.id.saveButton) {
 			Log.d(TAG, "The User Selected to Save Entries");
 			InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SAVE);

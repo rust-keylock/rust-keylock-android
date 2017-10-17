@@ -30,7 +30,7 @@ public interface InterfaceWithRust extends Library {
 	 * Callback containing a Set of Entries
 	 */
 	interface EntriesSetCallback extends Callback {
-		void apply(JavaEntriesSet.ByValue entriesSet);
+		void apply(JavaEntriesSet.ByReference entriesSet, String filter);
 	}
 
 	/**
@@ -66,13 +66,15 @@ public interface InterfaceWithRust extends Library {
 	void go_to_menu(String menuName);
 
 	/**
-	 * Passes a Menu name to Rust and an int argument. Rust instructs the
-	 * callback to go to this menu and use the passed argument
+	 * Passes a Menu name to Rust and an int argument. Rust instructs the callback
+	 * to go to this menu and use the passed argument
 	 * 
 	 * @param menuName
-	 * @param arg
+	 * @param argNum
+	 *            A String representing an Integer
+	 * @param argStr
 	 */
-	void go_to_menu_plus_arg(String menuName, int arg);
+	void go_to_menu_plus_arg(String menuName, String argNum, String argStr);
 
 	/**
 	 * Adds this JavaEntry to the list of Entries in memory. Note: The entry is

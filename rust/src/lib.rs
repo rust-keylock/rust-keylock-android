@@ -19,7 +19,7 @@ mod logger;
 type LogCallback =  extern "C" fn(*const c_char, *const c_char, *const c_char, i32, *const c_char);
 type StringCallback =  extern "C" fn(*const c_char);
 type ShowEntryCallback = extern "C" fn(Box<JavaEntry>, i32, bool, bool);
-type ShowEntriesSetCallback = extern "C" fn(JavaEntriesSet);
+type ShowEntriesSetCallback = extern "C" fn(Box<JavaEntriesSet>, *const c_char);
 
 lazy_static! {
     static ref TX: Mutex<Option<Sender<UserSelection>>> = Mutex::new(None);
@@ -135,21 +135,39 @@ pub extern fn go_to_menu(menu_name: *const c_char) {
 	};
 	let rust_string_menu_name = to_rust_string(menu_name);
 	debug!("go_to_menu '{}'", rust_string_menu_name);
-	let menu = Menu::from(rust_string_menu_name, None);
+	let menu = Menu::from(rust_string_menu_name, None, None);
 	let user_selection = UserSelection::GoTo(menu);
 	tx.send(user_selection).unwrap();
 	debug!("go_to_menu sent UserSelection to the TX");
 }
 
 #[no_mangle]
-pub extern fn go_to_menu_plus_arg(menu_name: *const c_char, arg: i32) {
+pub extern fn go_to_menu_plus_arg(menu_name: *const c_char, arg_num: *const c_char, arg_str: *const c_char) {
 	debug!("go_to_menu_plus_arg called");
 	let tx = {
 		TX.lock().unwrap().as_ref().unwrap().clone()
 	};
 	let rust_string_menu_name = to_rust_string(menu_name);
 	debug!("go_to_menu_plus_arg '{}'", rust_string_menu_name);
-	let menu = Menu::from(rust_string_menu_name, Some(arg as usize));
+	let rust_string_arg_num = to_rust_string(arg_num);
+	let rust_string_arg_str = to_rust_string(arg_str);
+	debug!("Arguments: num = '{}' and str = '{}'", rust_string_arg_num, rust_string_arg_str);
+
+	let num_opt = if rust_string_arg_num == "null" {
+    	None
+    } else {
+    	let num = rust_string_arg_num.parse::<usize>().unwrap();
+    	Some(num)
+    };
+
+    let str_opt = if rust_string_arg_str == "null" {
+    	None
+    } else {
+    	Some(rust_string_arg_str)
+    };
+
+    let menu = Menu::from(rust_string_menu_name, num_opt, str_opt);
+
 	let user_selection = UserSelection::GoTo(menu);
 	tx.send(user_selection).unwrap();
 	debug!("go_to_menu_plus_arg sent UserSelection to the TX");
