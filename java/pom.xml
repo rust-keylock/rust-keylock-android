@@ -4,7 +4,7 @@
 
 	<groupId>org.astonbitecode.rustkeylock</groupId>
 	<artifactId>rust-keylock-android</artifactId>
-	<version>0.2.1</version>
+	<version>0.3.0</version>
 	<packaging>apk</packaging>
 
 	<name>rust-keylock-android</name>

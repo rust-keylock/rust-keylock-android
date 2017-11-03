@@ -4,3 +4,4 @@ Cargo.lock
 /.settings/
 /config
 /rust-keylock-android-rust.iml
+/.cargo/
