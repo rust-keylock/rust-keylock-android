@@ -19,6 +19,7 @@ The core logic is written in [Rust](https://www.rust-lang.org), but the presenta
 
  * The data is locked with a user-defined master password, using _bcrypt_ password hashing
  * Encryption using _AES_ with _CTR_ mode
+ * Data integrity checks with SHA3 (Keccak)
  * Encrypted bytes blending
  * Passwords are kept encrypted in memory
  * Encryption keys on runtime are stored in safe, non-swappable memory
@@ -36,19 +37,9 @@ Thanks to [xargo](https://github.com/japaric/xargo), [cross](https://github.com/
 
  * Export/import encrypted passwords to/from the filesystem
 
-## The _rust-keylock_ library and the _Editors_
-
-The idea is that the [rust-keylock library](https://github.com/rust-keylock/rust-keylock-lib) handles the core application logic, whereas the interaction with the _rust-keylock_ users is done via libraries that have presentation responsibilities (aka [Editors](https://rust-keylock.github.io/rust-keylock-lib/rust_keylock/trait.Editor.html)).
-
-The library is responsible for the encryption/decryption, storing and retrieving encrypted data from the filesystem, taking backups (todo) and synchronizing with rust-keylock instances (todo).
-
-The Editors are driven by the rust-keylock library and are responsible for interacting with the Users and transfer the Users' input to the library.
-
-The documentation can be found [here](https://rust-keylock.github.io/rust-keylock-lib/rust_keylock/).
-
 ## Install
 
-Soon to be published in [F-Droid](https://gitlab.com/fdroid/fdroiddata/merge_requests/2141).
+Instructions can be found [here](https://rust-keylock.github.io/download/rkl/).
 
 ## Screenshots
 
