@@ -85,12 +85,12 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
 		if (filter.length() > 0) {
 			filterText.setFocusableInTouchMode(true);
 			filterText.requestFocus();
+		} else {
+			// Hide the soft keyboard
+			final InputMethodManager imm = (InputMethodManager) getActivity()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
 		}
-
-		// Hide the soft keyboard
-		final InputMethodManager imm = (InputMethodManager) getActivity()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
 
 		return rootView;
 	}
