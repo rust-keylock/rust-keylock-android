@@ -1,5 +1,7 @@
 package org.astonbitecode.rustkeylock.api;
 
+import org.astonbitecode.rustkeylock.callbacks.ShowMessageCb;
+
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -34,14 +36,21 @@ public interface InterfaceWithRust extends Library {
 	}
 
 	/**
+	 * Callback for showing messages
+	 */
+	interface ShowMessageCallback extends Callback {
+		void apply(JavaUserOptionsSet.ByReference options, String message, String severity);
+	}
+
+	/**
 	 * Callback to be used for logging
 	 */
 	interface LoggingCallback extends Callback {
 		void apply(String level, String path, String file, int line, String message);
 	}
 
-	void execute(RustCallback showMenuCb, EntryCallback showEntryCb, EntriesSetCallback showEntriesSetCb, RustCallback sowMessageCb,
-			LoggingCallback logCb);
+	void execute(RustCallback showMenuCb, EntryCallback showEntryCb, EntriesSetCallback showEntriesSetCb,
+			ShowMessageCb sowMessageCb, LoggingCallback logCb);
 
 	/**
 	 * Passes the Username and Password to Rust
@@ -66,8 +75,9 @@ public interface InterfaceWithRust extends Library {
 	void go_to_menu(String menuName);
 
 	/**
-	 * Passes a Menu name to Rust and an int argument. Rust instructs the callback
-	 * to go to this menu and use the passed argument
+	 * Passes a Menu name to Rust plus an int argument and a String argument. Rust
+	 * instructs the callback to go to this menu and use the passed arguments. An
+	 * argNum or argStr that is a String null means that the argument is not used.
 	 * 
 	 * @param menuName
 	 * @param argNum
@@ -77,8 +87,8 @@ public interface InterfaceWithRust extends Library {
 	void go_to_menu_plus_arg(String menuName, String argNum, String argStr);
 
 	/**
-	 * Adds this JavaEntry to the list of Entries in memory. Note: The entry is
-	 * not yet encrypted and saved in the file.
+	 * Adds this JavaEntry to the list of Entries in memory. Note: The entry is not
+	 * yet encrypted and saved in the file.
 	 * 
 	 * @param javaEntry
 	 */
@@ -101,12 +111,23 @@ public interface InterfaceWithRust extends Library {
 
 	/**
 	 * Provides to Rust a path to export to / import from
+	 * 
 	 * @param path
-	 * @param export. Bypass issues with boolean. 0 for false, > 0 for true
+	 * @param export.
+	 *            Bypass issues with boolean. 0 for false, > 0 for true
 	 * @param password
 	 * @param number
 	 */
 	void export_import(String path, int export, String password, int number);
+
+	/**
+	 * Provides to Rust a UserOption that was selected
+	 * 
+	 * @param label
+	 * @param value
+	 * @param short_label
+	 */
+	void user_option_selected(String label, String value, String short_label);
 
 	/**
 	 * Instructs Rust to deallocate the heap memory for this JavaEntry

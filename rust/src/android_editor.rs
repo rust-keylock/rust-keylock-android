@@ -1,20 +1,20 @@
-use rust_keylock::{Editor, UserSelection, Menu, Safe};
+use rust_keylock::{Editor, UserSelection, Menu, Safe, UserOption, MessageSeverity};
 use super::{StringCallback, ShowEntryCallback, ShowEntriesSetCallback, LogCallback, logger,
-            JavaEntriesSet, JavaEntry};
+            JavaEntriesSet, JavaEntry, ShowMessageCallback, JavaUserOptionsSet};
 use std::sync::mpsc::Receiver;
 
 pub struct AndroidImpl {
     show_menu_cb: StringCallback,
     show_entry_cb: ShowEntryCallback,
     show_entries_set_cb: ShowEntriesSetCallback,
-    show_message_cb: StringCallback,
+    show_message_cb: ShowMessageCallback,
     rx: Receiver<UserSelection>,
 }
 
 pub fn new(show_menu_cb: StringCallback,
            show_entry_cb: ShowEntryCallback,
            show_entries_set_cb: ShowEntriesSetCallback,
-           show_message_cb: StringCallback,
+           show_message_cb: ShowMessageCallback,
            log_cb: LogCallback,
            rx: Receiver<UserSelection>)
            -> AndroidImpl {
@@ -64,13 +64,13 @@ impl Editor for AndroidImpl {
                     JavaEntriesSet::from(safe.get_entries())
                 };
 
-				let filter_ptr = if safe.get_filter().len() == 0 {
-					super::to_java_string("null".to_string())
-				} else {
-					super::to_java_string(safe.get_filter().clone())
-				};
+                let filter_ptr = if safe.get_filter().len() == 0 {
+                    super::to_java_string("null".to_string())
+                } else {
+                    super::to_java_string(safe.get_filter().clone())
+                };
 
-				(self.show_entries_set_cb)(Box::new(java_entries_set), filter_ptr);
+                (self.show_entries_set_cb)(Box::new(java_entries_set), filter_ptr);
             }
             &Menu::ShowEntry(index) => {
                 let entry = safe.get_entry_decrypted(index);
@@ -129,9 +129,20 @@ impl Editor for AndroidImpl {
         }
     }
 
-    fn show_message(&self, message: &str) -> UserSelection {
+    fn show_message(&self,
+                    message: &str,
+                    options: Vec<UserOption>,
+                    severity: MessageSeverity)
+                    -> UserSelection {
         debug!("Showing Message '{}'", message);
-        (self.show_message_cb)(super::to_java_string(message.to_string()));
+        let java_options_set = if options.len() == 0 {
+            JavaUserOptionsSet::with_nulls()
+        } else {
+            JavaUserOptionsSet::from(&options[..])
+        };
+        (self.show_message_cb)(Box::new(java_options_set),
+                               super::to_java_string(message.to_string()),
+                               super::to_java_string(severity.to_string()));
         let user_selection = self.rx.recv().unwrap();
         user_selection
     }
