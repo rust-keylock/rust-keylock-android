@@ -48,6 +48,7 @@ fi
 ANDROID_NDK_HOME=${ANDROID_NDK}
 
 sh $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain
+
 cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
 echo Android toolchain set in $ANDROID_TOOLCHAIN_DIR
@@ -69,3 +70,22 @@ cat > config << EOF
 [target.arm-linux-androideabi]
 linker = "${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-gcc"
 EOF
+
+# Get and build the openssl
+
+ANDROID_NDK_ROOT=${ANDROID_NDK}
+
+cd $BASEDIR/tools
+
+curl -O https://www.openssl.org/source/openssl-1.1.0g.tar.gz
+tar xzf openssl-1.1.0g.tar.gz
+OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0g
+
+. ../rust-build/setenv-android.sh
+
+cd $OPENSSL_SRC_DIR
+
+./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+make all
+make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib
+

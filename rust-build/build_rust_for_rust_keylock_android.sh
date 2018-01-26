@@ -19,7 +19,9 @@ ANDROID_JAVA_NATIVE="$BASEDIR/java/libs/armeabi/"
 mkdir -p $ANDROID_JAVA_NATIVE
 cd $ANDROID_RUST
 
-$CARGO_HOME/bin/xargo build --target=arm-linux-androideabi --release
+ANDROID_TOOLCHAIN_DIR=$BASEDIR/android-toolchain
+OPENSSL_BUILD_DIR=$BASEDIR/tools/openssl-1.1.0g/build
+CC="${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-gcc" OPENSSL_DIR=${OPENSSL_BUILD_DIR} OPENSSL_LIB_DIR=${OPENSSL_BUILD_DIR}/lib OPENSSL_INCLUDE_DIR=${OPENSSL_BUILD_DIR}/include OPENSSL_STATIC=true $CARGO_HOME/bin/xargo build --target=arm-linux-androideabi --release
 
 echo "Copying $ANDROID_RUST_KEYLOCK_LIB to $ANDROID_JAVA_NATIVE"
 cp $ANDROID_RUST_KEYLOCK_LIB $ANDROID_JAVA_NATIVE

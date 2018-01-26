@@ -14,5 +14,6 @@ public class Defs {
 	public static final String MENU_NEW_ENTRY = "NewEntry";
 	public static final String MENU_EXPORT_ENTRIES = "ExportEntries";
 	public static final String MENU_IMPORT_ENTRIES = "ImportEntries";
+	public static final String MENU_SHOW_CONFIGURATION = "ShowConfiguration";
 	public static final String EMPTY_ARG = "null";
 }

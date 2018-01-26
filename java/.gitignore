@@ -9,5 +9,10 @@
 /project.properties
 /target/
 /libs/armeabi/
-/rust-keylock-android-java.iml
+*.iml
 /libs/
+/.gradle/
+/.idea/
+/gradle/
+*gradle*
+

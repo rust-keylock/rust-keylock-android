@@ -59,6 +59,7 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
 		}
 		if (buttonIndex <= optionsList.size()) {
 			JavaUserOption juo = optionsList.get(buttonIndex);
+			Log.d(TAG, "ShowMessage returns label " + juo.label +", value " + juo.value +", shortLabel " + juo.shortLabel);
 			InterfaceWithRust.INSTANCE.user_option_selected(juo.label, juo.value, juo.shortLabel);
 		} else {
 			Log.e(TAG,

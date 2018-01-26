@@ -1,6 +1,8 @@
-use rust_keylock::{Editor, UserSelection, Menu, Safe, UserOption, MessageSeverity};
-use super::{StringCallback, ShowEntryCallback, ShowEntriesSetCallback, LogCallback, logger,
-            JavaEntriesSet, JavaEntry, ShowMessageCallback, JavaUserOptionsSet};
+use rust_keylock::{Editor, UserSelection, Menu, Safe, UserOption, MessageSeverity,
+                   RklConfiguration};
+use super::{StringCallback, StringListCallback, ShowEntryCallback, ShowEntriesSetCallback,
+            LogCallback, logger, JavaEntriesSet, JavaEntry, ShowMessageCallback,
+            JavaUserOptionsSet, StringList};
 use std::sync::mpsc::Receiver;
 
 pub struct AndroidImpl {
@@ -8,6 +10,7 @@ pub struct AndroidImpl {
     show_entry_cb: ShowEntryCallback,
     show_entries_set_cb: ShowEntriesSetCallback,
     show_message_cb: ShowMessageCallback,
+    edit_configuration_cb: StringListCallback,
     rx: Receiver<UserSelection>,
 }
 
@@ -15,6 +18,7 @@ pub fn new(show_menu_cb: StringCallback,
            show_entry_cb: ShowEntryCallback,
            show_entries_set_cb: ShowEntriesSetCallback,
            show_message_cb: ShowMessageCallback,
+           edit_configuration_cb: StringListCallback,
            log_cb: LogCallback,
            rx: Receiver<UserSelection>)
            -> AndroidImpl {
@@ -27,6 +31,7 @@ pub fn new(show_menu_cb: StringCallback,
         show_entry_cb: show_entry_cb,
         show_entries_set_cb: show_entries_set_cb,
         show_message_cb: show_message_cb,
+        edit_configuration_cb: edit_configuration_cb,
         rx: rx,
     }
 }
@@ -50,7 +55,11 @@ impl Editor for AndroidImpl {
         user_selection
     }
 
-    fn show_menu(&self, menu: &Menu, safe: &Safe) -> UserSelection {
+    fn show_menu(&self,
+                 menu: &Menu,
+                 safe: &Safe,
+                 configuration: &RklConfiguration)
+                 -> UserSelection {
         debug!("Opening menu '{:?}' with entries size {}",
                menu,
                safe.get_entries().len());
@@ -97,6 +106,14 @@ impl Editor for AndroidImpl {
             }
             &Menu::ImportEntries => {
                 (self.show_menu_cb)(super::to_java_string(Menu::ImportEntries.get_name()))
+            }
+            &Menu::ShowConfiguration => {
+                let conf_strings =
+                    vec![configuration.nextcloud.server_url.clone(),
+                         configuration.nextcloud.username.clone(),
+                         configuration.nextcloud.decrypted_password().unwrap(),
+                         configuration.nextcloud.use_self_signed_certificate.to_string()];
+                (self.edit_configuration_cb)(Box::new(StringList::from(conf_strings)))
             }
             other => {
                 panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
