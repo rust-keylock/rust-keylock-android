@@ -148,7 +148,7 @@ public class MainActivity extends Activity implements BackButtonHandlable {
                     in.close();
                 }
             } catch (IOException error) {
-                Log.e(TAG, "Could not copy the certificates", error);
+                Log.e(TAG, "Could not copy the certificates...", error);
             }
         }
 

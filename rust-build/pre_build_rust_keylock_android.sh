@@ -85,7 +85,12 @@ OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0g
 
 cd $OPENSSL_SRC_DIR
 
-./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
-make all
-make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib
+echo Building openssl
 
+{
+ ./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+ make all
+ make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib
+} &> /dev/null
+
+echo openssl build success

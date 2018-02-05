@@ -1,19 +1,5 @@
 package org.astonbitecode.rustkeylock.fragments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import android.widget.Button;
-import android.widget.CheckBox;
-import com.sun.jna.StringArray;
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.StringList;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import com.sun.jna.StringArray;
+import org.astonbitecode.rustkeylock.MainActivity;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.StringList;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+import org.astonbitecode.rustkeylock.utils.Defs;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditConfiguration extends Fragment implements OnClickListener, BackButtonHandler {
     private final String TAG = getClass().getName();
@@ -51,7 +49,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.editConfigurationOkButton) {
-            Log.d(TAG, "Clicked Ok in configuration ");
+            Log.d(TAG, "Clicked Ok in configuration");
             String url = nextcloudUrlText.getText() != null ? nextcloudUrlText.getText().toString() : "";
             String user = nextcloudUsernameText.getText() != null ? nextcloudUsernameText.getText().toString() : "";
             String password = nextcloudPasswordText.getText() != null ? nextcloudPasswordText.getText().toString() : "";
@@ -59,18 +57,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             Log.d(TAG, "Saving configuration (password not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
 
             boolean errorsOccured = false;
-            if (url.isEmpty()) {
-                nextcloudUrlText.setError("Required field");
-                errorsOccured = true;
-            }
-            if (user.isEmpty()) {
-                nextcloudUsernameText.setError("Required field");
-                errorsOccured = true;
-            }
-            if (password.isEmpty()) {
-                nextcloudPasswordText.setError("Required field");
-                errorsOccured = true;
-            }
+
             if (!errorsOccured) {
                 String[] stringsToSave = {url, user, password, useSelfSignedCertString};
                 StringList sl = new StringList.ByReference();
@@ -79,8 +66,16 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
                 InterfaceWithRust.INSTANCE.set_configuration(sl);
             }
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
-            Log.d(TAG, "Clicked Cancel in configuration ");
+            Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        } else if (view.getId() == R.id.synchronizeButton) {
+            Log.d(TAG, "Clicked Synchronize now in configuration");
+
+            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SYNCHRONIZE);
+
+            MainActivity mainActivity = MainActivity.getActiveActivity();
+            Runnable uiRunnable = new UiThreadRunnable(mainActivity);
+            mainActivity.runOnUiThread(uiRunnable);
         }
     }
 
@@ -89,6 +84,8 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         ob.setOnClickListener(this);
         Button cb = (Button) v.findViewById(R.id.editConfigurationCancelButton);
         cb.setOnClickListener(this);
+        Button sb = (Button) v.findViewById(R.id.synchronizeButton);
+        sb.setOnClickListener(this);
 
         EditText urlText = (EditText) v.findViewById(R.id.editNextcloudUrl);
         urlText.setText(strings.get(0));
@@ -107,7 +104,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_ENTRIES_LIST, Defs.EMPTY_ARG, "");
+        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
     }
 
     @Override
@@ -118,6 +115,21 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     private void restore(Bundle state) {
         if (state != null) {
             this.strings = state.getStringArrayList("strings");
+        }
+    }
+
+    private class UiThreadRunnable implements Runnable {
+        private MainActivity mainActivity = null;
+
+        public UiThreadRunnable(MainActivity mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+
+        @Override
+        public void run() {
+            PleaseWait pw = new PleaseWait();
+            mainActivity.setBackButtonHandler(null);
+            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
         }
     }
 }

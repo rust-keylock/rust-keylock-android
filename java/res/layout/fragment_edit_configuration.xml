@@ -30,13 +30,33 @@
                     android:text="Configuration"
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <TextView
-                    android:id="@+id/nextcloudLabel"
-                    android:layout_width="wrap_content"
+            <GridLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="Nextcloud"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20sp"
+                    android:columnCount="2"
+                    android:gravity="center|top"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/nextcloudLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:text="Nextcloud"
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <Button
+                        android:id="@+id/synchronizeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:color/transparent"
+                        android:drawableTop="@drawable/synchronizesmall"
+                        android:text="Synchronize now"
+                        android:textAppearance="?android:textAppearanceSmall"/>
+            </GridLayout>
 
             <TextView
                     android:id="@+id/urlLabel"
@@ -78,7 +98,7 @@
                     android:id="@+id/editNextcloudPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
+                    android:inputType="textPassword"/>
 
             <CheckBox android:id="@+id/editNextcloudUseSelfSignedCert" android:layout_width="match_parent"
                       android:layout_height="match_parent"

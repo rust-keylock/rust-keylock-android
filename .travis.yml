@@ -1,35 +1,40 @@
 dist: trusty
 language: android
-
 jdk:
-  - oraclejdk8
+- oraclejdk8
 addons:
   apt:
     packages:
     - oracle-java8-installer
 android:
   components:
-    - platform-tools
-    - tools
-    - build-tools-26.0.2
-    - android-16
-
+  - platform-tools
+  - tools
+  - build-tools-26.0.2
+  - android-16
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq gcc-arm-linux-androideabi
-  - sh rust-build/pre_build_rust_keylock_android.sh
-  - sh rust-build/build_rust_for_rust_keylock_android.sh
-
+- openssl aes-256-cbc -K $encrypted_2f32dd076c5d_key -iv $encrypted_2f32dd076c5d_iv
+  -in rkl.jks.enc -out ks/rkl.jks -d
+- sudo apt-get update -qq
+- sudo apt-get install -qq gcc-arm-linux-androideabi
+- sh rust-build/pre_build_rust_keylock_android.sh
+- sh rust-build/build_rust_for_rust_keylock_android.sh
 script:
-  - mvn -f java/pom.xml clean install
-
+- mvn -f java/pom.xml clean install
+before_deploy:
+- jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ks/rkl.jks -storepass $storepass -keypass $keypass java/target/rust-keylock-android-0.4.0.apk rustkeylock
+- mv rust-keylock-android-0.4.0.apk rust-keylock-android-0.4.0.apk.tmp
+- "${ANDROID_HOME}/build-tools/24.0.2/zipalign -v 4 rust-keylock-android-0.4.0.apk.tmp rust-keylock-android-0.4.0.apk"
 deploy:
   provider: releases
   api_key:
     secure: QAFSbUoyNv/1/lkSzS4SBXwozKkk3Hnjlio6aH6akEniFBhkG93+8SUHLFl/O7MR74IpCG4iIm+E7Lo8sZR/xkk5SJgvw2ts4se06b5QmSy0AFjdWuaPJvJpF3WCnOmNiOa/MNBQdnQGoBHDtkmiZM/k4TX4sZfOKN5JEzItt9rSF23koAdnGvwwiaihjIcA1kOLFcGYmzNQF3qwBsnwwhsTHINGwvXcpbLWF6/3pYWXcnPDL/h2Vb+iTg+fG4KBHLK3l7jXarJmqy2uOHs6Nabz1e0KDEoWrUH1GXKzPBfxyXpTXhwIek7iI95QF/eiFgsHlYuX0fAwSRqs5zVEwmx+vmoi5GwaTId1DeY82yn6jl+a5fPFRFVz6DRBQwIu6GgQnMHuijnDrNGim4jrYmDaKHSA+9eK9luXZsXFCxHwTAHRdeWWebK0CdHDr+r3BP9kCzHxmOopwvxt/x3/AZwEAPlNPfLKVFdnKSx7J71lUkiJIjxDOnijWBhmFeOgb7VlHc2Fhg9EZ+/+DD0g+o6IfVqvdBSInD39ynnU8KJVJDWyykyjK45hmZDRCNdN3ns2pSTU7KPS5orTtAOMKs0VPh66/S9aP2TO0W2IUtaY3oyg83g8hCr+BIamyLhA1QQDdlHd7wgy2sNdmt+vVi/KEHGxSw2f/3U3y2XmQMY=
-
   file: java/target/rust-keylock-android-0.3.0.apk
   skip_cleanup: true
   on:
     repo: rust-keylock/rust-keylock-android
     tags: true
+env:
+  global:
+  - secure: FbNZegeBAEOx1xolpsTBZX8M4CyTRCYaVXEkMdwFjQCirjpn8S8CdLhqzzvp/NBHVAHu+UwAGCCWkwmVwdVDNxPWOfsm8E5JCq0vku7k1wTGDNtliVs5aVgSv6IyhbSaUY5Sa+l6Dyko/Al0UsLnKMTADkY6hGwNRfD6myrOr7ByfZCvy+K99wEyhBRuoT1RwLat2UlbzTxXDrjzPt1kE0J/Lrmqkc57zODxGo5RQto9cIELU2tX1FTZlOw0Ai7jq/i+5Ms/vVQMKaPWS5cMjDhBBYuwMJrd6TzYcHqvMbE5XOzZRLxmKuvvI+SEGcnDa7V0t3xI3KkDb2/JrMX5Pp+3bTi+r9vjUmOsLaJJ7mPBj/XxHaACFJvxXRttq1mX2PMt90c6ZS0B+Cnu4vutmHKwGfJhiXjbQLdZGjXGYvg6MEBQvDGjPUzx3oCVjzT1WPUyYx3AzeSBFoBcI9dFvyB9uPlIoxaZVQA9vr46m8RT8lMAhCICQ4RiV9WVugbOopVIjV4s0Hguj/vnjHk+EUQ/jZ/WqZVdrFfHAafZOGBJ2CdRLCbA89VEkaLIWVh+O1ag2yPvSeNGsK74ciOe97+sEneIz5Gwbm0ZvsCUh3DOCHFRAEBZsNn7Uhuw2/GwntpUYqZywBEKoCOjrJ4zO+7nfTL2+IZRq+77xAuh3aE=
+  - secure: wFTs0tRC44hdVzHdSGHAhjTIfV31uDBrfJqeu1ZyjLeuiKV626ru1OKaSj5g7wCdh0637slf6AFpJgwwu8PfyxGxI1U5w6ocY4/l7kMuu/Ed4GeAKNKMs/5MLwZ4M+u+GVTqffuaHnPLqMASFTrfI4ojeYzib15OvU+nS3L64MzB/vRzDQvRBQI0Dd9vcu2qHI1I8AnfYv7Ecpnxq2FUNYvWTtdWybfR8oG2fl/dFWU+TYqOP+NCABjJh49F+0XcJRY8fs5kJBhoq06OABujHtS3qgqREPjqhqbChZJHZWy1S1MUVXPNq45BuIXVrK04+izhjtmrgohrPpx9b6jI7Vq3G16HWJMKkxrS9XnNA+7lQMGBXkbYoZzJdSlSHYIvCg0DeQ/FW3Sht4VuKbdIllS0f4J1M/H0va8NfYRYxFlxj4T3on626yIJXiPPBfqt3dPM5ESUeBHApAxm38LcLSMMSufytBvjLDnWFyuVBn3NChGpBQ0hSk7BH0XM5QPq59f82u1y0C/mCyHyBylhhGvbIW+BSwRKUBcFPLLYC9Qpjo85wzqpmnfJyfAQ8uaLyiq0o/2PYdY08WQAHPUjjHr+ZJJl3atZ0EHkbX7OYQptHoK8YzAY9nnOLHwDitj900aWcENYmtKsaLF7HShu3yI7mQq7RUi5yXgmDF4XrFw=
