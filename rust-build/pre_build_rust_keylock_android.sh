@@ -47,11 +47,14 @@ fi
 
 ANDROID_NDK_HOME=${ANDROID_NDK}
 
-sh $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain
+echo Installing the Android toolchain
+
+sh $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain > /dev/null
 
 cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
-echo Android toolchain set in $ANDROID_TOOLCHAIN_DIR
+
+echo Android toolchain installed in $ANDROID_TOOLCHAIN_DIR
 
 # Install the jar containing the jna native library for Android (taken from https://github.com/java-native-access/jna/tree/master/lib/native)
 echo "Installing jar android-arm.jar in the local Maven... This jar is not provided in the Maven Central, rather by the project's GitHub repo."
@@ -87,10 +90,8 @@ cd $OPENSSL_SRC_DIR
 
 echo Building openssl
 
-{
- ./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
- make all
- make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib
-} &> /dev/null
+./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+make all > /dev/null
+make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib > /dev/null
 
 echo openssl build success
