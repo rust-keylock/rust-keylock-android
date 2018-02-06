@@ -1,5 +1,6 @@
 package org.astonbitecode.rustkeylock.fragments;
 
+import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
@@ -48,6 +49,8 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
         binp.setOnClickListener(this);
         Button bcfg = (Button) rootView.findViewById(R.id.mmEditConfigurationButton);
         bcfg.setOnClickListener(this);
+        Button sb = (Button) rootView.findViewById(R.id.synchronizeButton);
+        sb.setOnClickListener(this);
     }
 
     @Override
@@ -73,7 +76,15 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
         } else if (view.getId() == R.id.mmEditConfigurationButton) {
             Log.d(TAG, "The User Selected to edit the configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SHOW_CONFIGURATION);
-        } else {
+        } else if (view.getId() == R.id.synchronizeButton) {
+            Log.d(TAG, "Clicked Synchronize now in configuration");
+
+            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SYNCHRONIZE);
+
+            MainActivity mainActivity = MainActivity.getActiveActivity();
+            Runnable uiRunnable = new UiThreadRunnable(mainActivity);
+            mainActivity.runOnUiThread(uiRunnable);
+        }else {
             Log.e(TAG, "The User selected a Menu that is not implemented yet in Rust");
         }
     }
@@ -82,5 +93,20 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
         InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_EXIT);
+    }
+
+    private class UiThreadRunnable implements Runnable {
+        private MainActivity mainActivity = null;
+
+        public UiThreadRunnable(MainActivity mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+
+        @Override
+        public void run() {
+            PleaseWait pw = new PleaseWait();
+            mainActivity.setBackButtonHandler(null);
+            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
+        }
     }
 }

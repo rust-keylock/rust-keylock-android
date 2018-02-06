@@ -30,33 +30,13 @@
                     android:text="Configuration"
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <GridLayout
-                    android:layout_width="match_parent"
+            <TextView
+                    android:id="@+id/nextcloudLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20sp"
-                    android:columnCount="2"
-                    android:gravity="center|top"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:id="@+id/nextcloudLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|center"
-                        android:text="Nextcloud"
-                        android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                <Button
-                        android:id="@+id/synchronizeButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@android:color/transparent"
-                        android:drawableTop="@drawable/synchronizesmall"
-                        android:text="Synchronize now"
-                        android:textAppearance="?android:textAppearanceSmall"/>
-            </GridLayout>
+                    android:layout_gravity="left|center"
+                    android:text="Nextcloud"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <TextView
                     android:id="@+id/urlLabel"

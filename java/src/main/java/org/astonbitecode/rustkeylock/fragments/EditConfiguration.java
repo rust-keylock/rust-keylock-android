@@ -68,14 +68,6 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
-        } else if (view.getId() == R.id.synchronizeButton) {
-            Log.d(TAG, "Clicked Synchronize now in configuration");
-
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SYNCHRONIZE);
-
-            MainActivity mainActivity = MainActivity.getActiveActivity();
-            Runnable uiRunnable = new UiThreadRunnable(mainActivity);
-            mainActivity.runOnUiThread(uiRunnable);
         }
     }
 
@@ -84,8 +76,6 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         ob.setOnClickListener(this);
         Button cb = (Button) v.findViewById(R.id.editConfigurationCancelButton);
         cb.setOnClickListener(this);
-        Button sb = (Button) v.findViewById(R.id.synchronizeButton);
-        sb.setOnClickListener(this);
 
         EditText urlText = (EditText) v.findViewById(R.id.editNextcloudUrl);
         urlText.setText(strings.get(0));
@@ -118,18 +108,4 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         }
     }
 
-    private class UiThreadRunnable implements Runnable {
-        private MainActivity mainActivity = null;
-
-        public UiThreadRunnable(MainActivity mainActivity) {
-            this.mainActivity = mainActivity;
-        }
-
-        @Override
-        public void run() {
-            PleaseWait pw = new PleaseWait();
-            mainActivity.setBackButtonHandler(null);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
-        }
-    }
 }
