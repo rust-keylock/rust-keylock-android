@@ -35,6 +35,7 @@ deploy:
   on:
     repo: rust-keylock/rust-keylock-android
     tags: true
+    branch: master
 env:
   global:
   - secure: CsqkZWx2fDhbPwAAMiHyGTSX+XdvJdLY8ngktSMfA2HxVk4A1BLO0lwT/25d7Rw8wxmle/+t43cNmyZJ+TdR/J4AbAtKNTlBUo0EFi6PQKDEQJK+Tn+TnelMZLgMa3DlrBhAgN+keZHZM3PBE76fwfuR1x7QGbwP3KAryJsmpESJfwHmn2UpwAX3TmE6RW/MqoSSlEyhiJEEyUuWjjM40bKUhsyLbJPgdyhPRnUrs13j2k/Luhf8UAaWxdQp48dOkYdUxb4VAY7pQdEaV362xlK48RdF/2X33YX+vJ8GwnwMljchOWq91tE2F1HKrSEHzA3EtEsc7ZZgGoS5wAC5oB8SOPhA2HgczQbEMon3YSvGt2nv50q6gwvgPNvbEUuR1UV3tFgqoUyVfpPGpj/Zmz2dmHA6NF2BCrtgMk/R9G2NS/u9a83SVJd/JH4XP7m2ca3WxiS9p/PlvvQEQNmCymWY3zYcgPtZrsRF3awbvcXks9UnBMOrv5qp5sfv4NeQbXPlB+R1T8SiEOnVyIxdKigSgK+oNSvECK3VjDuxLtrU8kyJfSXdvUE9I8DtHvwgYEZW4v73N6PpEda6tz/FZJskrRavGBuPb+PaRBYzY74+GRqugQIg3hgt6F0DCaPKSbnls526aPr0l/vWpYqy6laPvxDOC4tfu6tggD/cULI=
