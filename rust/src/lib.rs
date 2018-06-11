@@ -35,6 +35,7 @@ lazy_static! {
 #[repr(C)]
 pub struct JavaEntry {
     name: *const c_char,
+    url: *const c_char,
     user: *const c_char,
     pass: *const c_char,
     desc: *const c_char,
@@ -44,6 +45,7 @@ impl JavaEntry {
     fn new(entry: &Entry) -> JavaEntry {
         JavaEntry {
             name: to_java_string(entry.name.clone()),
+            url: to_java_string(entry.url.clone()),
             user: to_java_string(entry.user.clone()),
             pass: to_java_string(entry.pass.clone()),
             desc: to_java_string(entry.desc.clone()),
@@ -53,6 +55,7 @@ impl JavaEntry {
     fn empty() -> JavaEntry {
         JavaEntry {
             name: to_java_string("".to_string()),
+            url: to_java_string("".to_string()),
             user: to_java_string("".to_string()),
             pass: to_java_string("".to_string()),
             desc: to_java_string("".to_string()),
@@ -62,6 +65,7 @@ impl JavaEntry {
     fn with_nulls() -> JavaEntry {
         JavaEntry {
             name: to_java_string("null".to_string()),
+            url: to_java_string("null".to_string()),
             user: to_java_string("null".to_string()),
             pass: to_java_string("null".to_string()),
             desc: to_java_string("null".to_string()),
@@ -296,6 +300,7 @@ pub extern "C" fn add_entry(java_entry: &JavaEntry) {
         TX.lock().unwrap().as_ref().unwrap().clone()
     };
     let entry = Entry::new(to_rust_string(java_entry.name),
+                           to_rust_string(java_entry.url),
                            to_rust_string(java_entry.user),
                            to_rust_string(java_entry.pass),
                            to_rust_string(java_entry.desc));
@@ -312,6 +317,7 @@ pub extern "C" fn replace_entry(java_entry: &JavaEntry, index: i32) {
         TX.lock().unwrap().as_ref().unwrap().clone()
     };
     let entry = Entry::new(to_rust_string(java_entry.name),
+                           to_rust_string(java_entry.url),
                            to_rust_string(java_entry.user),
                            to_rust_string(java_entry.pass),
                            to_rust_string(java_entry.desc));

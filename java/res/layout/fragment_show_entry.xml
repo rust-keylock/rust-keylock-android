@@ -45,6 +45,20 @@
                     android:inputType="text"/>
 
             <TextView
+                    android:id="@+id/urlLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:text="URL"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <EditText
+                    android:id="@+id/editUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+
+            <TextView
                     android:id="@+id/userLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -19,11 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class ShowEntry extends Fragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 163106573370997557L;
     private final String TAG = getClass().getName();
     private transient JavaEntry entry;
     private String entryName;
+    private String entryUrl;
     private String entryUser;
     private String entryPass;
     private String entryDesc;
@@ -31,6 +35,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     private boolean edit;
     private boolean delete;
     private transient EditText nameText;
+    private transient EditText urlText;
     private transient EditText userText;
     private transient EditText passwordText;
     private transient EditText descriptionText;
@@ -47,6 +52,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     public ShowEntry(JavaEntry entry, int entryIndex, boolean edit, boolean delete) {
         this.entry = entry;
         this.entryName = entry.getName();
+        this.entryUrl = entry.getUrl();
         this.entryUser = entry.getUser();
         this.entryPass = entry.getPass();
         this.entryDesc = entry.getDesc();
@@ -79,6 +85,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
             JavaEntry javaEntry = new JavaEntry();
             javaEntry.name = nameText.getText() != null ? nameText.getText().toString() : "";
+            javaEntry.url = urlText.getText() != null ? urlText.getText().toString() : "";
             javaEntry.user = userText.getText() != null ? userText.getText().toString() : "";
             javaEntry.pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
             javaEntry.desc = descriptionText.getText() != null ? descriptionText.getText().toString() : "";
@@ -95,6 +102,14 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             if (javaEntry.pass.isEmpty()) {
                 passwordText.setError("Required field");
                 errorsOccured = true;
+            }
+            if (!javaEntry.url.isEmpty()) {
+                try {
+                    new URL(javaEntry.url);
+                } catch (MalformedURLException mue) {
+                    urlText.setError("Invalid URL. Eg: https://my.com");
+                    errorsOccured = true;
+                }
             }
             if (!errorsOccured) {
                 if (entryIndex >= 0) {
@@ -131,6 +146,10 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         nameText.setText(entry.getName());
         nameText.setEnabled(edit);
         this.nameText = nameText;
+        EditText urlText = (EditText) v.findViewById(R.id.editUrl);
+        urlText.setText(entry.getUrl());
+        urlText.setEnabled(edit);
+        this.urlText = urlText;
         EditText userText = (EditText) v.findViewById(R.id.editUser);
         userText.setText(entry.getUser());
         userText.setEnabled(edit);
@@ -180,6 +199,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         if (state != null) {
             this.entry = new JavaEntry();
             this.entry.name = this.entryName;
+            this.entry.url = this.entryUrl;
             this.entry.user = this.entryUser;
             this.entry.pass = this.entryPass;
             this.entry.desc = this.entryDesc;
