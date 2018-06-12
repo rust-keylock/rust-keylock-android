@@ -1,3 +1,18 @@
+// Copyright 2017 astonbitecode
+// This file is part of rust-keylock password manager.
+//
+// rust-keylock is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rust-keylock is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
 import org.astonbitecode.rustkeylock.R;
@@ -15,19 +30,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class EnterPassword extends Fragment implements OnClickListener, BackButtonHandler {
-	private static final long serialVersionUID = -9046678064745197531L;
-	private final String TAG = getClass().getName();
-	private transient EditText passwordText;
-	private transient EditText numberText;
+    private static final long serialVersionUID = -9046678064745197531L;
+    private final String TAG = getClass().getName();
+    private transient EditText passwordText;
+    private transient EditText numberText;
 
-	public EnterPassword() {
-	}
+    public EnterPassword() {
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_enter_password, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_enter_password, container, false);
 
-		// TODO: Should this be included?
+        // TODO: Should this be included?
 		/*
 		ImageView image = (ImageView) rootView.findViewById(R.id.changableImage);
 		Calendar cal = Calendar.getInstance();
@@ -42,44 +57,44 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
 			image.setImageResource(R.drawable.unmbrella);
 		}
 		*/
-		EditText passwordText = (EditText) rootView.findViewById(R.id.editPassword);
-		this.passwordText = passwordText;
-		EditText numberText = (EditText) rootView.findViewById(R.id.editFavoriteNumber);
-		this.numberText = numberText;
-		Button b = (Button) rootView.findViewById(R.id.buttonDecrypt);
-		b.setOnClickListener(this);
+        EditText passwordText = (EditText) rootView.findViewById(R.id.editPassword);
+        this.passwordText = passwordText;
+        EditText numberText = (EditText) rootView.findViewById(R.id.editFavoriteNumber);
+        this.numberText = numberText;
+        Button b = (Button) rootView.findViewById(R.id.buttonDecrypt);
+        b.setOnClickListener(this);
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	@Override
-	public void onClick(View view) {
-		String pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
-		String numString = numberText.getText() != null ? numberText.getText().toString() : "";
+    @Override
+    public void onClick(View view) {
+        String pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
+        String numString = numberText.getText() != null ? numberText.getText().toString() : "";
 
-		if (pass.isEmpty()) {
-			passwordText.setError("Required Field");
-			passwordText.setText("");
-		} else if (numString.isEmpty()) {
-			numberText.setText("");
-			numberText.setError("Required Field");
-		} else {
-			try {
-				int num = new Integer(numString);
-				InterfaceWithRust.INSTANCE.set_password(pass, num);
-			} catch (Exception error) {
-				String message = "Incorrect number";
-				Log.e(TAG, message, error);
-				numberText.setText("");
-				numberText.setError(message);
-			}
-		}
+        if (pass.isEmpty()) {
+            passwordText.setError("Required Field");
+            passwordText.setText("");
+        } else if (numString.isEmpty()) {
+            numberText.setText("");
+            numberText.setError("Required Field");
+        } else {
+            try {
+                int num = new Integer(numString);
+                InterfaceWithRust.INSTANCE.set_password(pass, num);
+            } catch (Exception error) {
+                String message = "Incorrect number";
+                Log.e(TAG, message, error);
+                numberText.setText("");
+                numberText.setError(message);
+            }
+        }
 
-	}
+    }
 
-	@Override
-	public void onBackButton() {
-		Log.d(TAG, "Back button pressed");
-		System.exit(0);
-	}
+    @Override
+    public void onBackButton() {
+        Log.d(TAG, "Back button pressed");
+        System.exit(0);
+    }
 }
