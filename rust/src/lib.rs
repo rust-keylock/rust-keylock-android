@@ -1,3 +1,19 @@
+// Copyright 2017 astonbitecode
+// This file is part of rust-keylock password manager.
+//
+// rust-keylock is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rust-keylock is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
+
 #[macro_use]
 extern crate log;
 #[macro_use]
@@ -203,8 +219,7 @@ pub extern "C" fn execute(show_menu_cb: StringCallback,
                           edit_configuration_cb: StringListCallback,
                           log_cb: LogCallback,
                           cert_file_path_java_string: *const c_char) {
-
-	let cert_file_path = to_rust_string(cert_file_path_java_string);
+    let cert_file_path = to_rust_string(cert_file_path_java_string);
     ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
     let (tx, rx): (Sender<UserSelection>, Receiver<UserSelection>) = mpsc::channel();
     // Release the lock before calling the execute.
@@ -372,8 +387,8 @@ pub extern "C" fn user_option_selected(label: *const c_char,
     };
 
     tx.send(UserSelection::UserOption(UserOption::from((to_rust_string(label),
-                                                          to_rust_string(value),
-                                                          to_rust_string(short_label)))))
+                                                        to_rust_string(value),
+                                                        to_rust_string(short_label)))))
         .unwrap();
     debug!("user_option_selected sent UserSelection to the TX");
 }
