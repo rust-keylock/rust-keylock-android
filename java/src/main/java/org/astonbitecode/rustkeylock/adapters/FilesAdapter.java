@@ -1,3 +1,18 @@
+// Copyright 2017 astonbitecode
+// This file is part of rust-keylock password manager.
+//
+// rust-keylock is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rust-keylock is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.adapters;
 
 import java.util.List;
@@ -14,34 +29,34 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class FilesAdapter extends ArrayAdapter<FileSelector.FileEntry> {
-	private List<FileSelector.FileEntry> entries;
-	private Context context; 
-	private int layoutResourceId;
+    private List<FileSelector.FileEntry> entries;
+    private Context context;
+    private int layoutResourceId;
 
-	public FilesAdapter(Context context, int resourceId, List<FileSelector.FileEntry> entries) {
-		super(context, resourceId, entries);
-		this.entries = entries;
-		this.context = context;
-		this.layoutResourceId = resourceId;
-	}
+    public FilesAdapter(Context context, int resourceId, List<FileSelector.FileEntry> entries) {
+        super(context, resourceId, entries);
+        this.entries = entries;
+        this.context = context;
+        this.layoutResourceId = resourceId;
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = convertView;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View v = convertView;
 
-		if (v == null) {
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			v = inflater.inflate(layoutResourceId, parent, false);
-		}
+        if (v == null) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            v = inflater.inflate(layoutResourceId, parent, false);
+        }
 
-		FileSelector.FileEntry i = entries.get(position);
+        FileSelector.FileEntry i = entries.get(position);
 
-		if (i != null) {
-			TextView tvn = (TextView) v.findViewById(R.id.filename);
+        if (i != null) {
+            TextView tvn = (TextView) v.findViewById(R.id.filename);
 
-			if (tvn != null) {
-				tvn.setText(i.getName());
-			}
-		}
-		return v;
-	}
+            if (tvn != null) {
+                tvn.setText(i.getName());
+            }
+        }
+        return v;
+    }
 }
