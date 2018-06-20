@@ -157,4 +157,10 @@ public interface InterfaceWithRust extends Library {
      *                   file location
      */
     void set_configuration(StringList stringList);
+
+    /**
+     * Copies the data in the Clipboard
+     * @param data
+     */
+    void copy(String data);
 }

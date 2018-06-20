@@ -3,7 +3,8 @@ use rust_keylock::{Editor, UserSelection, Menu, Safe, UserOption, MessageSeverit
 use super::{StringCallback, StringListCallback, ShowEntryCallback, ShowEntriesSetCallback,
             LogCallback, logger, JavaEntriesSet, JavaEntry, ShowMessageCallback,
             JavaUserOptionsSet, StringList};
-use std::sync::mpsc::Receiver;
+use std::sync::mpsc::{Receiver, Sender};
+use std::sync::Mutex;
 
 pub struct AndroidImpl {
     show_menu_cb: StringCallback,
@@ -12,6 +13,8 @@ pub struct AndroidImpl {
     show_message_cb: ShowMessageCallback,
     edit_configuration_cb: StringListCallback,
     rx: Receiver<UserSelection>,
+    tx: Sender<UserSelection>,
+    previous_menu: Mutex<Option<Menu>>,
 }
 
 pub fn new(show_menu_cb: StringCallback,
@@ -20,7 +23,8 @@ pub fn new(show_menu_cb: StringCallback,
            show_message_cb: ShowMessageCallback,
            edit_configuration_cb: StringListCallback,
            log_cb: LogCallback,
-           rx: Receiver<UserSelection>)
+           rx: Receiver<UserSelection>,
+           tx: Sender<UserSelection>)
            -> AndroidImpl {
 
     // Initialize the Android logger
@@ -33,6 +37,42 @@ pub fn new(show_menu_cb: StringCallback,
         show_message_cb: show_message_cb,
         edit_configuration_cb: edit_configuration_cb,
         rx: rx,
+        tx: tx,
+        previous_menu: Mutex::new(None),
+    }
+}
+
+impl AndroidImpl {
+    fn update_internal_state(&self, menu: &UserSelection) {
+        match menu {
+            &UserSelection::GoTo(ref menu) => { self.update_menu(menu.clone()) }
+            _ => {
+                // ignore
+            }
+        }
+    }
+
+    fn update_menu(&self, menu: Menu) {
+        match self.previous_menu.lock() {
+            Ok(mut previous_menu_mut) => {
+                *previous_menu_mut = Some(menu);
+            }
+            Err(error) => {
+                warn!("Warning! Could not update the internal state. Reason: {:?}", error);
+            }
+        };
+    }
+
+    fn previous_menu(&self) -> Option<Menu> {
+        match self.previous_menu.lock() {
+            Ok(previous_menu_mut) => {
+                previous_menu_mut.clone()
+            }
+            Err(error) => {
+                warn!("Warning! Could not retrieve the internal state. Reason: {:?}", error);
+                Some(Menu::Main)
+            }
+        }
     }
 }
 
@@ -115,6 +155,9 @@ impl Editor for AndroidImpl {
                          configuration.nextcloud.use_self_signed_certificate.to_string()];
                 (self.edit_configuration_cb)(Box::new(StringList::from(conf_strings)))
             }
+            &Menu::Current => {
+                let _ = self.tx.send(UserSelection::GoTo(self.previous_menu().unwrap_or(Menu::Main)));
+            }
             other => {
                 panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
                         to the developers.",
@@ -130,6 +173,7 @@ impl Editor for AndroidImpl {
                 UserSelection::GoTo(Menu::Main)
             }
         };
+        self.update_internal_state(&usin);
         debug!("Proceeding after receiving User Input from {:?}", menu);
         usin
     }

@@ -1,15 +1,11 @@
 package org.astonbitecode.rustkeylock.fragments;
 
-import android.text.InputFilter;
-import android.text.Spanned;
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.JavaEntry;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +13,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.JavaEntry;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+import org.astonbitecode.rustkeylock.utils.Defs;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -126,7 +128,23 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             Log.d(TAG, "Clicked confirm deletion on entry with id " + entryIndex);
 
             InterfaceWithRust.INSTANCE.delete_entry(entryIndex);
+        } else if (view.getId() == R.id.copyUrlButton) {
+            Log.d(TAG, "Copying URL of entry with id " + entryIndex);
+            addToClipboard(entryUrl);
+        } else if (view.getId() == R.id.copyUsernameButton) {
+            Log.d(TAG, "Copying username of entry with id " + entryIndex);
+            addToClipboard(entryUser);
+        } else if (view.getId() == R.id.copyPasswordButton) {
+            Log.d(TAG, "Copying password of entry with id " + entryIndex);
+            addToClipboard(entryPass);
         }
+    }
+
+    private void addToClipboard(String data) {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("rust-keylock", data);
+        clipboard.setPrimaryClip(clip);
+        InterfaceWithRust.INSTANCE.copy(data);
     }
 
     private void prepareUiElements(View v) {
@@ -156,17 +174,9 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         this.userText = userText;
         EditText passwordText = (EditText) v.findViewById(R.id.editPassword);
         passwordText.setText(entry.getPass());
+        passwordText.setEnabled(edit);
         if (!edit) {
-            passwordText.setFilters(new InputFilter[]{
-                    new InputFilter() {
-                        public CharSequence filter(CharSequence src, int start,
-                                                   int end, Spanned dst, int dstart, int dend) {
-                            return src.length() < 1 ? dst.subSequence(dstart, dend) : "";
-                        }
-                    }
-            });
-        } else {
-            passwordText.setFilters(new InputFilter[]{});
+            passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
         this.passwordText = passwordText;
         EditText descriptionText = (EditText) v.findViewById(R.id.editDescriptionArea);
@@ -180,6 +190,12 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         Button aysb = (Button) v.findViewById(R.id.areYouSureButton);
         aysb.setOnClickListener(this);
         aysb.setVisibility((!edit && delete) ? View.VISIBLE : View.GONE);
+        ImageButton cub = (ImageButton) v.findViewById(R.id.copyUrlButton);
+        cub.setOnClickListener(this);
+        ImageButton cuserb = (ImageButton) v.findViewById(R.id.copyUsernameButton);
+        cuserb.setOnClickListener(this);
+        ImageButton cpb = (ImageButton) v.findViewById(R.id.copyPasswordButton);
+        cpb.setOnClickListener(this);
     }
 
     @Override

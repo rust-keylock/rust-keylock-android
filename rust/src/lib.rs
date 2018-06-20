@@ -203,15 +203,14 @@ pub extern "C" fn execute(show_menu_cb: StringCallback,
                           edit_configuration_cb: StringListCallback,
                           log_cb: LogCallback,
                           cert_file_path_java_string: *const c_char) {
-
-	let cert_file_path = to_rust_string(cert_file_path_java_string);
+    let cert_file_path = to_rust_string(cert_file_path_java_string);
     ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
     let (tx, rx): (Sender<UserSelection>, Receiver<UserSelection>) = mpsc::channel();
     // Release the lock before calling the execute.
     // Execute will not return for the whole lifetime of the app, so the lock would be for ever acquired if was not explicitly released using the brackets.
     {
         let mut tx_opt = TX.lock().unwrap();
-        *tx_opt = Some(tx);
+        *tx_opt = Some(tx.clone());
     }
     let editor = android_editor::new(show_menu_cb,
                                      show_entry_cb,
@@ -219,7 +218,8 @@ pub extern "C" fn execute(show_menu_cb: StringCallback,
                                      show_message_cb,
                                      edit_configuration_cb,
                                      log_cb,
-                                     rx);
+                                     rx,
+                                     tx);
     debug!("TX Mutex initialized. Executing native rust_keylock!");
     rust_keylock::execute(&editor)
 }
@@ -372,8 +372,8 @@ pub extern "C" fn user_option_selected(label: *const c_char,
     };
 
     tx.send(UserSelection::UserOption(UserOption::from((to_rust_string(label),
-                                                          to_rust_string(value),
-                                                          to_rust_string(short_label)))))
+                                                        to_rust_string(value),
+                                                        to_rust_string(short_label)))))
         .unwrap();
     debug!("user_option_selected sent UserSelection to the TX");
 }
@@ -406,6 +406,17 @@ pub extern "C" fn set_configuration(string_list: &StringList) {
     let conf = UserSelection::UpdateConfiguration(ncc.unwrap());
     tx.send(conf).unwrap();
     debug!("set_configuration sent UserSelection to the TX");
+}
+
+#[no_mangle]
+pub extern "C" fn copy(data: *const c_char) {
+    debug!("copying");
+    let tx = {
+        TX.lock().unwrap().as_ref().unwrap().clone()
+    };
+    tx.send(UserSelection::AddToClipboard(to_rust_string(data)))
+        .unwrap();
+    debug!("copy sent UserSelection to the TX");
 }
 
 #[no_mangle]
