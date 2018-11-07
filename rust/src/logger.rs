@@ -14,35 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 
-use log::{self, LogRecord, LogLevel, LogMetadata, LogLevelFilter};
+use std::sync::Mutex;
+use log::{self, Level, LevelFilter, Metadata, Record};
+
 use super::LogCallback;
 
-pub struct AndroidLogger {
-    log_cb: LogCallback,
+static ANDROID_LOGGER: AndroidLogger = AndroidLogger {};
+
+lazy_static! {
+    static ref LOG_CB: Mutex<Option<LogCallback>> = Mutex::new(None);
 }
 
+pub struct AndroidLogger {}
+
 impl log::Log for AndroidLogger {
-    fn enabled(&self, metadata: &LogMetadata) -> bool {
-        metadata.level() <= LogLevel::Debug
+    fn enabled(&self, metadata: &Metadata) -> bool {
+        metadata.level() <= Level::Debug
     }
 
-    fn log(&self, record: &LogRecord) {
+    fn log(&self, record: &Record) {
         if self.enabled(record.metadata()) {
             let message = format!("{:?}", record.args());
-            (self.log_cb)(super::to_java_string(record.level().to_string()),
-                          super::to_java_string(record.location().module_path().to_string()),
-                          super::to_java_string(record.location().file().to_string()),
-                          record.location().line() as i32,
-                          super::to_java_string(message))
+            (LOG_CB.lock().unwrap().unwrap())(super::to_java_string(record.level().to_string()),
+                                     super::to_java_string(record.module_path().unwrap_or("").to_string()),
+                                     super::to_java_string(record.file().unwrap_or("").to_string()),
+                                     record.line().unwrap_or(0) as i32,
+                                     super::to_java_string(message))
         }
     }
+
+    fn flush(&self) {}
 }
 
 pub fn init(log_cb: LogCallback) {
-    let android_logger = AndroidLogger { log_cb: log_cb };
-
-    let _ = log::set_logger(|max_log_level| {
-        max_log_level.set(LogLevelFilter::Debug);
-        Box::new(android_logger)
-    });
+    {
+        let mut cb = LOG_CB.lock().unwrap();
+        *cb = Some(log_cb);
+    }
+    let _ = log::set_logger(&ANDROID_LOGGER)
+        .map(|()| log::set_max_level(LevelFilter::Debug));
 }

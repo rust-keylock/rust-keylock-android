@@ -1,6 +1,6 @@
 [package]
 name = "rustkeylockandroid"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["aston <astonbitecode@gmail.com>"]
 edition = "2015"
 
@@ -11,17 +11,5 @@ crate-type = ["cdylib"]
 [dependencies]
 rust_keylock = {git = "https://github.com/rust-keylock/rust-keylock-lib.git"}
 libc = "0.2"
-lazy_static = "0.2"
-log = "0.3"
-
-[profile.dev]
-# Uncomment if building with nightly
-#panic = "abort"
-
-[profile.release]
-# Uncomment if building with nightly
-#panic = "abort"
-
-[profile.test]
-# Uncomment if building with nightly
-#panic = "abort"
+lazy_static = "1.2"
+log = "0.4"
