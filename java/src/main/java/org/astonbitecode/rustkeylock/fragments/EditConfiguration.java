@@ -25,15 +25,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import com.sun.jna.StringArray;
-import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.StringList;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EditConfiguration extends Fragment implements OnClickListener, BackButtonHandler {
@@ -74,11 +72,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             boolean errorsOccured = false;
 
             if (!errorsOccured) {
-                String[] stringsToSave = {url, user, password, useSelfSignedCertString};
-                StringList sl = new StringList.ByReference();
-                sl.numberOfstrings = 4;
-                sl.strings = new StringArray(stringsToSave);
-                InterfaceWithRust.INSTANCE.set_configuration(sl);
+                InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString));
             }
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");

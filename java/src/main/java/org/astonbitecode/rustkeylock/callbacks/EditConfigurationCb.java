@@ -15,24 +15,23 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
-import java.util.List;
-
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust.StringListCallback;
-import org.astonbitecode.rustkeylock.api.StringList.ByReference;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.fragments.EditConfiguration;
 
-import android.util.Log;
+import java.util.List;
 
-public class EditConfigurationCb implements StringListCallback {
+public class EditConfigurationCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    @Override
-    public void apply(ByReference stringList) {
+    public void apply(List<String> strings) {
         Log.d(TAG, "Callback for editing configuration");
+        InterfaceWithRust.INSTANCE.setCallback(this);
         MainActivity mainActivity = MainActivity.getActiveActivity();
-        Runnable uiRunnable = new UiThreadRunnable(stringList.getStrings(), mainActivity);
+        Runnable uiRunnable = new UiThreadRunnable(strings, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);
     }
 

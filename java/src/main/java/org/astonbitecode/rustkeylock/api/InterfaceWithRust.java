@@ -15,167 +15,84 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
-import org.astonbitecode.rustkeylock.callbacks.ShowMessageCb;
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
+import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
+import org.astonbitecode.rustkeylock.callbacks.*;
 
-import com.sun.jna.Callback;
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
-public interface InterfaceWithRust extends Library {
-    String JNA_LIBRARY_NAME = "rustkeylockandroid";
-    NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(JNA_LIBRARY_NAME);
+public class InterfaceWithRust {
+    private final String TAG = getClass().getName();
+    public static final InterfaceWithRust INSTANCE = new InterfaceWithRust();
+    private AtomicReference<NativeCallbackToRustChannelSupport> callback = new AtomicReference(null);
 
-    InterfaceWithRust INSTANCE = (InterfaceWithRust) Native.loadLibrary(JNA_LIBRARY_NAME, InterfaceWithRust.class);
-
-    /**
-     * Simple callback with String as argument
-     */
-    interface RustCallback extends Callback {
-        void apply(String aString);
+    private InterfaceWithRust() {
+        Log.i(TAG, "Initializing the native interface with Rust...");
+        System.loadLibrary("rustkeylockandroid");
+        Log.i(TAG, "The native interface with Rust is initialized!");
     }
 
-    /**
-     * Callback with a List of Strings
-     */
-    interface StringListCallback extends Callback {
+    public native void execute(String certFilePath);
 
-        void apply(StringList.ByReference stringList);
+    private void call(Object obj) {
+        callback.get().doCallback(obj);
     }
 
-    /**
-     * Callback containing an Entry
-     */
-    interface EntryCallback extends Callback {
-        // TODO: Use an enum in the arguments instead
-        void apply(JavaEntry.ByReference anEntry, int entryIndex, boolean edit, boolean delete);
+    public void set_password(String password, int number) {
+        Map<String, Object> m = GuiResponse.ChangePassword(password, number);
+        call(m);
     }
 
-    /**
-     * Callback containing a Set of Entries
-     */
-    interface EntriesSetCallback extends Callback {
-        void apply(JavaEntriesSet.ByReference entriesSet, String filter);
+    public void go_to_menu(String menuName) {
+        Map<String, Object> m = GuiResponse.GoToMenu(menuName);
+        call(m);
     }
 
-    /**
-     * Callback for showing messages
-     */
-    interface ShowMessageCallback extends Callback {
-        void apply(JavaUserOptionsSet.ByReference options, String message, String severity);
+    public void go_to_menu_plus_arg(String menuName, String argNum, String argStr) {
+        Map<String, Object> m = GuiResponse.GoToMenuPlusArgs(menuName, argNum, argStr);
+        call(m);
     }
 
-    /**
-     * Callback to be used for logging
-     */
-    interface LoggingCallback extends Callback {
-        void apply(String level, String path, String file, int line, String message);
+    public void add_entry(JavaEntry javaEntry) {
+        Map<String, Object> m = GuiResponse.AddEntry(javaEntry);
+        call(m);
     }
 
-    void execute(RustCallback showMenuCb, EntryCallback showEntryCb, EntriesSetCallback showEntriesSetCb,
-                 ShowMessageCb sowMessageCb, StringListCallback editConfigurationCb, LoggingCallback logCb, String certFilePath);
+    public void replace_entry(JavaEntry javaEntry, int index) {
+        Map<String, Object> m = GuiResponse.ReplaceEntry(javaEntry, index);
+        call(m);
+    }
 
-    /**
-     * Passes the Username and Password to Rust
-     *
-     * @param password
-     * @param number
-     */
-    void set_password(String password, int number);
+    public void delete_entry(int index) {
+        Map<String, Object> m = GuiResponse.DeleteEntry(index);
+        call(m);
+    }
 
-    /**
-     * Passes a selected Entry to Rust
-     *
-     * @param anEntry
-     */
-    void entry_selected(JavaEntry anEntry);
+    public void export_import(String path, int export, String password, int number) {
+        Map<String, Object> m = GuiResponse.ExportImport(path, export, password, number);
+        call(m);
+    }
 
-    /**
-     * Passes a Menu name to Rust. Rust instructs the callback to go there
-     *
-     * @param menuName
-     */
-    void go_to_menu(String menuName);
+    public void user_option_selected(String label, String value, String short_label) {
+        JavaUserOption juo = new JavaUserOption(label, value, short_label);
+        Map<String, Object> m = GuiResponse.UserOptionSelected(juo);
+        call(m);
+    }
 
-    /**
-     * Passes a Menu name to Rust plus an int argument and a String argument. Rust
-     * instructs the callback to go to this menu and use the passed arguments. An
-     * argNum or argStr that is a String null means that the argument is not used.
-     *
-     * @param menuName
-     * @param argNum   A String representing an Integer
-     * @param argStr
-     */
-    void go_to_menu_plus_arg(String menuName, String argNum, String argStr);
+    public void set_configuration(List<String> stringList) {
+        Map<String, Object> m = GuiResponse.SetConfiguration(stringList);
+        call(m);
+    }
 
-    /**
-     * Adds this JavaEntry to the list of Entries in memory. Note: The entry is not
-     * yet encrypted and saved in the file.
-     *
-     * @param javaEntry
-     */
-    void add_entry(JavaEntry javaEntry);
+    public void copy(String data) {
+        Map<String, Object> m = GuiResponse.Copy(data);
+        call(m);
+    }
 
-    /**
-     * Replaces the Entry located at the provided index.
-     *
-     * @param javaEntry
-     * @param index
-     */
-    void replace_entry(JavaEntry javaEntry, int index);
-
-    /**
-     * Deletes the Entry located at the provided index.
-     *
-     * @param index
-     */
-    void delete_entry(int index);
-
-    /**
-     * Provides to Rust a path to export to / import from
-     *
-     * @param path
-     * @param export   Bypass issues with boolean. 0 for false, > 0 for true
-     * @param password
-     * @param number
-     */
-    void export_import(String path, int export, String password, int number);
-
-    /**
-     * Provides to Rust a UserOption that was selected
-     *
-     * @param label
-     * @param value
-     * @param short_label
-     */
-    void user_option_selected(String label, String value, String short_label);
-
-    /**
-     * Instructs Rust to deallocate the heap memory for this JavaEntry
-     *
-     * @param javaEntry
-     */
-    void drop_java_entry(JavaEntry javaEntry);
-
-    /**
-     * Instructs Rust to deallocate the heap memory for this JavaEntriesSet
-     *
-     * @param javaEntriesSet
-     */
-    void drop_java_entries_set(JavaEntriesSet javaEntriesSet);
-
-    /**
-     * Sets the configuration values
-     *
-     * @param stringList A list that contains elements in the order: - Nextcloud server URL
-     *                   - Nextcloud user - Nextcloud password - Nextcloud DER certificate
-     *                   file location
-     */
-    void set_configuration(StringList stringList);
-
-    /**
-     * Copies the data in the Clipboard
-     * @param data
-     */
-    void copy(String data);
+    public void setCallback(NativeCallbackToRustChannelSupport newCallback) {
+        callback.set(newCallback);
+    }
 }

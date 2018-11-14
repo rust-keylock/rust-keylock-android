@@ -15,35 +15,32 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.JavaEntriesSet;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.fragments.ListEntries;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
-import android.util.Log;
+import java.util.List;
 
-public class ShowEntriesSetCb implements InterfaceWithRust.EntriesSetCallback {
+public class ShowEntriesSetCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    @Override
-    public void apply(JavaEntriesSet.ByReference entriesSet, String filter) {
-        Log.d(TAG, "Callback with JavaEntriesSet " + entriesSet.numberOfEntries);
-        List<JavaEntry> entries;
-        // Workaround for handling empty list from Rust
-        if (entriesSet.numberOfEntries == 1 && entriesSet.getEntries().get(0).name.equals(Defs.EMPTY_ARG)
-                && entriesSet.getEntries().get(0).user.equals(Defs.EMPTY_ARG)
-                && entriesSet.getEntries().get(0).pass.equals(Defs.EMPTY_ARG)
-                && entriesSet.getEntries().get(0).desc.equals(Defs.EMPTY_ARG)) {
-            entries = new ArrayList<>();
-        } else {
-            entries = entriesSet.getEntries();
-        }
+    public void apply(List<JavaEntry> entries, String filter) {
+        Log.d(TAG, "ShowEntriesSetCb with filter " + filter);
+        InterfaceWithRust.INSTANCE.setCallback(this);
+//        // Workaround for handling empty list from Rust
+//        if (entriesSet.numberOfEntries == 1 && entriesSet.getEntries().get(0).name.equals(Defs.EMPTY_ARG)
+//                && entriesSet.getEntries().get(0).user.equals(Defs.EMPTY_ARG)
+//                && entriesSet.getEntries().get(0).pass.equals(Defs.EMPTY_ARG)
+//                && entriesSet.getEntries().get(0).desc.equals(Defs.EMPTY_ARG)) {
+//            entries = new ArrayList<>();
+//        } else {
+//            entries = entriesSet.getEntries();
+//        }
 
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(entries, filter, mainActivity);

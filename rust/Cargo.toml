@@ -9,7 +9,13 @@ name = "rustkeylockandroid"
 crate-type = ["cdylib"]
 
 [dependencies]
-rust_keylock = {git = "https://github.com/rust-keylock/rust-keylock-lib.git"}
+rust_keylock = {git = "https://github.com/rust-keylock/rust-keylock-lib"}
+j4rs = {git = "https://github.com/astonbitecode/j4rs"}
 libc = "0.2"
+jni-sys = "0.3"
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
 lazy_static = "1.2"
 log = "0.4"
+android_logger = "0.6"

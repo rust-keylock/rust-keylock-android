@@ -15,25 +15,19 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
-import static java.util.Arrays.asList;
+import java.io.Serializable;
 
-import java.util.List;
-
-import com.sun.jna.Structure;
-
-public class JavaEntry extends Structure {
-
-    public static class ByReference extends JavaEntry implements Structure.ByReference {
-    }
-
-    public static class ByValue extends JavaEntry implements Structure.ByValue {
-    }
+public class JavaEntry  implements Serializable {
 
     public String name;
     public String url;
     public String user;
     public String pass;
     public String desc;
+
+    public JavaEntry() {
+
+    }
 
     public String getName() {
         return name;
@@ -55,8 +49,23 @@ public class JavaEntry extends Structure {
         return desc;
     }
 
-    @Override
-    protected List<String> getFieldOrder() {
-        return asList("name", "url", "user", "pass", "desc");
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

@@ -74,8 +74,8 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
         }
         if (buttonIndex <= optionsList.size()) {
             JavaUserOption juo = optionsList.get(buttonIndex);
-            Log.d(TAG, "ShowMessage returns label " + juo.label + ", value " + juo.value + ", shortLabel " + juo.shortLabel);
-            InterfaceWithRust.INSTANCE.user_option_selected(juo.label, juo.value, juo.shortLabel);
+            Log.d(TAG, "ShowMessage returns label " + juo.label + ", value " + juo.value + ", shortLabel " + juo.short_label);
+            InterfaceWithRust.INSTANCE.user_option_selected(juo.label, juo.value, juo.short_label);
         } else {
             Log.e(TAG,
                     "A button that does not exist in the User Options offered just got pressed! How did it got here?? Please consider opening a bug to the developers.");

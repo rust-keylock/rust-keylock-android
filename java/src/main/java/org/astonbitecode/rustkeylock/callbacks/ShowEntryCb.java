@@ -15,20 +15,20 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.fragments.ShowEntry;
 
-import android.util.Log;
-
-public class ShowEntryCb implements InterfaceWithRust.EntryCallback {
+public class ShowEntryCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    @Override
-    public void apply(JavaEntry.ByReference anEntry, int entryIndex, boolean edit, boolean delete) {
-        Log.d(TAG, "Callback with JavaEntry name " + anEntry.getName());
+    public void applay(JavaEntry anEntry, Integer entryIndex, Boolean edit, Boolean delete) {
+        Log.d(TAG, "ShowEntryCb");
+        InterfaceWithRust.INSTANCE.setCallback(this);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(anEntry, entryIndex, edit, delete, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);

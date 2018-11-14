@@ -15,41 +15,46 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
-import static java.util.Arrays.asList;
-
 import java.io.Serializable;
-import java.util.List;
 
-import com.sun.jna.Structure;
-
-public class JavaUserOption extends Structure implements Serializable {
-
+public class JavaUserOption implements Serializable {
     private static final long serialVersionUID = 8738491202638465205L;
-
-    public static class ByReference extends JavaUserOption implements Structure.ByReference {
-    }
-
-    public static class ByValue extends JavaUserOption implements Structure.ByValue {
-    }
 
     public String label;
     public String value;
-    public String shortLabel;
+    public String short_label;
+
+    public JavaUserOption() {
+
+    }
+
+    public JavaUserOption(String label, String value, String shortLabel) {
+        this.label = label;
+        this.value = value;
+        this.short_label = shortLabel;
+    }
 
     public String getLabel() {
         return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getValue() {
         return value;
     }
 
-    public String getShortLabel() {
-        return shortLabel;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    @Override
-    protected List<String> getFieldOrder() {
-        return asList("label", "value", "shortLabel");
+    public String getShort_label() {
+        return short_label;
+    }
+
+    public void setShort_label(String short_label) {
+        this.short_label = short_label;
     }
 }

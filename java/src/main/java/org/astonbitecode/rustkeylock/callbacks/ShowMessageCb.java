@@ -15,26 +15,22 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
-import java.util.List;
-
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaUserOption;
-import org.astonbitecode.rustkeylock.api.JavaUserOptionsSet;
 import org.astonbitecode.rustkeylock.fragments.ShowMessage;
 
-import android.util.Log;
+import java.util.List;
 
-public class ShowMessageCb implements InterfaceWithRust.ShowMessageCallback {
+public class ShowMessageCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    @Override
-    public void apply(JavaUserOptionsSet.ByReference options, String message, String severity) {
+    public void apply(List<JavaUserOption> optionsList, String message, String severity) {
         Log.d(TAG, "Callback for showing message " + message + " of severity " + severity);
-
-        List<JavaUserOption> optionsList = options.getOptions();
-
+        InterfaceWithRust.INSTANCE.setCallback(this);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(optionsList, message, severity, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);

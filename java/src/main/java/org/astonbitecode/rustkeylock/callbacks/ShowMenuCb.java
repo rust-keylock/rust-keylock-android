@@ -15,24 +15,20 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
+import android.util.Log;
+import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.fragments.ChangePassword;
-import org.astonbitecode.rustkeylock.fragments.EnterPassword;
-import org.astonbitecode.rustkeylock.fragments.ExitMenu;
-import org.astonbitecode.rustkeylock.fragments.MainMenu;
-import org.astonbitecode.rustkeylock.fragments.SelectPath;
+import org.astonbitecode.rustkeylock.fragments.*;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
-import android.util.Log;
-
-public class ShowMenuCb implements InterfaceWithRust.RustCallback {
+public class ShowMenuCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    @Override
     public void apply(String menu) {
         Log.d(TAG, "Callback for showing menu " + menu);
+        InterfaceWithRust.INSTANCE.setCallback(this);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(menu, MainActivity.getActiveActivity());
         mainActivity.runOnUiThread(uiRunnable);
