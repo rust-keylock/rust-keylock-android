@@ -131,18 +131,11 @@ impl AsyncEditor for AndroidImpl {
                     ])
             }
             &Menu::NewEntry => {
-                info!("++++++++++++++++NEWENTRY");
                 let empty_entry = japi::JavaEntry::empty();
                 // In order to denote that this is a new entry, put -1 as index
                 self.jvm.invoke_to_channel(
                     &self.show_entry_cb,
-                    "miko",
-                    &vec![InvocationArg::new(&empty_entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
-                          InvocationArg::from(true)]);
-
-                self.jvm.invoke_to_channel(
-                    &self.show_entry_cb,
-                    "applay",
+                    "apply",
                     &vec![
                         InvocationArg::new(&empty_entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
                         InvocationArg::from(-1),

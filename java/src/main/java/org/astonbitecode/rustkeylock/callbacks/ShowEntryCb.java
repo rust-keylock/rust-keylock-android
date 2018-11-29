@@ -26,7 +26,7 @@ import org.astonbitecode.rustkeylock.fragments.ShowEntry;
 public class ShowEntryCb extends NativeCallbackToRustChannelSupport {
     private final String TAG = getClass().getName();
 
-    public void applay(JavaEntry anEntry, Integer entryIndex, Boolean edit, Boolean delete) {
+    public void apply(JavaEntry anEntry, Integer entryIndex, Boolean edit, Boolean delete) {
         Log.d(TAG, "ShowEntryCb");
         InterfaceWithRust.INSTANCE.setCallback(this);
         MainActivity mainActivity = MainActivity.getActiveActivity();
@@ -54,6 +54,7 @@ public class ShowEntryCb extends NativeCallbackToRustChannelSupport {
             ShowEntry se = new ShowEntry(entry, entryIndex, edit, delete);
             mainActivity.setBackButtonHandler(se);
             mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, se).commitAllowingStateLoss();
+            InterfaceWithRust.INSTANCE.updateState(se);
         }
     }
 

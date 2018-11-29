@@ -31,5 +31,6 @@ public class Defs {
     public static final String MENU_IMPORT_ENTRIES = "ImportEntries";
     public static final String MENU_SHOW_CONFIGURATION = "ShowConfiguration";
     public static final String MENU_SYNCHRONIZE = "Synchronize";
+    public static final String MENU_CURRENT = "Current";
     public static final String EMPTY_ARG = "null";
 }

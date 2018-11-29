@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
+import android.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
@@ -28,6 +29,7 @@ public class InterfaceWithRust {
     private final String TAG = getClass().getName();
     public static final InterfaceWithRust INSTANCE = new InterfaceWithRust();
     private AtomicReference<NativeCallbackToRustChannelSupport> callback = new AtomicReference(null);
+    private AtomicReference<Fragment> previousFragment = new AtomicReference<>(null);
 
     private InterfaceWithRust() {
         Log.i(TAG, "Initializing the native interface with Rust...");
@@ -94,5 +96,13 @@ public class InterfaceWithRust {
 
     public void setCallback(NativeCallbackToRustChannelSupport newCallback) {
         callback.set(newCallback);
+    }
+
+    public void updateState(Fragment newFragment) {
+        previousFragment.set(newFragment);
+    }
+
+    public Fragment getPreviousFragment() {
+        return previousFragment.get();
     }
 }

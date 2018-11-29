@@ -15,12 +15,14 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
+import android.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.fragments.*;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 public class ShowMenuCb extends NativeCallbackToRustChannelSupport {
@@ -45,39 +47,32 @@ public class ShowMenuCb extends NativeCallbackToRustChannelSupport {
 
         @Override
         public void run() {
+            Fragment fragment = null;
             if (menu.equals(Defs.MENU_TRY_PASS)) {
-                EnterPassword ep = new EnterPassword();
-                mainActivity.setBackButtonHandler(ep);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, ep)
-                        .commitAllowingStateLoss();
+                fragment = new EnterPassword();
             } else if (menu.equals(Defs.MENU_CHANGE_PASS)) {
-                ChangePassword cp = new ChangePassword();
-                mainActivity.setBackButtonHandler(cp);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, cp)
-                        .commitAllowingStateLoss();
+                fragment = new ChangePassword();
             } else if (menu.equals(Defs.MENU_MAIN)) {
-                MainMenu mm = new MainMenu();
-                mainActivity.setBackButtonHandler(mm);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, mm)
-                        .commitAllowingStateLoss();
+                fragment = new MainMenu();
             } else if (menu.equals(Defs.MENU_EXIT)) {
-                ExitMenu em = new ExitMenu();
-                mainActivity.setBackButtonHandler(em);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, em)
-                        .commitAllowingStateLoss();
+                fragment = new ExitMenu();
             } else if (menu.equals(Defs.MENU_EXPORT_ENTRIES)) {
-                SelectPath sp = new SelectPath(true);
-                mainActivity.setBackButtonHandler(sp);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, sp)
-                        .commitAllowingStateLoss();
+                fragment = new SelectPath(true);
             } else if (menu.equals(Defs.MENU_IMPORT_ENTRIES)) {
-                SelectPath sp = new SelectPath(false);
-                mainActivity.setBackButtonHandler(sp);
-                mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, sp)
-                        .commitAllowingStateLoss();
+                fragment = new SelectPath(false);
+            } else if (menu.equals(Defs.MENU_CURRENT)) {
+                fragment = InterfaceWithRust.INSTANCE.getPreviousFragment();
             } else {
                 throw new RuntimeException("Cannot Show Menu with name '" + menu + "' and no arguments");
             }
+
+            if (fragment instanceof BackButtonHandler) {
+                mainActivity.setBackButtonHandler((BackButtonHandler) fragment);
+            }
+            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, fragment)
+                    .commitAllowingStateLoss();
+
+            InterfaceWithRust.INSTANCE.updateState(fragment);
         }
     }
 

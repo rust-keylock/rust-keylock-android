@@ -20,7 +20,8 @@ use log::Level;
 pub fn init() {
     android_logger::init_once(
         Filter::default()
-            .with_min_level(Level::Debug),
+            .with_min_level(Level::Debug)
+            .with_allowed_module_paths(vec!["rustkeylock".to_string(), "rustkeylockandroid".to_string()]),
         None,
     );
 }

@@ -49,6 +49,7 @@ public class EditConfigurationCb extends NativeCallbackToRustChannelSupport {
             EditConfiguration ec = new EditConfiguration(strings);
             mainActivity.setBackButtonHandler(ec);
             mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, ec).commitAllowingStateLoss();
+            InterfaceWithRust.INSTANCE.updateState(ec);
         }
     }
 }
