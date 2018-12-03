@@ -21,8 +21,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ import org.astonbitecode.rustkeylock.utils.Defs;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ShowEntry extends Fragment implements OnClickListener, BackButtonHandler {
+public class ShowEntry extends Fragment implements OnClickListener, BackButtonHandler, View.OnTouchListener {
     private static final long serialVersionUID = 163106573370997557L;
     private final String TAG = getClass().getName();
     private transient JavaEntry entry;
@@ -163,6 +165,11 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     }
 
     private void prepareUiElements(View v) {
+        if (!(edit || delete)) {
+            TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
+            passTitle.append(" (tap here to reveal)");
+            passTitle.setOnTouchListener(this);
+        }
         Button eb = (Button) v.findViewById(R.id.editButton);
         eb.setOnClickListener(this);
         eb.setVisibility((edit || delete) ? View.GONE : View.VISIBLE);
@@ -242,5 +249,15 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             this.edit = edit;
             this.delete = delete;
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            passwordText.setTransformationMethod(null);
+        } else {
+            passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+        return true;
     }
 }
