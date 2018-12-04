@@ -15,18 +15,6 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.adapters.EntriesAdapter;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.JavaEntry;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -41,6 +29,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.adapters.EntriesAdapter;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.JavaEntry;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+import org.astonbitecode.rustkeylock.utils.Defs;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ListEntries extends ListFragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 8765819759487480794L;
@@ -67,6 +66,8 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         View rootView = inflater.inflate(R.layout.fragment_list_entries, container, false);
         Button nb = (Button) rootView.findViewById(R.id.addNewButton);
         nb.setOnClickListener(this);
+        Button mmb = (Button) rootView.findViewById(R.id.mainMenuButton);
+        mmb.setOnClickListener(this);
 
         EditText filterText = (EditText) rootView.findViewById(R.id.editFilter);
         filterText.setText(filter);
@@ -126,8 +127,13 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG, "Clicked add new entry");
-        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_NEW_ENTRY);
+        if (view.getId() == R.id.mainMenuButton) {
+            Log.d(TAG, "Clicked go to the Main menu");
+            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        } else if (view.getId() == R.id.addNewButton) {
+            Log.d(TAG, "Clicked add new entry");
+            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_NEW_ENTRY);
+        }
     }
 
     @Override

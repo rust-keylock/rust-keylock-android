@@ -1,45 +1,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ListEntriesLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:gravity="top"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.astonbitecode.rustkeylock.MainActivity" >
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ListEntriesLayout"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_gravity="center"
+              android:gravity="top"
+              android:orientation="vertical"
+              android:paddingBottom="16dp"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:paddingTop="16dp"
+              tools:context="org.astonbitecode.rustkeylock.MainActivity">
 
-    <TextView
-        android:id="@+id/listMenuLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Passwords"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+        <Button
+                android:id="@+id/mainMenuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/home"
+                android:text="Home"/>
 
-    <Button
-        android:id="@+id/addNewButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/newimage"
-        android:text="New" />
+        <TextView
+                android:id="@+id/listMenuLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Passwords"
+                android:layout_centerInParent="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Button
+                android:id="@+id/addNewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/newimage"
+                android:text="New"/>
+    </RelativeLayout>
 
     <EditText
-        android:id="@+id/editFilter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_columnSpan="2"
-        android:hint="Filter the displayed passwords..."
-        android:inputType="text" />
+            android:id="@+id/editFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:hint="Filter the displayed passwords..."
+            android:inputType="text"/>
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
     </ListView>
 
 </LinearLayout>
