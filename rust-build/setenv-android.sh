@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 # Cross-compile environment for Android on ARMv7 and x86
 #
 # Contents licensed under the terms of the OpenSSL license
@@ -8,6 +11,8 @@
 #   and http://wiki.openssl.org/index.php/Android
 
 #####################################################################
+
+echo ===========setenv-android starts=============
 
 # Set ANDROID_NDK_ROOT to you NDK location. For example,
 # /opt/android-ndk-r8e or /opt/android-ndk-r9. This can be done in a
@@ -22,8 +27,8 @@
 # list in $ANDROID_NDK_ROOT/toolchains. This value is always used.
 # _ANDROID_EABI="x86-4.6"
 # _ANDROID_EABI="arm-linux-androideabi-4.6"
-_ANDROID_EABI="arm-linux-androideabi-4.8"
-#_ANDROID_EABI="arm-linux-androideabi-4.9"
+#_ANDROID_EABI="arm-linux-androideabi-4.8"
+_ANDROID_EABI="arm-linux-androideabi-4.9"
 
 # Set _ANDROID_ARCH to the architecture you are building for.
 # This value is always used.
@@ -103,14 +108,18 @@ fi
 # doing things according to the NDK documentation for Ice Cream Sandwich.
 # https://android.googlesource.com/platform/ndk/+/ics-mr0/docs/STANDALONE-TOOLCHAIN.html
 
-ANDROID_TOOLCHAIN=""
-for host in "linux-x86_64" "linux-x86" "darwin-x86_64" "darwin-x86"
-do
-  if [ -d "$ANDROID_NDK_ROOT/toolchains/$_ANDROID_EABI/prebuilt/$host/bin" ]; then
-    ANDROID_TOOLCHAIN="$ANDROID_NDK_ROOT/toolchains/$_ANDROID_EABI/prebuilt/$host/bin"
-    break
-  fi
-done
+if [ -z "$ANDROID_TOOLCHAIN" ]; then
+
+  ANDROID_TOOLCHAIN=""
+  for host in "linux-x86_64" "linux-x86" "darwin-x86_64" "darwin-x86"
+  do
+    if [ -d "$ANDROID_NDK_ROOT/toolchains/$_ANDROID_EABI/prebuilt/$host/bin" ]; then
+      export ANDROID_TOOLCHAIN="$ANDROID_NDK_ROOT/toolchains/$_ANDROID_EABI/prebuilt/$host/bin"
+      break
+    fi
+  done
+fi
+
 
 # Error checking
 if [ -z "$ANDROID_TOOLCHAIN" ] || [ ! -d "$ANDROID_TOOLCHAIN" ]; then
@@ -120,12 +129,12 @@ if [ -z "$ANDROID_TOOLCHAIN" ] || [ ! -d "$ANDROID_TOOLCHAIN" ]; then
 fi
 
 case $_ANDROID_ARCH in
-	arch-arm)	  
+	arch-arm)
       ANDROID_TOOLS="arm-linux-androideabi-gcc arm-linux-androideabi-ranlib arm-linux-androideabi-ld"
 	  ;;
-	arch-x86)	  
+	arch-x86)
       ANDROID_TOOLS="i686-linux-android-gcc i686-linux-android-ranlib i686-linux-android-ld"
-	  ;;	  
+	  ;;
 	*)
 	  echo "ERROR ERROR ERROR"
 	  ;;
@@ -151,9 +160,10 @@ fi
 
 # For the Android SYSROOT. Can be used on the command line with --sysroot
 # https://android.googlesource.com/platform/ndk/+/ics-mr0/docs/STANDALONE-TOOLCHAIN.html
-export ANDROID_SYSROOT="$ANDROID_NDK_ROOT/platforms/$_ANDROID_API/$_ANDROID_ARCH"
+#export ANDROID_SYSROOT="$ANDROID_NDK_ROOT/platforms/$_ANDROID_API/$_ANDROID_ARCH"
+export ANDROID_SYSROOT="$ANDROID_TOOLCHAIN/../sysroot"
+export NDK_SYSROOT="$ANDROID_NDK_ROOT/sysroot"
 export CROSS_SYSROOT="$ANDROID_SYSROOT"
-export NDK_SYSROOT="$ANDROID_SYSROOT"
 
 # Error checking
 if [ -z "$ANDROID_SYSROOT" ] || [ ! -d "$ANDROID_SYSROOT" ]; then
@@ -210,9 +220,8 @@ fi
 
 # For the Android toolchain
 # https://android.googlesource.com/platform/ndk/+/ics-mr0/docs/STANDALONE-TOOLCHAIN.html
-export ANDROID_SYSROOT="$ANDROID_NDK_ROOT/platforms/$_ANDROID_API/$_ANDROID_ARCH"
 export SYSROOT="$ANDROID_SYSROOT"
-export NDK_SYSROOT="$ANDROID_SYSROOT"
+export NDK_SYSROOT="$ANDROID_NDK_ROOT/sysroot"
 export ANDROID_NDK_SYSROOT="$ANDROID_SYSROOT"
 export ANDROID_API="$_ANDROID_API"
 
@@ -221,15 +230,20 @@ export ANDROID_API="$_ANDROID_API"
 export ANDROID_DEV="$ANDROID_NDK_ROOT/platforms/$_ANDROID_API/$_ANDROID_ARCH/usr"
 export HOSTCC=gcc
 
-VERBOSE=1
-if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
-  echo "ANDROID_NDK_ROOT: $ANDROID_NDK_ROOT"
-  echo "ANDROID_ARCH: $_ANDROID_ARCH"
-  echo "ANDROID_EABI: $_ANDROID_EABI"
-  echo "ANDROID_API: $ANDROID_API"
-  echo "ANDROID_SYSROOT: $ANDROID_SYSROOT"
-  echo "ANDROID_TOOLCHAIN: $ANDROID_TOOLCHAIN"
-  echo "FIPS_SIG: $FIPS_SIG"
-  echo "CROSS_COMPILE: $CROSS_COMPILE"
-  echo "ANDROID_DEV: $ANDROID_DEV"
-fi
+echo "ANDROID_TOOLS: $ANDROID_TOOLS"
+echo "ANDROID_NDK_ROOT: $ANDROID_NDK_ROOT"
+echo "ANDROID_ARCH: $_ANDROID_ARCH"
+echo "ANDROID_EABI: $_ANDROID_EABI"
+echo "ANDROID_API: $ANDROID_API"
+echo "ANDROID_SYSROOT: $ANDROID_SYSROOT"
+echo "ANDROID_TOOLCHAIN: $ANDROID_TOOLCHAIN"
+echo "FIPS_SIG: $FIPS_SIG"
+echo "CROSS_SYS_ROOT: $CROSS_SYSROOT"
+echo "NDK_SYSROOT: $NDK_SYSROOT"
+echo "MACHINE: $MACHINE"
+echo "SYSTEM: $SYSTEM"
+echo "ARCH: $ARCH"
+echo "CROSS_COMPILE: $CROSS_COMPILE"
+echo "ANDROID_DEV: $ANDROID_DEV"
+
+echo ===========setenv-android completed=============

@@ -2,7 +2,7 @@
 name = "rustkeylockandroid"
 version = "0.7.0"
 authors = ["aston <astonbitecode@gmail.com>"]
-edition = "2015"
+edition = "2018"
 
 [lib]
 name = "rustkeylockandroid"

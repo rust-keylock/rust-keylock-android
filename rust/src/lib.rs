@@ -18,14 +18,11 @@ extern crate android_logger;
 extern crate j4rs;
 extern crate jni_sys;
 #[allow(unused_imports)]
-#[macro_use]
 extern crate lazy_static;
 extern crate libc;
-#[macro_use]
 extern crate log;
 extern crate rust_keylock;
 extern crate serde;
-#[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
 
@@ -34,6 +31,7 @@ use std::str;
 
 use jni_sys::{JavaVM, jint, JNI_VERSION_1_6, JNIEnv, jobject, jstring};
 use libc::c_char;
+use log::*;
 
 mod android_editor;
 mod logger;

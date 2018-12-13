@@ -2,9 +2,10 @@ use std::sync::mpsc::{self, Receiver};
 use std::thread;
 
 use j4rs::{errors, Instance, InstanceReceiver};
-
+use log::*;
 use rust_keylock::{Entry, Menu, UserOption, UserSelection};
 use rust_keylock::nextcloud::NextcloudConfiguration;
+use serde_derive::{Deserialize, Serialize};
 
 pub fn handle_instance_receiver_result(instance_receiver_res: errors::Result<InstanceReceiver>) -> Receiver<UserSelection> {
     let (tx, rx) = mpsc::channel();

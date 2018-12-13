@@ -32,15 +32,6 @@ public class ShowEntriesSetCb extends NativeCallbackToRustChannelSupport {
     public void apply(List<JavaEntry> entries, String filter) {
         Log.d(TAG, "ShowEntriesSetCb with filter " + filter);
         InterfaceWithRust.INSTANCE.setCallback(this);
-//        // Workaround for handling empty list from Rust
-//        if (entriesSet.numberOfEntries == 1 && entriesSet.getEntries().get(0).name.equals(Defs.EMPTY_ARG)
-//                && entriesSet.getEntries().get(0).user.equals(Defs.EMPTY_ARG)
-//                && entriesSet.getEntries().get(0).pass.equals(Defs.EMPTY_ARG)
-//                && entriesSet.getEntries().get(0).desc.equals(Defs.EMPTY_ARG)) {
-//            entries = new ArrayList<>();
-//        } else {
-//            entries = entriesSet.getEntries();
-//        }
 
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(entries, filter, mainActivity);

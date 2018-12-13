@@ -24,9 +24,6 @@ CARGO_HOME=$BASEDIR/tools/.cargo RUSTUP_HOME=$BASEDIR/tools/.rustup sh tools/rus
 $CARGO_HOME/bin/rustup default stable
 $CARGO_HOME/bin/rustup target add arm-linux-androideabi
 
-# Install xargo
-$CARGO_HOME/bin/cargo install xargo --force --root $CARGO_HOME
-
 # Create an Android toolchain
 cd $BASEDIR
 
@@ -47,9 +44,9 @@ fi
 
 ANDROID_NDK_HOME=${ANDROID_NDK}
 
-echo Installing the Android toolchain
+echo Installing the Android toolchain using NDK: $ANDROID_NDK
 
-sh $ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain > /dev/null
+$ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain  > /dev/null
 
 cd android-toolchain
 ANDROID_TOOLCHAIN_DIR=`pwd`
@@ -72,22 +69,28 @@ EOF
 
 # Get and build the openssl
 
-ANDROID_NDK_ROOT=${ANDROID_NDK}
+# Export the ANDROID_TOOLCHAIN variable to be used for building the openssl
+export ANDROID_TOOLCHAIN=$ANDROID_TOOLCHAIN_DIR/bin
+export ANDROID_NDK_ROOT=${ANDROID_NDK}
 
 cd $BASEDIR/tools
 
-curl -O https://www.openssl.org/source/openssl-1.1.0g.tar.gz
-tar xzf openssl-1.1.0g.tar.gz
-OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0g
+curl -O https://www.openssl.org/source/openssl-1.1.0j.tar.gz
+tar xzf openssl-1.1.0j.tar.gz
+
+export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0j
+
+# Delete the mandroid flag as clang does not recognize it
+sed -i 's/-mandroid //g' ${OPENSSL_SRC_DIR}/Configurations/10-main.conf
 
 . ../rust-build/setenv-android.sh
 
 cd $OPENSSL_SRC_DIR
 
 echo Building openssl
-
-./config shared no-ssl2 no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+#./config android shared no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+./Configure android-armeabi shared no-ssl3 no-comp no-hw no-asm --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
 make all > /dev/null
-make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-gcc RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib > /dev/null
+make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-clang RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib > /dev/null
 
 echo openssl build success
