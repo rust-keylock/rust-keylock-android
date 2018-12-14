@@ -23,6 +23,7 @@ before_deploy:
 - "${ANDROID_HOME}/build-tools/26.0.2/zipalign -v 4 java/target/rust-keylock-android-0.7.0-unsigned.apk
   java/target/rust-keylock-android.apk"
 deploy:
+  overwrite: true
   provider: releases
   api_key:
     secure: QAFSbUoyNv/1/lkSzS4SBXwozKkk3Hnjlio6aH6akEniFBhkG93+8SUHLFl/O7MR74IpCG4iIm+E7Lo8sZR/xkk5SJgvw2ts4se06b5QmSy0AFjdWuaPJvJpF3WCnOmNiOa/MNBQdnQGoBHDtkmiZM/k4TX4sZfOKN5JEzItt9rSF23koAdnGvwwiaihjIcA1kOLFcGYmzNQF3qwBsnwwhsTHINGwvXcpbLWF6/3pYWXcnPDL/h2Vb+iTg+fG4KBHLK3l7jXarJmqy2uOHs6Nabz1e0KDEoWrUH1GXKzPBfxyXpTXhwIek7iI95QF/eiFgsHlYuX0fAwSRqs5zVEwmx+vmoi5GwaTId1DeY82yn6jl+a5fPFRFVz6DRBQwIu6GgQnMHuijnDrNGim4jrYmDaKHSA+9eK9luXZsXFCxHwTAHRdeWWebK0CdHDr+r3BP9kCzHxmOopwvxt/x3/AZwEAPlNPfLKVFdnKSx7J71lUkiJIjxDOnijWBhmFeOgb7VlHc2Fhg9EZ+/+DD0g+o6IfVqvdBSInD39ynnU8KJVJDWyykyjK45hmZDRCNdN3ns2pSTU7KPS5orTtAOMKs0VPh66/S9aP2TO0W2IUtaY3oyg83g8hCr+BIamyLhA1QQDdlHd7wgy2sNdmt+vVi/KEHGxSw2f/3U3y2XmQMY=
@@ -30,7 +31,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: rust-keylock/rust-keylock-android
-    tags: true
+#    tags: true
     branch: master
 env:
   global:
