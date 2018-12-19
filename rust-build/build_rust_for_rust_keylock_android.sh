@@ -20,7 +20,7 @@ mkdir -p $ANDROID_JAVA_NATIVE
 cd $ANDROID_RUST
 
 ANDROID_TOOLCHAIN_DIR=$BASEDIR/android-toolchain
-OPENSSL_BUILD_DIR=$BASEDIR/tools/openssl-1.1.0j/build
+OPENSSL_BUILD_DIR=$BASEDIR/tools/openssl-1.1.0g/build
 CC="${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-gcc" AR="${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-ar" OPENSSL_DIR=${OPENSSL_BUILD_DIR} OPENSSL_LIB_DIR=${OPENSSL_BUILD_DIR}/lib OPENSSL_INCLUDE_DIR=${OPENSSL_BUILD_DIR}/include OPENSSL_STATIC=true $CARGO_HOME/bin/cargo build --target=arm-linux-androideabi --release
 
 echo "Copying $ANDROID_RUST_KEYLOCK_LIB to $ANDROID_JAVA_NATIVE"

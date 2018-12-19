@@ -41,8 +41,7 @@
         <dependency>
             <groupId>io.github.astonbitecode</groupId>
             <artifactId>j4rs</artifactId>
-            <version>0.3.0</version>
-            <classifier>java7</classifier>
+            <version>0.3.0-java7</version>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
