@@ -58,6 +58,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     private transient EditText userText;
     private transient EditText passwordText;
     private transient EditText descriptionText;
+    private boolean passwordVisibleWhenNotEditing;
 
     /**
      * Creates a ShowEntry fragment.
@@ -167,7 +168,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     private void prepareUiElements(View v) {
         if (!(edit || delete)) {
             TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
-            passTitle.append(" (tap here to reveal)");
+            passTitle.append(" (tap here to reveal or hide)");
             passTitle.setOnTouchListener(this);
         }
         Button eb = (Button) v.findViewById(R.id.editButton);
@@ -253,10 +254,12 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && !passwordVisibleWhenNotEditing) {
             passwordText.setTransformationMethod(null);
-        } else {
+            passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && passwordVisibleWhenNotEditing) {
             passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
         }
         return true;
     }
