@@ -31,7 +31,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: rust-keylock/rust-keylock-android
-#    tags: true
+    tags: true
     branch: master
 env:
   global:
