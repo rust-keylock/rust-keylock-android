@@ -19,8 +19,8 @@ script:
 - mvn -f java/pom.xml clean install
 before_deploy:
 - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ks/rkl.jks -storepass
-  $storepass -keypass $keypass java/target/rust-keylock-android-0.7.0-unsigned.apk rustkeylock
-- "${ANDROID_HOME}/build-tools/26.0.2/zipalign -v 4 java/target/rust-keylock-android-0.7.0-unsigned.apk
+  $storepass -keypass $keypass java/target/rust-keylock-android-0.8.0-unsigned.apk rustkeylock
+- "${ANDROID_HOME}/build-tools/26.0.2/zipalign -v 4 java/target/rust-keylock-android-0.8.0-unsigned.apk
   java/target/rust-keylock-android.apk"
 deploy:
   overwrite: true
