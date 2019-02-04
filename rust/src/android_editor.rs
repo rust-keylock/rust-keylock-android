@@ -1,7 +1,3 @@
-use std::sync::mpsc::{self, Receiver};
-
-use j4rs::{Instance, InvocationArg, Jvm};
-use log::*;
 // Copyright 2017 astonbitecode
 // This file is part of rust-keylock password manager.
 //
@@ -17,6 +13,8 @@ use log::*;
 //
 // You should have received a copy of the GNU General Public License
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
+use j4rs::{Instance, InvocationArg, Jvm};
+use log::*;
 use rust_keylock::{
     AsyncEditor,
     Menu,
@@ -25,7 +23,7 @@ use rust_keylock::{
     Safe, UserOption,
     UserSelection,
 };
-
+use std::sync::mpsc::{self, Receiver};
 use super::japi;
 
 pub struct AndroidImpl {
