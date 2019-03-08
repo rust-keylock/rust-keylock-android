@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rust_keylock = "0.8"
-j4rs = "0.3"
+j4rs = "0.5"
 libc = "0.2"
 jni-sys = "0.3"
 serde = "1.0"
