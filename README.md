@@ -2,6 +2,10 @@ ___rust-keylock-android___ is the [Editor](https://rust-keylock.github.io/rust-k
 
 The minimum supported Android API level is __16__ (4.1.2 is tested as a minimum version).
 
+## Warning
+
+The project has not yet received any formal / official security reviews. Use it at your own risk.
+
 ## Install
 
 Instructions can be found [here](https://rust-keylock.github.io/download/rkl/).
