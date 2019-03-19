@@ -1,3 +1,5 @@
+[![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
+
 ___rust-keylock-android___ is the [Editor](https://rust-keylock.github.io/rust-keylock-lib/rust_keylock/trait.Editor.html) that manages the [rust-keylock-lib](https://github.com/rust-keylock/rust-keylock-lib) in Android devices.
 
 The minimum supported Android API level is __16__ (4.1.2 is tested as a minimum version).
