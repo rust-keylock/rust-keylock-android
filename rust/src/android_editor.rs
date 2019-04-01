@@ -55,7 +55,7 @@ pub fn new(jvm: Jvm,
 impl AsyncEditor for AndroidImpl {
     fn show_password_enter(&self) -> Receiver<UserSelection> {
         debug!("Opening the password fragment");
-        let try_pass_menu_name = Menu::TryPass.get_name();
+        let try_pass_menu_name = Menu::TryPass(false).get_name();
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_menu_cb,
             "apply",

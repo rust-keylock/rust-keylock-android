@@ -75,7 +75,7 @@ pub extern fn Java_org_astonbitecode_rustkeylock_api_InterfaceWithRust_execute(
                                                      show_message_cb,
                                                      edit_configuration_cb);
                     debug!("Executing native rust_keylock!");
-                    rust_keylock::execute_async(&editor)
+                    rust_keylock::execute_async(Box::new(editor))
                 }
                 (_, _, _, _, _) => {
                     error!("Could not instantiate the Java World callbacks")

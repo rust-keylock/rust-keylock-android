@@ -16,7 +16,7 @@
 package org.astonbitecode.rustkeylock.utils;
 
 public class Defs {
-    public static final String MENU_TRY_PASS = "TryPass";
+    public static final String MENU_TRY_PASS = "TryPass(false)";
     public static final String MENU_CHANGE_PASS = "ChangePass";
     public static final String MENU_MAIN = "Main";
     public static final String MENU_ENTRIES_LIST = "EntriesList";
