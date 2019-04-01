@@ -64,8 +64,6 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
         binp.setOnClickListener(this);
         Button bcfg = (Button) rootView.findViewById(R.id.mmEditConfigurationButton);
         bcfg.setOnClickListener(this);
-        Button sb = (Button) rootView.findViewById(R.id.synchronizeButton);
-        sb.setOnClickListener(this);
     }
 
     @Override
@@ -91,14 +89,6 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
         } else if (view.getId() == R.id.mmEditConfigurationButton) {
             Log.d(TAG, "The User Selected to edit the configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SHOW_CONFIGURATION);
-        } else if (view.getId() == R.id.synchronizeButton) {
-            Log.d(TAG, "Clicked Synchronize now in configuration");
-
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SYNCHRONIZE);
-
-            MainActivity mainActivity = MainActivity.getActiveActivity();
-            Runnable uiRunnable = new UiThreadRunnable(mainActivity);
-            mainActivity.runOnUiThread(uiRunnable);
         } else {
             Log.e(TAG, "The User selected a Menu that is not implemented yet in Rust");
         }
