@@ -108,8 +108,7 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
             }
             GuiResponse::DeleteEntry { index } => {
                 debug!("delete_entry");
-                let user_selection = UserSelection::DeleteEntry(index);
-                user_selection
+                UserSelection::DeleteEntry(index)
             }
             GuiResponse::SetConfiguration { strings } => {
                 debug!("set_configuration with {} elements", strings.len());
@@ -146,14 +145,13 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
             GuiResponse::ExportImport { path, mode, password, number } => {
                 debug!("export_import");
 
-                let user_selection = if mode > 0 {
+                if mode > 0 {
                     debug!("Followed exporting path");
                     UserSelection::ExportTo(path)
                 } else {
                     debug!("Followed importing path");
                     UserSelection::ImportFrom(path, password, number as usize)
-                };
-                user_selection
+                }
             }
             GuiResponse::Copy { data } => {
                 debug!("copy");

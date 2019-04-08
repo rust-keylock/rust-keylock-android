@@ -59,7 +59,7 @@ impl AsyncEditor for AndroidImpl {
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_menu_cb,
             "apply",
-            &vec![InvocationArg::from(try_pass_menu_name)]);
+            &[InvocationArg::from(try_pass_menu_name)]);
         debug!("Waiting for password...");
         japi::handle_instance_receiver_result(instance_receiver)
     }
@@ -70,7 +70,7 @@ impl AsyncEditor for AndroidImpl {
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_menu_cb,
             "apply",
-            &vec![InvocationArg::from(change_pass_menu_name)]);
+            &[InvocationArg::from(change_pass_menu_name)]);
         debug!("Waiting for password...");
         japi::handle_instance_receiver_result(instance_receiver)
     }
@@ -89,13 +89,13 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &vec![InvocationArg::from(Menu::Main.get_name())])
+                    &[InvocationArg::from(Menu::Main.get_name())])
             }
             &Menu::EntriesList(_) => {
                 let java_entries: Vec<japi::JavaEntry> = safe.get_entries().iter()
                     .map(|entry| japi::JavaEntry::new(entry))
                     .collect();
-                let filter = if safe.get_filter().len() == 0 {
+                let filter = if safe.get_filter().is_empty() {
                     "null".to_string()
                 } else {
                     safe.get_filter().clone()
@@ -103,7 +103,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_entries_set_cb,
                     "apply",
-                    &vec![
+                    &[
                         InvocationArg::from((
                             java_entries.as_slice(),
                             "org.astonbitecode.rustkeylock.api.JavaEntry",
@@ -115,7 +115,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_entry_cb,
                     "apply",
-                    &vec![
+                    &[
                         InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
                         InvocationArg::from(index as i32),
                         InvocationArg::from(false),
@@ -128,7 +128,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_entry_cb,
                     "apply",
-                    &vec![
+                    &[
                         InvocationArg::new(&entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
                         InvocationArg::from(index as i32),
                         InvocationArg::from(false),
@@ -141,7 +141,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_entry_cb,
                     "apply",
-                    &vec![
+                    &[
                         InvocationArg::new(&empty_entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
                         InvocationArg::from(-1),
                         InvocationArg::from(true),
@@ -149,11 +149,11 @@ impl AsyncEditor for AndroidImpl {
                     ])
             }
             &Menu::EditEntry(index) => {
-                let ref selected_entry = safe.get_entry_decrypted(index);
+                let selected_entry = safe.get_entry_decrypted(index);
                 self.jvm.invoke_to_channel(
                     &self.show_entry_cb,
                     "apply",
-                    &vec![
+                    &[
                         InvocationArg::new(&japi::JavaEntry::new(&selected_entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
                         InvocationArg::from(index as i32),
                         InvocationArg::from(true),
@@ -164,13 +164,13 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &vec![InvocationArg::from(Menu::ExportEntries.get_name())])
+                    &[InvocationArg::from(Menu::ExportEntries.get_name())])
             }
             &Menu::ImportEntries => {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &vec![InvocationArg::from(Menu::ImportEntries.get_name())])
+                    &[InvocationArg::from(Menu::ImportEntries.get_name())])
             }
             &Menu::ShowConfiguration => {
                 let conf_strings = vec![
@@ -181,13 +181,13 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.edit_configuration_cb,
                     "apply",
-                    &vec![InvocationArg::from((conf_strings.as_slice(), &self.jvm))])
+                    &[InvocationArg::from((conf_strings.as_slice(), &self.jvm))])
             }
             &Menu::Current => {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &vec![InvocationArg::from(Menu::Current.get_name())])
+                    &[InvocationArg::from(Menu::Current.get_name())])
             }
             other => {
                 panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
@@ -205,7 +205,7 @@ impl AsyncEditor for AndroidImpl {
             let instance_receiver = self.jvm.invoke_to_channel(
                 &self.show_menu_cb,
                 "apply",
-                &vec![InvocationArg::from(Menu::Exit.get_name())]);
+                &[InvocationArg::from(Menu::Exit.get_name())]);
 
             japi::handle_instance_receiver_result(instance_receiver)
         } else {
@@ -228,7 +228,7 @@ impl AsyncEditor for AndroidImpl {
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_message_cb,
             "apply",
-            &vec![
+            &[
                 InvocationArg::from((
                     java_user_options.as_slice(),
                     "org.astonbitecode.rustkeylock.api.JavaUserOption",

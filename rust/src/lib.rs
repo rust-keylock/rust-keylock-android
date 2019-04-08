@@ -17,7 +17,6 @@
 extern crate android_logger;
 extern crate j4rs;
 extern crate jni_sys;
-#[allow(unused_imports)]
 extern crate lazy_static;
 extern crate libc;
 extern crate log;
