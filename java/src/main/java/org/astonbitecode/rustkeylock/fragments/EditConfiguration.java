@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
+import com.dropbox.core.android.Auth;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
@@ -77,6 +79,24 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        } else if (view.getId() == R.id.editConfigurationGetTokenButton) {
+            String appKey = getString(R.string.dbx_app_key);
+            Log.d(TAG, "Clicked Get Dropbox token in configuration. App key: " + appKey);
+            Auth.startOAuth2Authentication(getActivity(), appKey);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String token = strings.get(5);
+
+        if (token == null || token.isEmpty()) {
+            String retrieved_token_from_shared_preferences = Auth.getOAuth2Token();
+            if (retrieved_token_from_shared_preferences != null) {
+                token = retrieved_token_from_shared_preferences;
+                InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_SET_DB_TOKEN, Defs.EMPTY_ARG, token);
+            }
         }
     }
 
@@ -85,6 +105,8 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         ob.setOnClickListener(this);
         Button cb = (Button) v.findViewById(R.id.editConfigurationCancelButton);
         cb.setOnClickListener(this);
+        Button gt = (Button) v.findViewById(R.id.editConfigurationGetTokenButton);
+        gt.setOnClickListener(this);
 
         EditText urlText = (EditText) v.findViewById(R.id.editNextcloudUrl);
         urlText.setText(strings.get(0));
@@ -98,6 +120,12 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         CheckBox useSsc = (CheckBox) v.findViewById(R.id.editNextcloudUseSelfSignedCert);
         useSsc.setChecked(new Boolean(strings.get(3)));
         this.useSelfSignedCert = useSsc;
+
+        TextView dbxTokenLabel = (TextView) v.findViewById(R.id.editConfigurationTokenLabel);
+        dbxTokenLabel.setText((strings.get(5) == null || strings.get(5).isEmpty()) ?
+                "Press the button below to acquire a new authentication token." :
+                "A token is acquired. Press the button below to renew."
+        );
     }
 
     @Override

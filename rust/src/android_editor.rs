@@ -25,6 +25,7 @@ use rust_keylock::{
 };
 use std::sync::mpsc::{self, Receiver};
 use super::japi;
+use rust_keylock::dropbox::DropboxConfiguration;
 
 pub struct AndroidImpl {
     jvm: Jvm,
@@ -177,7 +178,10 @@ impl AsyncEditor for AndroidImpl {
                     configuration.nextcloud.server_url.clone(),
                     configuration.nextcloud.username.clone(),
                     configuration.nextcloud.decrypted_password().unwrap(),
-                    configuration.nextcloud.use_self_signed_certificate.to_string()];
+                    configuration.nextcloud.use_self_signed_certificate.to_string(),
+                    DropboxConfiguration::dropbox_url(),
+                    configuration.dropbox.decrypted_token().unwrap(),
+                ];
                 self.jvm.invoke_to_channel(
                     &self.edit_configuration_cb,
                     "apply",

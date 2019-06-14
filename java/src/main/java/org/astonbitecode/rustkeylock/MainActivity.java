@@ -32,7 +32,6 @@ public class MainActivity extends Activity implements BackButtonHandlable {
     private final String TAG = getClass().getName();
     private Thread rustThread = null;
     private BackButtonHandler backButtonHandler;
-    private long savedStateAt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +41,8 @@ public class MainActivity extends Activity implements BackButtonHandlable {
         if (savedInstanceState == null) {
             initializeRust();
         } else {
-            savedStateAt = savedInstanceState.getLong("saveStateAt");
-            checkIdleTime();
             // Restore the back button handler
             backButtonHandler = (BackButtonHandler) savedInstanceState.get("backButtonHandler");
-        }
-    }
-
-    private void checkIdleTime() {
-        if (savedStateAt > 0) {
-            long now = System.currentTimeMillis();
-            // If paused for more than 60 seconds, close the application for
-            // security reasons
-            if (now - savedStateAt > 60000) {
-                Log.w(TAG, "Closing because of beeing idle for too long...");
-                finish();
-                System.exit(0);
-            }
         }
     }
 
@@ -75,35 +59,13 @@ public class MainActivity extends Activity implements BackButtonHandlable {
     protected void onPause() {
         Log.i(TAG, "rust-keylock is being paused...");
         super.onPause();
-        savedStateAt = System.currentTimeMillis();
     }
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "resuming rust-keylock...");
         super.onResume();
-        checkIdleTime();
-        savedStateAt = 0;
+        Log.i(TAG, "resuming rust-keylock...");
     }
-
-    // @Override
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    // // Inflate the menu; this adds items to the action bar if it is present.
-    // getMenuInflater().inflate(R.menu.main, menu);
-    // return true;
-    // }
-
-    // @Override
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // // Handle action bar item clicks here. The action bar will
-    // // automatically handle clicks on the Home/Up button, so long
-    // // as you specify a parent activity in AndroidManifest.xml.
-    // int id = item.getItemId();
-    // if (id == R.id.action_settings) {
-    // return true;
-    // }
-    // return super.onOptionsItemSelected(item);
-    // }
 
     @Override
     public void onBackPressed() {

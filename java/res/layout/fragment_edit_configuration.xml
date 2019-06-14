@@ -84,6 +84,41 @@
                       android:layout_height="match_parent"
                       android:text="Use self-signed certificate"/>
 
+            <TextView
+                    android:id="@+id/dropboxLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:layout_gravity="left|center"
+                    android:text="Dropbox"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20sp"
+                    android:columnCount="1"
+                    android:gravity="center|top"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/editConfigurationTokenLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <Button
+                        android:id="@+id/editConfigurationGetTokenButton"
+                        android:layout_marginTop="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:drawableTop="@drawable/dropbox_circle_black_64"/>
+            </GridLayout>
+
             <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,6 +146,8 @@
                         android:drawableTop="@drawable/close"
                         android:text="Cancel"/>
             </GridLayout>
+
+
         </LinearLayout>
     </ScrollView>
 

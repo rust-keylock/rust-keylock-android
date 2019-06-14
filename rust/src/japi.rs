@@ -3,9 +3,10 @@ use std::thread;
 
 use j4rs::{errors, Instance, InstanceReceiver};
 use log::*;
-use rust_keylock::{Entry, Menu, UserOption, UserSelection};
+use rust_keylock::{Entry, Menu, UserOption, UserSelection, AllConfigurations};
 use rust_keylock::nextcloud::NextcloudConfiguration;
 use serde_derive::{Deserialize, Serialize};
+use rust_keylock::dropbox::DropboxConfiguration;
 
 pub fn handle_instance_receiver_result(instance_receiver_res: errors::Result<InstanceReceiver>) -> Receiver<UserSelection> {
     let (tx, rx) = mpsc::channel();
@@ -129,7 +130,13 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                                 false)
                 };
 
-                UserSelection::UpdateConfiguration(ncc.unwrap())
+                let dbxc = if strings.len() == 4 {
+                    DropboxConfiguration::new(strings[3].clone())
+                } else {
+                    Ok(DropboxConfiguration::default())
+                };
+
+                UserSelection::UpdateConfiguration(AllConfigurations::new(ncc.unwrap(), dbxc.unwrap()))
             }
             GuiResponse::UserOptionSelected { user_option } => {
                 debug!("user_option_selected");
