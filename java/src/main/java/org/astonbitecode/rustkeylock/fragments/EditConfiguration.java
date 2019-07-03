@@ -124,7 +124,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         TextView dbxTokenLabel = (TextView) v.findViewById(R.id.editConfigurationTokenLabel);
         dbxTokenLabel.setText((strings.get(5) == null || strings.get(5).isEmpty()) ?
                 "Press the button below to acquire a new authentication token." :
-                "A token is acquired. Press the button below to renew."
+                "A token is acquired. Press the button below if you want to renew."
         );
     }
 

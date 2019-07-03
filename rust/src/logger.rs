@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 
-use android_logger::Filter;
+use android_logger::{Config,FilterBuilder};
 use log::Level;
 
 pub fn init() {
     android_logger::init_once(
-        Filter::default()
+        Config::default()
             .with_min_level(Level::Debug)
-            .with_allowed_module_paths(vec!["rustkeylock".to_string(), "rustkeylockandroid".to_string()]),
-        None,
+            .with_tag("rustkeylock")
+            .with_filter(FilterBuilder::new().parse("debug,rustkeylockandroid::crate=debug").build())
     );
 }

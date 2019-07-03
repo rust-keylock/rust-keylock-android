@@ -45,7 +45,7 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
     private static final long serialVersionUID = 8765819759487480794L;
     private final String TAG = getClass().getName();
     private List<JavaEntry> entries;
-    private EntriesAdapter entriesAdapter;
+    private transient EntriesAdapter entriesAdapter;
     private String filter;
 
     public ListEntries() {
