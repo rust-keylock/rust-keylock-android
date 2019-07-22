@@ -15,15 +15,6 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -38,6 +29,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SelectPath extends Fragment implements BackButtonHandler, OnClickListener {
     private static final long serialVersionUID = 1503736744138963548L;
@@ -184,12 +183,12 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
         if (backButtonHandler == this) {
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
         } else {
             try {
                 backButtonHandler.onBackButton();
             } catch (Exception e) {
-                InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+                InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
             }
         }
     }

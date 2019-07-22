@@ -15,15 +15,6 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.api.JavaUserOption;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +25,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.JavaUserOption;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ShowMessage extends Fragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 163106573370997557L;
@@ -79,7 +78,7 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
         } else {
             Log.e(TAG,
                     "A button that does not exist in the User Options offered just got pressed! How did it got here?? Please consider opening a bug to the developers.");
-            InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_MAIN, Defs.EMPTY_ARG, "");
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
         }
     }
 
@@ -128,7 +127,7 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_TRY_PASS, Defs.EMPTY_ARG, "");
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.TryPass(false));
     }
 
     @Override

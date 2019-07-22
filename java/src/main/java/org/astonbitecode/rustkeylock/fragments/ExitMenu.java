@@ -17,6 +17,7 @@ package org.astonbitecode.rustkeylock.fragments;
 
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
@@ -51,16 +52,16 @@ public class ExitMenu extends Fragment implements OnClickListener, BackButtonHan
     public void onClick(View view) {
         if (view.getId() == R.id.exitButtonYes) {
             Log.d(TAG, "The User selected to force Exit with unsaved data");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_FORCE_EXIT);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ForceExit());
         } else {
             Log.e(TAG, "The User selected not to exit because of unsaved data");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
         }
     }
 
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
     }
 }

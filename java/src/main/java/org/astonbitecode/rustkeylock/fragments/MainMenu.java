@@ -15,12 +15,6 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import org.astonbitecode.rustkeylock.MainActivity;
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,6 +25,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import org.astonbitecode.rustkeylock.MainActivity;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
 public class MainMenu extends Fragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = -4385132544016979748L;
@@ -70,25 +69,25 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
     public void onClick(View view) {
         if (view.getId() == R.id.listButton) {
             Log.d(TAG, "The User Selected to List Entries");
-            InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_ENTRIES_LIST, Defs.EMPTY_ARG, "");
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(""));
         } else if (view.getId() == R.id.saveButton) {
             Log.d(TAG, "The User Selected to Save Entries");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SAVE);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Save(false));
         } else if (view.getId() == R.id.changePasswordButton) {
             Log.d(TAG, "The User Selected to Change the password");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_CHANGE_PASS);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ChangePass());
         } else if (view.getId() == R.id.exitButton) {
             Log.d(TAG, "The User Selected to Exit rust-keylock");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_EXIT);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Exit());
         } else if (view.getId() == R.id.exportButton) {
             Log.d(TAG, "The User Selected to export entries");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_EXPORT_ENTRIES);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ExportEntries());
         } else if (view.getId() == R.id.importButton) {
             Log.d(TAG, "The User Selected to import entries");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_IMPORT_ENTRIES);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ImportEntries());
         } else if (view.getId() == R.id.mmEditConfigurationButton) {
             Log.d(TAG, "The User Selected to edit the configuration");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_SHOW_CONFIGURATION);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ShowConfiguration());
         } else {
             Log.e(TAG, "The User selected a Menu that is not implemented yet in Rust");
         }
@@ -97,7 +96,7 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_EXIT);
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Exit());
     }
 
     private class UiThreadRunnable implements Runnable {

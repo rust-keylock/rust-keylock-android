@@ -15,11 +15,6 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import org.astonbitecode.rustkeylock.R;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
-import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +24,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
+import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
 public class ChangePassword extends Fragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 8235249433565909373L;
@@ -86,7 +85,7 @@ public class ChangePassword extends Fragment implements OnClickListener, BackBut
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
     }
 
     @Override

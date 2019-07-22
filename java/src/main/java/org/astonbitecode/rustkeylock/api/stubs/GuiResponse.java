@@ -32,21 +32,19 @@ public class GuiResponse {
         return map;
     }
 
-    public static Map<String, Object> GoToMenu(String menu) {
+    public static Map<String, Object> GoToMenu(Map<String, Object> m) {
         Map<String, Object> inner = new HashMap<>();
-        inner.put("menu", menu);
+        inner.put("menu", m);
         Map<String, Object> map = new HashMap<>();
         map.put("GoToMenu", inner);
         return map;
     }
 
-    public static Map<String, Object> GoToMenuPlusArgs(String menu, String intArg, String stringArg) {
+    public static Map<String, Object> GoToMenu(String m) {
         Map<String, Object> inner = new HashMap<>();
-        inner.put("menu", menu);
-        inner.put("intarg", intArg);
-        inner.put("stringarg", stringArg);
+        inner.put("menu", m);
         Map<String, Object> map = new HashMap<>();
-        map.put("GoToMenuPlusArgs", inner);
+        map.put("GoToMenu", inner);
         return map;
     }
 

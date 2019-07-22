@@ -56,22 +56,20 @@ pub fn new(jvm: Jvm,
 impl AsyncEditor for AndroidImpl {
     fn show_password_enter(&self) -> Receiver<UserSelection> {
         debug!("Opening the password fragment");
-        let try_pass_menu_name = Menu::TryPass(false).get_name();
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_menu_cb,
             "apply",
-            &[InvocationArg::from(try_pass_menu_name)]);
+            &[InvocationArg::from("TryPass")]);
         debug!("Waiting for password...");
         japi::handle_instance_receiver_result(instance_receiver)
     }
 
     fn show_change_password(&self) -> Receiver<UserSelection> {
         debug!("Opening the change password fragment");
-        let change_pass_menu_name = Menu::ChangePass.get_name();
         let instance_receiver = self.jvm.invoke_to_channel(
             &self.show_menu_cb,
             "apply",
-            &[InvocationArg::from(change_pass_menu_name)]);
+            &[InvocationArg::from("ChangePass")]);
         debug!("Waiting for password...");
         japi::handle_instance_receiver_result(instance_receiver)
     }
@@ -90,7 +88,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &[InvocationArg::from(Menu::Main.get_name())])
+                    &[InvocationArg::from("Main")])
             }
             &Menu::EntriesList(_) => {
                 let java_entries: Vec<japi::JavaEntry> = safe.get_entries().iter()
@@ -165,13 +163,13 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &[InvocationArg::from(Menu::ExportEntries.get_name())])
+                    &[InvocationArg::from("ExportEntries")])
             }
             &Menu::ImportEntries => {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &[InvocationArg::from(Menu::ImportEntries.get_name())])
+                    &[InvocationArg::from("ImportEntries")])
             }
             &Menu::ShowConfiguration => {
                 let conf_strings = vec![
@@ -191,7 +189,7 @@ impl AsyncEditor for AndroidImpl {
                 self.jvm.invoke_to_channel(
                     &self.show_menu_cb,
                     "apply",
-                    &[InvocationArg::from(Menu::Current.get_name())])
+                    &[InvocationArg::from("Current")])
             }
             other => {
                 panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
@@ -209,7 +207,7 @@ impl AsyncEditor for AndroidImpl {
             let instance_receiver = self.jvm.invoke_to_channel(
                 &self.show_menu_cb,
                 "apply",
-                &[InvocationArg::from(Menu::Exit.get_name())]);
+                &[InvocationArg::from("Exit")]);
 
             japi::handle_instance_receiver_result(instance_receiver)
         } else {

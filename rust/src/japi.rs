@@ -3,10 +3,10 @@ use std::thread;
 
 use j4rs::{errors, Instance, InstanceReceiver};
 use log::*;
-use rust_keylock::{Entry, Menu, UserOption, UserSelection, AllConfigurations};
+use rust_keylock::{AllConfigurations, Entry, Menu, UserOption, UserSelection};
+use rust_keylock::dropbox::DropboxConfiguration;
 use rust_keylock::nextcloud::NextcloudConfiguration;
 use serde_derive::{Deserialize, Serialize};
-use rust_keylock::dropbox::DropboxConfiguration;
 
 pub fn handle_instance_receiver_result(instance_receiver_res: errors::Result<InstanceReceiver>) -> Receiver<UserSelection> {
     let (tx, rx) = mpsc::channel();
@@ -41,8 +41,7 @@ fn retrieve_user_selection(instance_receiver_res: errors::Result<InstanceReceive
 #[derive(Deserialize, Debug)]
 enum GuiResponse {
     ProvidedPassword { password: String, number: usize },
-    GoToMenu { menu: String },
-    GoToMenuPlusArgs { menu: String, intarg: String, stringarg: String },
+    GoToMenu { menu: JavaMenu },
     AddEntry { entry: JavaEntry },
     ReplaceEntry { entry: JavaEntry, index: usize },
     DeleteEntry { index: usize },
@@ -61,31 +60,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                 UserSelection::ProvidedPassword(password, number)
             }
             GuiResponse::GoToMenu { menu } => {
-                debug!("go_to_menu called with {}", menu);
-                let menu = Menu::from(menu, None, None);
-                UserSelection::GoTo(menu)
-            }
-            GuiResponse::GoToMenuPlusArgs { menu, intarg, stringarg } => {
-                debug!("go_to_menu_plus_arg: menu: {}, num = '{}' and str = '{}'",
-                       menu,
-                       intarg,
-                       stringarg);
-
-                let num_opt = if intarg == "null" {
-                    None
-                } else {
-                    let num = intarg.parse::<usize>().unwrap();
-                    Some(num)
-                };
-
-                let str_opt = if stringarg == "null" {
-                    None
-                } else {
-                    Some(stringarg)
-                };
-
-                let menu = Menu::from(menu, num_opt, str_opt);
-                UserSelection::GoTo(menu)
+                debug!("go_to_menu");
+                UserSelection::GoTo(menu.to_menu())
             }
             GuiResponse::AddEntry { entry } => {
                 debug!("add_entry");
@@ -216,6 +192,53 @@ impl JavaUserOption {
             label: user_option.label.clone(),
             value: user_option.value.to_string(),
             short_label: user_option.short_label.clone(),
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub(crate) enum JavaMenu {
+    TryPass { b: bool },
+    ChangePass,
+    Main,
+    EntriesList { filter: String },
+    NewEntry,
+    ShowEntry { idx: usize },
+    EditEntry { idx: usize },
+    DeleteEntry { idx: usize },
+    Save { b: bool },
+    Exit,
+    ForceExit,
+    TryFileRecovery,
+    ImportEntries,
+    ExportEntries,
+    ShowConfiguration,
+    WaitForDbxTokenCallback { s: String },
+    SetDbxToken { s: String },
+    Current,
+}
+
+impl JavaMenu {
+    pub(crate) fn to_menu(self) -> Menu {
+        match self {
+            JavaMenu::Main => Menu::Main,
+            JavaMenu::Exit => Menu::Exit,
+            JavaMenu::EntriesList { filter } => Menu::EntriesList(filter),
+            JavaMenu::Save { b } => Menu::Save(b),
+            JavaMenu::ChangePass => Menu::ChangePass,
+            JavaMenu::ExportEntries => Menu::ExportEntries,
+            JavaMenu::ImportEntries => Menu::ImportEntries,
+            JavaMenu::ShowConfiguration => Menu::ShowConfiguration,
+            JavaMenu::ForceExit => Menu::ForceExit,
+            JavaMenu::NewEntry => Menu::NewEntry,
+            JavaMenu::WaitForDbxTokenCallback { s } => Menu::WaitForDbxTokenCallback(s),
+            JavaMenu::ShowEntry { idx } => Menu::ShowEntry(idx),
+            JavaMenu::EditEntry { idx } => Menu::EditEntry(idx),
+            JavaMenu::DeleteEntry { idx } => Menu::DeleteEntry(idx),
+            JavaMenu::TryPass { b } => Menu::TryPass(b),
+            _ => {
+                Menu::Current
+            }
         }
     }
 }

@@ -29,8 +29,8 @@ import android.widget.TextView;
 import com.dropbox.core.android.Auth;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
-import org.astonbitecode.rustkeylock.utils.Defs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +78,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             }
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
-            InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
         } else if (view.getId() == R.id.editConfigurationGetTokenButton) {
             String appKey = getString(R.string.dbx_app_key);
             Log.d(TAG, "Clicked Get Dropbox token in configuration. App key: " + appKey);
@@ -95,7 +95,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String retrieved_token_from_shared_preferences = Auth.getOAuth2Token();
             if (retrieved_token_from_shared_preferences != null) {
                 token = retrieved_token_from_shared_preferences;
-                InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_SET_DB_TOKEN, Defs.EMPTY_ARG, token);
+                InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.SetDbToken(token));
             }
         }
     }
@@ -131,7 +131,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu(Defs.MENU_MAIN);
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
     }
 
     @Override

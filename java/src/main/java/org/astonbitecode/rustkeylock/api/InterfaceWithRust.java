@@ -48,13 +48,13 @@ public class InterfaceWithRust {
         call(m);
     }
 
-    public void go_to_menu(String menuName) {
-        Map<String, Object> m = GuiResponse.GoToMenu(menuName);
+    public void go_to_menu(Map<String, Object> menu) {
+        Map<String, Object> m = GuiResponse.GoToMenu(menu);
         call(m);
     }
 
-    public void go_to_menu_plus_arg(String menuName, String argNum, String argStr) {
-        Map<String, Object> m = GuiResponse.GoToMenuPlusArgs(menuName, argNum, argStr);
+    public void go_to_menu(String menu) {
+        Map<String, Object> m = GuiResponse.GoToMenu(menu);
         call(m);
     }
 

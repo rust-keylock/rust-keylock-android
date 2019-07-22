@@ -35,6 +35,7 @@ import android.widget.TextView;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
+import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
@@ -99,7 +100,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         if (view.getId() == R.id.editButton) {
             Log.d(TAG, "Clicked edit on entry with id " + entryIndex);
 
-            InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_EDIT_ENTRY, entryIndex + "", Defs.EMPTY_ARG);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EditEntry(entryIndex));
         } else if (view.getId() == R.id.updateButton) {
             Log.d(TAG, "Clicked Update for entry with id " + entryIndex);
 
@@ -141,7 +142,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         } else if (view.getId() == R.id.deleteButton) {
             Log.d(TAG, "Clicked delete on entry with id " + entryIndex);
 
-            InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_DELETE_ENTRY, entryIndex + "", Defs.EMPTY_ARG);
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.DeleteEntry(entryIndex));
         } else if (view.getId() == R.id.areYouSureButton) {
             Log.d(TAG, "Clicked confirm deletion on entry with id " + entryIndex);
 
@@ -224,7 +225,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu_plus_arg(Defs.MENU_ENTRIES_LIST, Defs.EMPTY_ARG, "");
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(""));
     }
 
     @Override
