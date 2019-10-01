@@ -1,24 +1,24 @@
 use std::sync::mpsc::{self, Receiver};
 use std::thread;
 
-use j4rs::{errors, Instance, InstanceReceiver};
+use j4rs::{Instance, InstanceReceiver};
 use log::*;
 use rust_keylock::{AllConfigurations, Entry, Menu, UserOption, UserSelection};
 use rust_keylock::dropbox::DropboxConfiguration;
 use rust_keylock::nextcloud::NextcloudConfiguration;
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
-pub fn handle_instance_receiver_result(instance_receiver_res: errors::Result<InstanceReceiver>) -> Receiver<UserSelection> {
+pub fn handle_instance_receiver_result(instance_receiver_res: j4rs::errors::Result<InstanceReceiver>) -> crate::errors::Result<Receiver<UserSelection>> {
     let (tx, rx) = mpsc::channel();
     let _ = thread::spawn(move || {
         let sel = retrieve_user_selection(instance_receiver_res);
         let _ = tx.send(sel);
     });
 
-    rx
+    Ok(rx)
 }
 
-fn retrieve_user_selection(instance_receiver_res: errors::Result<InstanceReceiver>) -> UserSelection {
+fn retrieve_user_selection(instance_receiver_res: j4rs::errors::Result<InstanceReceiver>) -> UserSelection {
     match instance_receiver_res {
         Ok(instance_receiver) => {
             match instance_receiver.rx().recv() {

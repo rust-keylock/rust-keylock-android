@@ -1,5 +1,3 @@
-use std::sync::mpsc::{self, Receiver};
-
 // Copyright 2017 astonbitecode
 // This file is part of rust-keylock password manager.
 //
@@ -15,14 +13,19 @@ use std::sync::mpsc::{self, Receiver};
 //
 // You should have received a copy of the GNU General Public License
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
+
+use std::convert::TryFrom;
+use std::sync::mpsc::{self, Receiver};
+
 use j4rs::{Instance, InvocationArg, Jvm};
 use log::*;
-
 use rust_keylock::{AsyncEditor, Entry, EntryPresentationType, Menu, MessageSeverity, UserOption, UserSelection};
 use rust_keylock::dropbox::DropboxConfiguration;
 use rust_keylock::nextcloud::NextcloudConfiguration;
 
-use super::japi;
+use crate::{japi, errors};
+use crate::errors::RklAndroidError;
+use std::error::Error;
 
 pub struct AndroidImpl {
     jvm: Jvm,
@@ -52,167 +55,31 @@ pub fn new(jvm: Jvm,
 
 impl AsyncEditor for AndroidImpl {
     fn show_password_enter(&self) -> Receiver<UserSelection> {
-        debug!("Opening the password fragment");
-        let instance_receiver = self.jvm.invoke_to_channel(
-            &self.show_menu_cb,
-            "apply",
-            &[InvocationArg::from("TryPass")]);
-        debug!("Waiting for password...");
-        japi::handle_instance_receiver_result(instance_receiver)
+        show_password_enter(&self).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_change_password(&self) -> Receiver<UserSelection> {
-        debug!("Opening the change password fragment");
-        let instance_receiver = self.jvm.invoke_to_channel(
-            &self.show_menu_cb,
-            "apply",
-            &[InvocationArg::from("ChangePass")]);
-        debug!("Waiting for password...");
-        japi::handle_instance_receiver_result(instance_receiver)
+        show_change_password(&self).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_menu(&self, menu: &Menu) -> Receiver<UserSelection> {
-        debug!("Opening menu '{:?}'", menu);
-
-        let instance_receiver_res = match menu {
-            &Menu::Main => {
-                self.jvm.invoke_to_channel(
-                    &self.show_menu_cb,
-                    "apply",
-                    &[InvocationArg::from("Main")])
-            }
-            &Menu::NewEntry => {
-                let empty_entry = japi::JavaEntry::empty();
-                // In order to denote that this is a new entry, put -1 as index
-                self.jvm.invoke_to_channel(
-                    &self.show_entry_cb,
-                    "apply",
-                    &[
-                        InvocationArg::new(&empty_entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
-                        InvocationArg::from(-1),
-                        InvocationArg::from(true),
-                        InvocationArg::from(false)
-                    ])
-            }
-            &Menu::ExportEntries => {
-                self.jvm.invoke_to_channel(
-                    &self.show_menu_cb,
-                    "apply",
-                    &[InvocationArg::from("ExportEntries")])
-            }
-            &Menu::ImportEntries => {
-                self.jvm.invoke_to_channel(
-                    &self.show_menu_cb,
-                    "apply",
-                    &[InvocationArg::from("ImportEntries")])
-            }
-            &Menu::Current => {
-                self.jvm.invoke_to_channel(
-                    &self.show_menu_cb,
-                    "apply",
-                    &[InvocationArg::from("Current")])
-            }
-            other => {
-                panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
-                        to the developers.",
-                       other)
-            }
-        };
-
-        japi::handle_instance_receiver_result(instance_receiver_res)
+        show_menu(&self, menu).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_entries(&self, entries: Vec<Entry>, filter: String) -> Receiver<UserSelection> {
-        let java_entries: Vec<japi::JavaEntry> = entries.iter()
-            .map(|entry| japi::JavaEntry::new(entry))
-            .collect();
-        let filter = if filter.is_empty() {
-            "null".to_string()
-        } else {
-            filter
-        };
-
-        let instance_receiver_res = self.jvm.invoke_to_channel(
-            &self.show_entries_set_cb,
-            "apply",
-            &[
-                InvocationArg::from((
-                    java_entries.as_slice(),
-                    "org.astonbitecode.rustkeylock.api.JavaEntry",
-                    &self.jvm)),
-                InvocationArg::from(filter)]);
-        japi::handle_instance_receiver_result(instance_receiver_res)
+        show_entries(&self, entries, filter).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_entry(&self, entry: Entry, index: usize, presentation_type: EntryPresentationType) -> Receiver<UserSelection> {
-        let instance_receiver_res = match presentation_type {
-            EntryPresentationType::View => {
-                self.jvm.invoke_to_channel(
-                    &self.show_entry_cb,
-                    "apply",
-                    &[
-                        InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
-                        InvocationArg::from(index as i32),
-                        InvocationArg::from(false),
-                        InvocationArg::from(false)
-                    ])
-            }
-            EntryPresentationType::Delete => {
-                self.jvm.invoke_to_channel(
-                    &self.show_entry_cb,
-                    "apply",
-                    &[
-                        InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
-                        InvocationArg::from(index as i32),
-                        InvocationArg::from(false),
-                        InvocationArg::from(true)
-                    ])
-            }
-            EntryPresentationType::Edit => {
-                self.jvm.invoke_to_channel(
-                    &self.show_entry_cb,
-                    "apply",
-                    &[
-                        InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
-                        InvocationArg::from(index as i32),
-                        InvocationArg::from(true),
-                        InvocationArg::from(false)
-                    ])
-            }
-        };
-
-        japi::handle_instance_receiver_result(instance_receiver_res)
+        show_entry(&self, entry, index, presentation_type).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_configuration(&self, nextcloud: NextcloudConfiguration, dropbox: DropboxConfiguration) -> Receiver<UserSelection> {
-        let conf_strings = vec![
-            nextcloud.server_url.clone(),
-            nextcloud.username.clone(),
-            nextcloud.decrypted_password().unwrap(),
-            nextcloud.use_self_signed_certificate.to_string(),
-            DropboxConfiguration::dropbox_url(),
-            dropbox.decrypted_token().unwrap()];
-        let instance_receiver_res = self.jvm.invoke_to_channel(
-            &self.edit_configuration_cb,
-            "apply",
-            &[InvocationArg::from((conf_strings.as_slice(), &self.jvm))]);
-        japi::handle_instance_receiver_result(instance_receiver_res)
+        show_configuration(&self, nextcloud, dropbox).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn exit(&self, contents_changed: bool) -> Receiver<UserSelection> {
-        debug!("Exiting rust-keylock...");
-        if contents_changed {
-            let instance_receiver = self.jvm.invoke_to_channel(
-                &self.show_menu_cb,
-                "apply",
-                &[InvocationArg::from("Exit")]);
-
-            japi::handle_instance_receiver_result(instance_receiver)
-        } else {
-            let (tx, rx) = mpsc::channel();
-            let _ = tx.send(UserSelection::GoTo(Menu::ForceExit));
-            rx
-        }
+        exit(&self, contents_changed).unwrap_or_else(|error| handle_error(&error))
     }
 
     fn show_message(&self,
@@ -220,22 +87,200 @@ impl AsyncEditor for AndroidImpl {
                     options: Vec<UserOption>,
                     severity: MessageSeverity)
                     -> Receiver<UserSelection> {
-        debug!("Showing Message '{}'", message);
-        let java_user_options: Vec<japi::JavaUserOption> = options.iter()
-            .clone()
-            .map(|user_option| japi::JavaUserOption::new(user_option))
-            .collect();
-        let instance_receiver = self.jvm.invoke_to_channel(
-            &self.show_message_cb,
+        show_message(&self, message, options, severity).unwrap_or_else(|error| handle_error(&error))
+    }
+}
+
+fn show_password_enter(editor: &AndroidImpl) -> errors::Result<Receiver<UserSelection>> {
+    debug!("Opening the password fragment");
+    let instance_receiver = editor.jvm.invoke_to_channel(
+        &editor.show_menu_cb,
+        "apply",
+        &[InvocationArg::try_from("TryPass")?]);
+    debug!("Waiting for password...");
+    japi::handle_instance_receiver_result(instance_receiver)
+}
+
+fn show_change_password(editor: &AndroidImpl) -> errors::Result<Receiver<UserSelection>> {
+    debug!("Opening the change password fragment");
+    let instance_receiver = editor.jvm.invoke_to_channel(
+        &editor.show_menu_cb,
+        "apply",
+        &[InvocationArg::try_from("ChangePass")?]);
+    debug!("Waiting for password...");
+    japi::handle_instance_receiver_result(instance_receiver)
+}
+
+fn show_menu(editor: &AndroidImpl, menu: &Menu) -> errors::Result<Receiver<UserSelection>> {
+    debug!("Opening menu '{:?}'", menu);
+
+    let instance_receiver_res = match menu {
+        &Menu::Main => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_menu_cb,
+                "apply",
+                &[InvocationArg::try_from("Main")?])
+        }
+        &Menu::NewEntry => {
+            let empty_entry = japi::JavaEntry::empty();
+            // In order to denote that this is a new entry, put -1 as index
+            editor.jvm.invoke_to_channel(
+                &editor.show_entry_cb,
+                "apply",
+                &[
+                    InvocationArg::new(&empty_entry, "org.astonbitecode.rustkeylock.api.JavaEntry"),
+                    InvocationArg::try_from(-1)?,
+                    InvocationArg::try_from(true)?,
+                    InvocationArg::try_from(false)?
+                ])
+        }
+        &Menu::ExportEntries => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_menu_cb,
+                "apply",
+                &[InvocationArg::try_from("ExportEntries")?])
+        }
+        &Menu::ImportEntries => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_menu_cb,
+                "apply",
+                &[InvocationArg::try_from("ImportEntries")?])
+        }
+        &Menu::Current => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_menu_cb,
+                "apply",
+                &[InvocationArg::try_from("Current")?])
+        }
+        other => {
+            panic!("Menu '{:?}' cannot be used with Entries. Please, consider opening a bug \
+                        to the developers.",
+                   other)
+        }
+    };
+
+    japi::handle_instance_receiver_result(instance_receiver_res)
+}
+
+fn show_entries(editor: &AndroidImpl, entries: Vec<Entry>, filter: String) -> errors::Result<Receiver<UserSelection>> {
+    let java_entries: Vec<japi::JavaEntry> = entries.iter()
+        .map(|entry| japi::JavaEntry::new(entry))
+        .collect();
+    let filter = if filter.is_empty() {
+        "null".to_string()
+    } else {
+        filter
+    };
+
+    let instance_receiver_res = editor.jvm.invoke_to_channel(
+        &editor.show_entries_set_cb,
+        "apply",
+        &[
+            InvocationArg::try_from((
+                java_entries.as_slice(),
+                "org.astonbitecode.rustkeylock.api.JavaEntry"))?,
+            InvocationArg::try_from(filter)?]);
+    japi::handle_instance_receiver_result(instance_receiver_res)
+}
+
+fn show_entry(editor: &AndroidImpl, entry: Entry, index: usize, presentation_type: EntryPresentationType) -> errors::Result<Receiver<UserSelection>> {
+    let instance_receiver_res = match presentation_type {
+        EntryPresentationType::View => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_entry_cb,
+                "apply",
+                &[
+                    InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
+                    InvocationArg::try_from(index as i32)?,
+                    InvocationArg::try_from(false)?,
+                    InvocationArg::try_from(false)?
+                ])
+        }
+        EntryPresentationType::Delete => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_entry_cb,
+                "apply",
+                &[
+                    InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
+                    InvocationArg::try_from(index as i32)?,
+                    InvocationArg::try_from(false)?,
+                    InvocationArg::try_from(true)?
+                ])
+        }
+        EntryPresentationType::Edit => {
+            editor.jvm.invoke_to_channel(
+                &editor.show_entry_cb,
+                "apply",
+                &[
+                    InvocationArg::new(&japi::JavaEntry::new(&entry), "org.astonbitecode.rustkeylock.api.JavaEntry"),
+                    InvocationArg::try_from(index as i32)?,
+                    InvocationArg::try_from(true)?,
+                    InvocationArg::try_from(false)?
+                ])
+        }
+    };
+
+    japi::handle_instance_receiver_result(instance_receiver_res)
+}
+
+fn show_configuration(editor: &AndroidImpl, nextcloud: NextcloudConfiguration, dropbox: DropboxConfiguration) -> errors::Result<Receiver<UserSelection>> {
+    let conf_strings = vec![
+        nextcloud.server_url.clone(),
+        nextcloud.username.clone(),
+        nextcloud.decrypted_password().unwrap(),
+        nextcloud.use_self_signed_certificate.to_string(),
+        DropboxConfiguration::dropbox_url(),
+        dropbox.decrypted_token().unwrap()];
+    let instance_receiver_res = editor.jvm.invoke_to_channel(
+        &editor.edit_configuration_cb,
+        "apply",
+        &[InvocationArg::try_from(conf_strings.as_slice())?]);
+    japi::handle_instance_receiver_result(instance_receiver_res)
+}
+
+fn exit(editor: &AndroidImpl, contents_changed: bool) -> errors::Result<Receiver<UserSelection>> {
+    debug!("Exiting rust-keylock...");
+    if contents_changed {
+        let instance_receiver = editor.jvm.invoke_to_channel(
+            &editor.show_menu_cb,
             "apply",
-            &[
-                InvocationArg::from((
-                    java_user_options.as_slice(),
-                    "org.astonbitecode.rustkeylock.api.JavaUserOption",
-                    &self.jvm)),
-                InvocationArg::from(message),
-                InvocationArg::from(severity.to_string())]);
+            &[InvocationArg::try_from("Exit")?]);
 
         japi::handle_instance_receiver_result(instance_receiver)
+    } else {
+        let (tx, rx) = mpsc::channel();
+        let _ = tx.send(UserSelection::GoTo(Menu::ForceExit));
+        Ok(rx)
     }
+}
+
+fn show_message(editor: &AndroidImpl,
+                message: &str,
+                options: Vec<UserOption>,
+                severity: MessageSeverity)
+                -> errors::Result<Receiver<UserSelection>> {
+    debug!("Showing Message '{}'", message);
+    let java_user_options: Vec<japi::JavaUserOption> = options.iter()
+        .clone()
+        .map(|user_option| japi::JavaUserOption::new(user_option))
+        .collect();
+    let instance_receiver = editor.jvm.invoke_to_channel(
+        &editor.show_message_cb,
+        "apply",
+        &[
+            InvocationArg::try_from((
+                java_user_options.as_slice(),
+                "org.astonbitecode.rustkeylock.api.JavaUserOption"))?,
+            InvocationArg::try_from(message)?,
+            InvocationArg::try_from(severity.to_string())?]);
+
+    japi::handle_instance_receiver_result(instance_receiver)
+}
+
+fn handle_error(error: &RklAndroidError) -> Receiver<UserSelection> {
+    error!("An error occured: {}", error.description());
+    error!("{:?}", error);
+    let (tx, rx) = mpsc::channel();
+    let _ = tx.send(UserSelection::GoTo(Menu::Main));
+    rx
 }

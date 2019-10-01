@@ -22,7 +22,6 @@ extern crate libc;
 extern crate log;
 extern crate rust_keylock;
 extern crate serde;
-extern crate serde_derive;
 extern crate serde_json;
 
 use std::ffi::CString;
@@ -35,6 +34,7 @@ use log::*;
 mod android_editor;
 mod logger;
 mod japi;
+mod errors;
 
 #[allow(non_snake_case)]
 #[no_mangle]
@@ -57,7 +57,7 @@ pub extern fn Java_org_astonbitecode_rustkeylock_api_InterfaceWithRust_execute(
         .with_native_lib_name("rustkeylockandroid")
         .build() {
         Ok(jvm) => {
-            if let Ok(cert_file_path) = jvm.to_rust_string(cert_file_path_java_string) {
+            if let Ok(cert_file_path) = j4rs::jstring_to_rust_string(&jvm, cert_file_path_java_string) {
                 ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
             }
 
