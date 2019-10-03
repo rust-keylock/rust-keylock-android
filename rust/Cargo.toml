@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rust_keylock = "0.10.0"
-j4rs = {path="/home/dimitris/git/j4rs/rust"}
+j4rs = "0.10"
 libc = "0.2"
 jni-sys = "0.3"
 serde = { version = "1.0", features = ["derive"] }
