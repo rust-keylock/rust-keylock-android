@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <android.maven.plugin.version>4.5.0</android.maven.plugin.version>
+        <android.maven.plugin.version>4.6.0</android.maven.plugin.version>
         <android.plugin.version>4.1.1.4</android.plugin.version>
         <junit.version>3.8.1</junit.version>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
