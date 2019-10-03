@@ -1,7 +1,7 @@
-dist: trusty
+dist: xenial
 language: android
 jdk:
-- openjdk8
+  - openjdk11
 android:
   components:
   - platform-tools
