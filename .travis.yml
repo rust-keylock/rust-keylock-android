@@ -16,7 +16,6 @@ before_install:
   - sh rust-build/pre_build_rust_keylock_android.sh
   - sh rust-build/build_rust_for_rust_keylock_android.sh
 script:
-  - echo "-------------------------------JAVAHOME ${JAVA_HOME}"
   - mvn -f java/pom.xml clean install
 before_deploy:
   - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ks/rkl.jks -storepass
