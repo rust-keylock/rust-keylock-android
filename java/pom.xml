@@ -4,7 +4,7 @@
 
     <groupId>org.astonbitecode.rustkeylock</groupId>
     <artifactId>rust-keylock-android</artifactId>
-    <version>0.10.0</version>
+    <version>0.11.0</version>
     <packaging>apk</packaging>
 
     <name>rust-keylock-android</name>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>io.github.astonbitecode</groupId>
             <artifactId>j4rs</artifactId>
-            <version>0.10.2-java7</version>
+            <version>0.11.0-java7</version>
         </dependency>
         <dependency>
             <groupId>com.dropbox.core</groupId>
