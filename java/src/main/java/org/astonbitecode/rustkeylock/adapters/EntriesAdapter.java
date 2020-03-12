@@ -17,8 +17,8 @@ package org.astonbitecode.rustkeylock.adapters;
 
 import java.util.List;
 
-import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
+import org.astonbitecode.rustkeylock.R;
 
 import android.app.Activity;
 import android.content.Context;

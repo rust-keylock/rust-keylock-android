@@ -19,7 +19,6 @@ import android.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
-import org.astonbitecode.rustkeylock.callbacks.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class InterfaceWithRust {
     private final String TAG = getClass().getName();
     public static final InterfaceWithRust INSTANCE = new InterfaceWithRust();
-    private AtomicReference<NativeCallbackToRustChannelSupport> callback = new AtomicReference(null);
+    private AtomicReference<NativeCallbackToRustChannelSupport> callback = new AtomicReference<>(null);
     private AtomicReference<Fragment> previousFragment = new AtomicReference<>(null);
 
     private InterfaceWithRust() {

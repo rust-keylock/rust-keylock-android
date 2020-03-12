@@ -51,12 +51,14 @@ pub extern fn Java_org_astonbitecode_rustkeylock_api_InterfaceWithRust_execute(
     _jni_env: *mut JNIEnv,
     _thiz: jobject,
     cert_file_path_java_string: jstring) {
+    debug!("Executing rust-keylock native");
     match j4rs::JvmBuilder::new()
         .detach_thread_on_drop(false)
         .with_no_implicit_classpath()
         .with_native_lib_name("rustkeylockandroid")
         .build() {
         Ok(jvm) => {
+            debug!("JVM is created ");
             if let Ok(cert_file_path) = j4rs::jstring_to_rust_string(&jvm, cert_file_path_java_string) {
                 ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
             }
