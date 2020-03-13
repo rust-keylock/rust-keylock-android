@@ -1,6 +1,13 @@
 [![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
 
-___rust-keylock-android___ is the [Editor](https://rust-keylock.github.io/rust-keylock-lib/rust_keylock/trait.Editor.html) that manages the [rust-keylock-lib](https://github.com/rust-keylock/rust-keylock-lib) in Android devices.
+___rust-keylock___ is a password manager and its goals are to be:
+
+* Secure
+* Simple to use
+* Portable
+* Extensible
+
+___rust-keylock-android___ is an Android app that provides access to [rust-keylock-lib](https://github.com/rust-keylock/rust-keylock-lib).
 
 The minimum supported Android API level is __16__ (4.1.2 is tested as a minimum version).
 
@@ -12,13 +19,10 @@ The project has not yet received any formal / official security reviews. Use it 
 
 Instructions can be found [here](https://rust-keylock.github.io/download/rkl/).
 
-## FAQ
+# More info
 
-On the Project [website](https://rust-keylock.github.io/faq/rkl/).
-
-## Wiki
-
-On the Project [website](https://rust-keylock.github.io/wiki/).
+* [FAQ](https://rust-keylock.github.io/faq/rkl/) 
+* [Wiki](https://rust-keylock.github.io/wiki/)
 
 ## Screenshots
 
