@@ -167,16 +167,6 @@ impl JavaEntry {
             desc: entry.desc.clone(),
         }
     }
-
-    pub(crate) fn empty() -> JavaEntry {
-        JavaEntry {
-            name: "".to_string(),
-            url: "".to_string(),
-            user: "".to_string(),
-            pass: "".to_string(),
-            desc: "".to_string(),
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -230,7 +220,7 @@ impl JavaMenu {
             JavaMenu::ImportEntries => Menu::ImportEntries,
             JavaMenu::ShowConfiguration => Menu::ShowConfiguration,
             JavaMenu::ForceExit => Menu::ForceExit,
-            JavaMenu::NewEntry => Menu::NewEntry,
+            JavaMenu::NewEntry => Menu::NewEntry(None),
             JavaMenu::WaitForDbxTokenCallback { s } => Menu::WaitForDbxTokenCallback(s),
             JavaMenu::ShowEntry { idx } => Menu::ShowEntry(idx),
             JavaMenu::EditEntry { idx } => Menu::EditEntry(idx),

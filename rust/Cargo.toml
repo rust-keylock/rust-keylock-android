@@ -1,6 +1,6 @@
 [package]
 name = "rustkeylockandroid"
-version = "0.11.0"
+version = "0.12.0"
 authors = ["aston <astonbitecode@gmail.com>"]
 edition = "2018"
 
@@ -9,7 +9,7 @@ name = "rustkeylockandroid"
 crate-type = ["cdylib"]
 
 [dependencies]
-rust_keylock = "0.11"
+rust_keylock = {git = "https://github.com/rust-keylock/rust-keylock-lib.git"}
 j4rs = "0.11"
 libc = "0.2"
 jni-sys = "0.3"
