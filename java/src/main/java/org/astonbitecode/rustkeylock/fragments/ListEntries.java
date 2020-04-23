@@ -18,8 +18,6 @@ package org.astonbitecode.rustkeylock.fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +36,6 @@ import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ListEntries extends ListFragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 8765819759487480794L;
@@ -47,6 +43,7 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
     private List<JavaEntry> entries;
     private transient EntriesAdapter entriesAdapter;
     private String filter;
+    private transient EditText filterEditText;
 
     public ListEntries() {
         this.entries = new ArrayList<>();
@@ -68,38 +65,14 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         nb.setOnClickListener(this);
         Button mmb = (Button) rootView.findViewById(R.id.mainMenuButton);
         mmb.setOnClickListener(this);
+        Button fb = (Button) rootView.findViewById(R.id.filterButton);
+        fb.setOnClickListener(this);
 
-        EditText filterText = (EditText) rootView.findViewById(R.id.editFilter);
-        filterText.setText(filter);
-        filterText.addTextChangedListener(new TextWatcher() {
-            private Timer timer = new Timer();
-            private final long DELAY = 500;
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(final Editable s) {
-                timer.cancel();
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(s != null ? s.toString() : ""));
-                    }
-                }, DELAY);
-            }
-        });
+        filterEditText = (EditText) rootView.findViewById(R.id.editFilter);
+        filterEditText.setText(filter);
         if (filter.length() > 0) {
-            filterText.setFocusableInTouchMode(true);
-            filterText.requestFocus();
+            filterEditText.setFocusableInTouchMode(true);
+            filterEditText.requestFocus();
         } else {
             // Hide the soft keyboard
             final InputMethodManager imm = (InputMethodManager) getActivity()
@@ -132,6 +105,9 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         } else if (view.getId() == R.id.addNewButton) {
             Log.d(TAG, "Clicked add new entry");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.NewEntry());
+        } else if (view.getId() == R.id.filterButton) {
+            Log.d(TAG, "Applying filter");
+            InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(filterEditText.getText() != null ? filterEditText.getText().toString() : ""));
         }
     }
 

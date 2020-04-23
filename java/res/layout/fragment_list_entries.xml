@@ -44,13 +44,28 @@
                 android:text="New"/>
     </RelativeLayout>
 
-    <EditText
-            android:id="@+id/editFilter"
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:hint="Filter the displayed passwords..."
-            android:inputType="text"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:weightSum="2">
+        <EditText
+                android:id="@+id/editFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:hint="Filter the displayed passwords..."
+                android:inputType="text"/>
+        <Button
+                android:id="@+id/filterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/filter"
+                android:text="Filter"/>
+    </RelativeLayout>
 
     <ListView
             android:id="@android:id/list"

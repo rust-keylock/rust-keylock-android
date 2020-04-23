@@ -68,7 +68,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String url = nextcloudUrlText.getText() != null ? nextcloudUrlText.getText().toString() : "";
             String user = nextcloudUsernameText.getText() != null ? nextcloudUsernameText.getText().toString() : "";
             String password = nextcloudPasswordText.getText() != null ? nextcloudPasswordText.getText().toString() : "";
-            String useSelfSignedCertString = new Boolean(useSelfSignedCert.isChecked()).toString();
+            String useSelfSignedCertString = Boolean.valueOf(useSelfSignedCert.isChecked()).toString();
             Log.d(TAG, "Saving configuration (password not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
 
             boolean errorsOccured = false;
@@ -118,7 +118,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         passwordText.setText(strings.get(2));
         this.nextcloudPasswordText = passwordText;
         CheckBox useSsc = (CheckBox) v.findViewById(R.id.editNextcloudUseSelfSignedCert);
-        useSsc.setChecked(new Boolean(strings.get(3)));
+        useSsc.setChecked(Boolean.valueOf(strings.get(3)));
         this.useSelfSignedCert = useSsc;
 
         TextView dbxTokenLabel = (TextView) v.findViewById(R.id.editConfigurationTokenLabel);
