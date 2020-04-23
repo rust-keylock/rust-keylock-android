@@ -49,6 +49,7 @@ enum GuiResponse {
     UserOptionSelected { user_option: JavaUserOption },
     ExportImport { path: String, mode: usize, password: String, number: usize },
     Copy { data: String },
+    GeneratePassphrase { entry: JavaEntry, index: isize },
 }
 
 fn instance_to_gui_response(instance: Instance) -> UserSelection {
@@ -82,6 +83,20 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                        entry.desc);
 
                 UserSelection::ReplaceEntry(index as usize, entry)
+            }
+            GuiResponse::GeneratePassphrase { entry, index } => {
+                debug!("generate_passphrase");
+                let entry = Entry::new(entry.name,
+                                       entry.url,
+                                       entry.user,
+                                       entry.pass,
+                                       entry.desc);
+                let index_opt = if index < 0 {
+                    None
+                } else {
+                    Some(index as usize)
+                };
+                UserSelection::GeneratePassphrase(index_opt, entry)
             }
             GuiResponse::DeleteEntry { index } => {
                 debug!("delete_entry");

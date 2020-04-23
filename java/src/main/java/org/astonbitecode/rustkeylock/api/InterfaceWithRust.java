@@ -72,6 +72,11 @@ public class InterfaceWithRust {
         call(m);
     }
 
+    public void generate_passphrase(JavaEntry javaEntry, int index) {
+        Map<String, Object> m = GuiResponse.GeneratePassphrase(javaEntry, index);
+        call(m);
+    }
+
     public void export_import(String path, int export, String password, int number) {
         Map<String, Object> m = GuiResponse.ExportImport(path, export, password, number);
         call(m);

@@ -171,6 +171,10 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
             passTitle.append(" (tap here to reveal or hide)");
             passTitle.setOnTouchListener(this);
+        } else if (edit) {
+            TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
+            passTitle.append(" (tap here to generate new passphrase)");
+            passTitle.setOnTouchListener(this);
         }
         Button eb = (Button) v.findViewById(R.id.editButton);
         eb.setOnClickListener(this);
@@ -255,12 +259,24 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && !passwordVisibleWhenNotEditing) {
-            passwordText.setTransformationMethod(null);
-            passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && passwordVisibleWhenNotEditing) {
-            passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
+        if (!edit) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && !passwordVisibleWhenNotEditing) {
+                passwordText.setTransformationMethod(null);
+                passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && passwordVisibleWhenNotEditing) {
+                passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                passwordVisibleWhenNotEditing = !passwordVisibleWhenNotEditing;
+            }
+        } else {
+            Log.d(TAG, "Tapped to generate a new passphrase");
+            JavaEntry javaEntry = new JavaEntry();
+            javaEntry.name = nameText.getText() != null ? nameText.getText().toString() : "";
+            javaEntry.url = urlText.getText() != null ? urlText.getText().toString() : "";
+            javaEntry.user = userText.getText() != null ? userText.getText().toString() : "";
+            javaEntry.pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
+            javaEntry.desc = descriptionText.getText() != null ? descriptionText.getText().toString() : "";
+
+            InterfaceWithRust.INSTANCE.generate_passphrase(javaEntry, entryIndex);
         }
         return true;
     }
