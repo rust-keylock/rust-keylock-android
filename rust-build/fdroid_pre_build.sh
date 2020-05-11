@@ -41,13 +41,12 @@ EOF
 export ANDROID_TOOLCHAIN=$ANDROID_TOOLCHAIN_DIR/bin
 export ANDROID_NDK_ROOT=${ANDROID_NDK}
 
-mkdir $BASEDIR/tools
 cd $BASEDIR/tools
 
-curl -O https://www.openssl.org/source/openssl-1.1.1g.tar.gz
-tar xzf openssl-1.1.1g.tar.gz
+curl -O https://www.openssl.org/source/openssl-1.1.0g.tar.gz
+tar xzf openssl-1.1.0g.tar.gz
 
-export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.1g
+export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0g
 
 # Delete the mandroid flag as clang does not recognize it
 sed -i 's/-mandroid //g' ${OPENSSL_SRC_DIR}/Configurations/10-main.conf
