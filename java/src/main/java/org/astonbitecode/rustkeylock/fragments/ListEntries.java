@@ -65,6 +65,8 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         nb.setOnClickListener(this);
         Button mmb = (Button) rootView.findViewById(R.id.mainMenuButton);
         mmb.setOnClickListener(this);
+        Button cp = (Button) rootView.findViewById(R.id.checkPasswordsButton);
+        cp.setOnClickListener(this);
         Button fb = (Button) rootView.findViewById(R.id.filterButton);
         fb.setOnClickListener(this);
 
@@ -105,6 +107,9 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         } else if (view.getId() == R.id.addNewButton) {
             Log.d(TAG, "Clicked add new entry");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.NewEntry());
+        } else if (view.getId() == R.id.checkPasswordsButton) {
+            Log.d(TAG, "Clicked check passwords");
+            InterfaceWithRust.INSTANCE.check_passwords();
         } else if (view.getId() == R.id.filterButton) {
             Log.d(TAG, "Applying filter");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(filterEditText.getText() != null ? filterEditText.getText().toString() : ""));

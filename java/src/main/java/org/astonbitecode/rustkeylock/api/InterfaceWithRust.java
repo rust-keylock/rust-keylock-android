@@ -98,6 +98,10 @@ public class InterfaceWithRust {
         call(m);
     }
 
+    public void check_passwords() {
+        call(GuiResponse.CheckPasswords());
+    }
+
     public void setCallback(NativeCallbackToRustChannelSupport newCallback) {
         callback.set(newCallback);
     }

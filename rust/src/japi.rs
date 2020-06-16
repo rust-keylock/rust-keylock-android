@@ -50,6 +50,7 @@ enum GuiResponse {
     ExportImport { path: String, mode: usize, password: String, number: usize },
     Copy { data: String },
     GeneratePassphrase { entry: JavaEntry, index: isize },
+    CheckPasswords,
 }
 
 fn instance_to_gui_response(instance: Instance) -> UserSelection {
@@ -154,6 +155,10 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
             GuiResponse::Copy { data } => {
                 debug!("copy");
                 UserSelection::AddToClipboard(data)
+            }
+            GuiResponse::CheckPasswords => {
+                debug!("check passwords");
+                UserSelection::CheckPasswords
             }
         }
     } else {

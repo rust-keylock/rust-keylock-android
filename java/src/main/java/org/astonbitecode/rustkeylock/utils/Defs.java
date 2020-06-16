@@ -33,4 +33,5 @@ public class Defs {
     public static final String MENU_SET_DB_TOKEN = "SetDbxToken";
     public static final String MENU_CURRENT = "Current";
     public static final String EMPTY_ARG = "null";
+    public static final String CHECK_PASSWORDS = "CheckPasswords";
 }

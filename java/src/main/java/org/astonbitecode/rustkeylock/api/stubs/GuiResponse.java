@@ -18,6 +18,7 @@ package org.astonbitecode.rustkeylock.api.stubs;
 
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.api.JavaUserOption;
+import org.astonbitecode.rustkeylock.utils.Defs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,5 +116,9 @@ public class GuiResponse {
         Map<String, Object> map = new HashMap<>();
         map.put("Copy", inner);
         return map;
+    }
+
+    public static String CheckPasswords() {
+        return Defs.CHECK_PASSWORDS;
     }
 }
