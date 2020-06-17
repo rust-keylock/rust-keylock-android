@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.adapters.EntriesAdapter;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
@@ -109,6 +110,7 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.NewEntry());
         } else if (view.getId() == R.id.checkPasswordsButton) {
             Log.d(TAG, "Clicked check passwords");
+            new Thread(new PleaseWaitRunnable()).start();
             InterfaceWithRust.INSTANCE.check_passwords();
         } else if (view.getId() == R.id.filterButton) {
             Log.d(TAG, "Applying filter");
@@ -133,4 +135,18 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         }
     }
 
+    private class PleaseWaitRunnable implements Runnable {
+        private MainActivity mainActivity = null;
+
+        public PleaseWaitRunnable() {
+            this.mainActivity = MainActivity.getActiveActivity();
+        }
+
+        @Override
+        public void run() {
+            PleaseWait pw = new PleaseWait();
+            mainActivity.setBackButtonHandler(null);
+            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
+        }
+    }
 }
