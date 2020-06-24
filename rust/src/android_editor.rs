@@ -111,8 +111,6 @@ fn show_change_password(editor: &AndroidImpl) -> errors::Result<Receiver<UserSel
 }
 
 fn show_menu(editor: &AndroidImpl, menu: &Menu) -> errors::Result<Receiver<UserSelection>> {
-    debug!("Opening menu '{:?}'", menu);
-
     let instance_receiver_res = match menu {
         &Menu::Main => {
             editor.jvm.invoke_to_channel(
