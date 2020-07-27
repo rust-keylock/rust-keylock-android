@@ -1,4 +1,4 @@
-[![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
+[![For Android: Get it from F-Droid](https://raw.githubusercontent.com/rust-keylock/rust-keylock.github.io/master/img/fdroid.png)](https://f-droid.org/en/packages/org.astonbitecode.rustkeylock/)
 
 ___rust-keylock___ is a password manager and its goals are to be:
 
