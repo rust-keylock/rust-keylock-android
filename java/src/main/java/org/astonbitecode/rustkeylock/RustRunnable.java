@@ -1,6 +1,7 @@
 package org.astonbitecode.rustkeylock;
 
 import android.util.Log;
+import org.astonbitecode.j4rs.api.java2rust.Java2RustUtils;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.callbacks.*;
 
@@ -47,7 +48,7 @@ public class RustRunnable implements Runnable {
     public void run() {
         Log.d(TAG, "Initializing rust-keylock native");
         try {
-            InterfaceWithRust.INSTANCE.execute(CertTargetPath);
+            InterfaceWithRust.INSTANCE.execute(Java2RustUtils.createInstance(CertTargetPath));
         } catch (Exception error) {
             Log.e(TAG, "Native rust-keylock error detected", error);
         } finally {

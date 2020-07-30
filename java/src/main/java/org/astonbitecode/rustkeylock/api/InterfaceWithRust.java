@@ -17,6 +17,7 @@ package org.astonbitecode.rustkeylock.api;
 
 import android.app.Fragment;
 import android.util.Log;
+import org.astonbitecode.j4rs.api.Instance;
 import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
 
@@ -36,7 +37,7 @@ public class InterfaceWithRust {
         Log.i(TAG, "The native interface with Rust is initialized!");
     }
 
-    public native void execute(String certFilePath);
+    public native void execute(Instance<String> certFilePath);
 
     private void call(Object obj) {
         callback.get().doCallback(obj);
