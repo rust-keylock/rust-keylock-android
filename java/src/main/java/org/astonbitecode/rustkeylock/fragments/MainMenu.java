@@ -98,19 +98,4 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
         Log.d(TAG, "Back button pressed");
         InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Exit());
     }
-
-    private class UiThreadRunnable implements Runnable {
-        private MainActivity mainActivity = null;
-
-        public UiThreadRunnable(MainActivity mainActivity) {
-            this.mainActivity = mainActivity;
-        }
-
-        @Override
-        public void run() {
-            PleaseWait pw = new PleaseWait();
-            mainActivity.setBackButtonHandler(null);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
-        }
-    }
 }

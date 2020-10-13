@@ -17,6 +17,7 @@ package org.astonbitecode.rustkeylock.api;
 
 import android.app.Fragment;
 import android.util.Log;
+import org.astonbitecode.j4rs.api.Instance;
 import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
 
@@ -36,7 +37,7 @@ public class InterfaceWithRust {
         Log.i(TAG, "The native interface with Rust is initialized!");
     }
 
-    public native void execute(String certFilePath);
+    public native void execute(Instance<String> certFilePath);
 
     private void call(Object obj) {
         callback.get().doCallback(obj);
@@ -72,6 +73,11 @@ public class InterfaceWithRust {
         call(m);
     }
 
+    public void generate_passphrase(JavaEntry javaEntry, int index) {
+        Map<String, Object> m = GuiResponse.GeneratePassphrase(javaEntry, index);
+        call(m);
+    }
+
     public void export_import(String path, int export, String password, int number) {
         Map<String, Object> m = GuiResponse.ExportImport(path, export, password, number);
         call(m);
@@ -91,6 +97,10 @@ public class InterfaceWithRust {
     public void copy(String data) {
         Map<String, Object> m = GuiResponse.Copy(data);
         call(m);
+    }
+
+    public void check_passwords() {
+        call(GuiResponse.CheckPasswords());
     }
 
     public void setCallback(NativeCallbackToRustChannelSupport newCallback) {

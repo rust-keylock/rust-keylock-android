@@ -49,6 +49,8 @@ enum GuiResponse {
     UserOptionSelected { user_option: JavaUserOption },
     ExportImport { path: String, mode: usize, password: String, number: usize },
     Copy { data: String },
+    GeneratePassphrase { entry: JavaEntry, index: isize },
+    CheckPasswords,
 }
 
 fn instance_to_gui_response(instance: Instance) -> UserSelection {
@@ -82,6 +84,20 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                        entry.desc);
 
                 UserSelection::ReplaceEntry(index as usize, entry)
+            }
+            GuiResponse::GeneratePassphrase { entry, index } => {
+                debug!("generate_passphrase");
+                let entry = Entry::new(entry.name,
+                                       entry.url,
+                                       entry.user,
+                                       entry.pass,
+                                       entry.desc);
+                let index_opt = if index < 0 {
+                    None
+                } else {
+                    Some(index as usize)
+                };
+                UserSelection::GeneratePassphrase(index_opt, entry)
             }
             GuiResponse::DeleteEntry { index } => {
                 debug!("delete_entry");
@@ -140,6 +156,10 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                 debug!("copy");
                 UserSelection::AddToClipboard(data)
             }
+            GuiResponse::CheckPasswords => {
+                debug!("check passwords");
+                UserSelection::CheckPasswords
+            }
         }
     } else {
         error!("Error while creating Rust representation of a Java Instance: {:?}", res.err());
@@ -165,16 +185,6 @@ impl JavaEntry {
             user: entry.user.clone(),
             pass: entry.pass.clone(),
             desc: entry.desc.clone(),
-        }
-    }
-
-    pub(crate) fn empty() -> JavaEntry {
-        JavaEntry {
-            name: "".to_string(),
-            url: "".to_string(),
-            user: "".to_string(),
-            pass: "".to_string(),
-            desc: "".to_string(),
         }
     }
 }
@@ -230,7 +240,7 @@ impl JavaMenu {
             JavaMenu::ImportEntries => Menu::ImportEntries,
             JavaMenu::ShowConfiguration => Menu::ShowConfiguration,
             JavaMenu::ForceExit => Menu::ForceExit,
-            JavaMenu::NewEntry => Menu::NewEntry,
+            JavaMenu::NewEntry => Menu::NewEntry(None),
             JavaMenu::WaitForDbxTokenCallback { s } => Menu::WaitForDbxTokenCallback(s),
             JavaMenu::ShowEntry { idx } => Menu::ShowEntry(idx),
             JavaMenu::EditEntry { idx } => Menu::EditEntry(idx),

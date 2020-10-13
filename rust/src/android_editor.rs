@@ -25,7 +25,6 @@ use rust_keylock::nextcloud::NextcloudConfiguration;
 
 use crate::{japi, errors};
 use crate::errors::RklAndroidError;
-use std::error::Error;
 
 pub struct AndroidImpl {
     jvm: Jvm,
@@ -112,8 +111,6 @@ fn show_change_password(editor: &AndroidImpl) -> errors::Result<Receiver<UserSel
 }
 
 fn show_menu(editor: &AndroidImpl, menu: &Menu) -> errors::Result<Receiver<UserSelection>> {
-    debug!("Opening menu '{:?}'", menu);
-
     let instance_receiver_res = match menu {
         &Menu::Main => {
             editor.jvm.invoke_to_channel(
@@ -121,8 +118,9 @@ fn show_menu(editor: &AndroidImpl, menu: &Menu) -> errors::Result<Receiver<UserS
                 "apply",
                 &[InvocationArg::try_from("Main")?])
         }
-        &Menu::NewEntry => {
-            let empty_entry = japi::JavaEntry::empty();
+        &Menu::NewEntry(ref entry_opt) => {
+            let entry = entry_opt.clone().unwrap_or_else(|| Entry::empty());
+            let empty_entry = japi::JavaEntry::new(&entry);
             // In order to denote that this is a new entry, put -1 as index
             editor.jvm.invoke_to_channel(
                 &editor.show_entry_cb,
@@ -278,7 +276,7 @@ fn show_message(editor: &AndroidImpl,
 }
 
 fn handle_error(error: &RklAndroidError) -> Receiver<UserSelection> {
-    error!("An error occured: {}", error.description());
+    error!("An error occured: {}", error);
     error!("{:?}", error);
     let (tx, rx) = mpsc::channel();
     let _ = tx.send(UserSelection::GoTo(Menu::Main));

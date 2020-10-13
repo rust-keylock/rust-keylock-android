@@ -28,8 +28,11 @@ use std::ffi::CString;
 use std::str;
 
 use jni_sys::{JavaVM, jint, JNI_VERSION_1_6, JNIEnv, jobject, jstring};
+use j4rs::prelude::*;
+use j4rs_derive::*;
 use libc::c_char;
 use log::*;
+use j4rs::InvocationArg;
 
 mod android_editor;
 mod logger;
@@ -46,11 +49,8 @@ pub extern fn JNI_OnLoad(env: *mut JavaVM, _reserved: jobject) -> jint {
 }
 
 #[allow(non_snake_case)]
-#[no_mangle]
-pub extern fn Java_org_astonbitecode_rustkeylock_api_InterfaceWithRust_execute(
-    _jni_env: *mut JNIEnv,
-    _thiz: jobject,
-    cert_file_path_java_string: jstring) {
+#[call_from_java("org.astonbitecode.rustkeylock.api.InterfaceWithRust.execute")]
+pub extern fn execute(cert_file_path_java_string: Instance) {
     debug!("Executing rust-keylock native");
     match j4rs::JvmBuilder::new()
         .detach_thread_on_drop(false)
@@ -59,7 +59,8 @@ pub extern fn Java_org_astonbitecode_rustkeylock_api_InterfaceWithRust_execute(
         .build() {
         Ok(jvm) => {
             debug!("JVM is created ");
-            if let Ok(cert_file_path) = j4rs::jstring_to_rust_string(&jvm, cert_file_path_java_string) {
+            let cert_file_path_java_string:j4rs::errors::Result<String> = jvm.to_rust(cert_file_path_java_string);
+            if let Ok(cert_file_path) = cert_file_path_java_string {
                 ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
             }
 
