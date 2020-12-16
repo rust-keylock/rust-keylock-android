@@ -110,6 +110,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             javaEntry.user = userText.getText() != null ? userText.getText().toString() : "";
             javaEntry.pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
             javaEntry.desc = descriptionText.getText() != null ? descriptionText.getText().toString() : "";
+            javaEntry.meta = this.entry.meta;
 
             boolean errorsOccured = false;
             if (javaEntry.name.isEmpty()) {
@@ -275,6 +276,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             javaEntry.user = userText.getText() != null ? userText.getText().toString() : "";
             javaEntry.pass = passwordText.getText() != null ? passwordText.getText().toString() : "";
             javaEntry.desc = descriptionText.getText() != null ? descriptionText.getText().toString() : "";
+            javaEntry.meta = this.entry.meta;
 
             InterfaceWithRust.INSTANCE.generate_passphrase(javaEntry, entryIndex);
         }

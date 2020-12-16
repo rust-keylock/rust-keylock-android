@@ -3,7 +3,7 @@ use std::thread;
 
 use j4rs::{Instance, InstanceReceiver};
 use log::*;
-use rust_keylock::{AllConfigurations, Entry, Menu, UserOption, UserSelection};
+use rust_keylock::{AllConfigurations, Entry, Menu, UserOption, UserSelection, EntryMeta};
 use rust_keylock::dropbox::DropboxConfiguration;
 use rust_keylock::nextcloud::NextcloudConfiguration;
 use serde::{Deserialize, Serialize};
@@ -71,7 +71,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                        entry.url,
                                        entry.user,
                                        entry.pass,
-                                       entry.desc);
+                                       entry.desc,
+                                       EntryMeta::new(entry.meta.leakedpassword));
 
                 UserSelection::NewEntry(entry)
             }
@@ -81,7 +82,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                        entry.url,
                                        entry.user,
                                        entry.pass,
-                                       entry.desc);
+                                       entry.desc,
+                                       EntryMeta::new(entry.meta.leakedpassword));
 
                 UserSelection::ReplaceEntry(index as usize, entry)
             }
@@ -91,7 +93,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                        entry.url,
                                        entry.user,
                                        entry.pass,
-                                       entry.desc);
+                                       entry.desc,
+                                       EntryMeta::new(entry.meta.leakedpassword));
                 let index_opt = if index < 0 {
                     None
                 } else {
@@ -167,6 +170,18 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub(crate) struct JavaEntryMeta {
+    pub leakedpassword: bool,
+}
+
+impl JavaEntryMeta {
+    fn new(entry_meta: &EntryMeta) -> JavaEntryMeta {
+        JavaEntryMeta {
+            leakedpassword: entry_meta.leaked_password
+        }
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct JavaEntry {
@@ -175,6 +190,7 @@ pub struct JavaEntry {
     user: String,
     pass: String,
     desc: String,
+    meta: JavaEntryMeta,
 }
 
 impl JavaEntry {
@@ -185,6 +201,7 @@ impl JavaEntry {
             user: entry.user.clone(),
             pass: entry.pass.clone(),
             desc: entry.desc.clone(),
+            meta: JavaEntryMeta::new(&entry.meta),
         }
     }
 }

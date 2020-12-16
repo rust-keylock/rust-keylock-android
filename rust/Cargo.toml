@@ -10,8 +10,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rust_keylock = {git = "https://github.com/rust-keylock/rust-keylock-lib.git"}
-j4rs = {git = "https://github.com/astonbitecode/j4rs"}
-j4rs_derive = {git = "https://github.com/astonbitecode/j4rs"}
+j4rs = "0.13"
+j4rs_derive = "0.1"
 libc = "0.2"
 jni-sys = "0.3"
 serde = { version = "1.0", features = ["derive"] }

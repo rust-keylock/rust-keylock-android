@@ -27,12 +27,11 @@ extern crate serde_json;
 use std::ffi::CString;
 use std::str;
 
-use jni_sys::{JavaVM, jint, JNI_VERSION_1_6, JNIEnv, jobject, jstring};
+use jni_sys::{JavaVM, jint, JNI_VERSION_1_6, JNIEnv, jobject};
 use j4rs::prelude::*;
 use j4rs_derive::*;
 use libc::c_char;
 use log::*;
-use j4rs::InvocationArg;
 
 mod android_editor;
 mod logger;
@@ -50,7 +49,7 @@ pub extern fn JNI_OnLoad(env: *mut JavaVM, _reserved: jobject) -> jint {
 
 #[allow(non_snake_case)]
 #[call_from_java("org.astonbitecode.rustkeylock.api.InterfaceWithRust.execute")]
-pub extern fn execute(cert_file_path_java_string: Instance) {
+pub fn execute(cert_file_path_java_string: Instance) {
     debug!("Executing rust-keylock native");
     match j4rs::JvmBuilder::new()
         .detach_thread_on_drop(false)
