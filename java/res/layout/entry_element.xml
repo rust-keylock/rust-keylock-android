@@ -2,12 +2,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:padding="10dp" >
+    android:padding="10dp"
+    android:id="@+id/entrynamecontainer">
 
     <TextView
         android:id="@+id/entryname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:ellipsize="marquee"

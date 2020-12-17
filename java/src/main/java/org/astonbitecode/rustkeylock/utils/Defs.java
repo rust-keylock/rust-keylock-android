@@ -15,6 +15,8 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.utils;
 
+import android.graphics.Color;
+
 public class Defs {
     public static final String MENU_TRY_PASS = "TryPass";
     public static final String MENU_CHANGE_PASS = "ChangePass";
@@ -34,4 +36,5 @@ public class Defs {
     public static final String MENU_CURRENT = "Current";
     public static final String EMPTY_ARG = "null";
     public static final String CHECK_PASSWORDS = "CheckPasswords";
+    public static final int BACKROUND_ERROR = Color.argb(255, 246, 147, 100);
 }

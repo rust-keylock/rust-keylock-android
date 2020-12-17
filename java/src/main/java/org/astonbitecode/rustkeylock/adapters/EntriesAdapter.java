@@ -15,18 +15,19 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.adapters;
 
-import java.util.List;
-
-import org.astonbitecode.rustkeylock.api.JavaEntry;
-import org.astonbitecode.rustkeylock.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.astonbitecode.rustkeylock.R;
+import org.astonbitecode.rustkeylock.api.JavaEntry;
+import org.astonbitecode.rustkeylock.utils.Defs;
+
+import java.util.List;
 
 public class EntriesAdapter extends ArrayAdapter<JavaEntry> {
     private List<JavaEntry> entries;
@@ -55,6 +56,10 @@ public class EntriesAdapter extends ArrayAdapter<JavaEntry> {
 
             if (tvn != null) {
                 tvn.setText(i.getName());
+                if (i.getMeta().isLeakedpassword()) {
+                    LinearLayout ll = (LinearLayout) v.findViewById(R.id.entrynamecontainer);
+                    ll.setBackgroundColor(Defs.BACKROUND_ERROR);
+                }
             }
         }
         return v;

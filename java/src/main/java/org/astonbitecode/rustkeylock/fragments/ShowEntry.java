@@ -19,9 +19,9 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -206,6 +206,10 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
         passwordText.setEnabled(edit);
         if (!edit) {
             passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+        if (this.entry.getMeta().isLeakedpassword()) {
+            passwordText.setBackgroundColor(Defs.BACKROUND_ERROR);
+            passwordText.setTextColor(Color.BLACK);
         }
         this.passwordText = passwordText;
         EditText descriptionText = (EditText) v.findViewById(R.id.editDescriptionArea);
