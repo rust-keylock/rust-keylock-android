@@ -59,7 +59,7 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
     if let Ok(gr) = res {
         match gr {
             GuiResponse::ProvidedPassword { password, number } => {
-                UserSelection::ProvidedPassword(password, number)
+                UserSelection::new_provided_password(password, number)
             }
             GuiResponse::GoToMenu { menu } => {
                 debug!("go_to_menu");
@@ -152,7 +152,7 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                     UserSelection::ExportTo(path)
                 } else {
                     debug!("Followed importing path");
-                    UserSelection::ImportFrom(path, password, number as usize)
+                    UserSelection::new_import_from(path, password, number as usize)
                 }
             }
             GuiResponse::Copy { data } => {

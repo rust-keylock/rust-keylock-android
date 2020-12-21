@@ -225,10 +225,10 @@ fn show_configuration(editor: &AndroidImpl, nextcloud: NextcloudConfiguration, d
     let conf_strings = vec![
         nextcloud.server_url.clone(),
         nextcloud.username.clone(),
-        nextcloud.decrypted_password().unwrap(),
+        nextcloud.decrypted_password().unwrap().to_string(),
         nextcloud.use_self_signed_certificate.to_string(),
         DropboxConfiguration::dropbox_url(),
-        dropbox.decrypted_token().unwrap()];
+        dropbox.decrypted_token().unwrap().to_string()];
     let instance_receiver_res = editor.jvm.invoke_to_channel(
         &editor.edit_configuration_cb,
         "apply",
