@@ -74,7 +74,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             boolean errorsOccured = false;
 
             if (!errorsOccured) {
-                InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString));
+                InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5)));
             }
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");

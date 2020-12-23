@@ -109,7 +109,7 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
             GuiResponse::SetConfiguration { strings } => {
                 debug!("set_configuration with {} elements", strings.len());
 
-                let ncc = if strings.len() == 4 {
+                let ncc = if strings.len() == 5 {
                     let b = match strings[3].as_ref() {
                         "true" => true,
                         _ => false,
@@ -124,9 +124,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
                                                 "Wrong Java Data".to_string(),
                                                 false)
                 };
-
-                let dbxc = if strings.len() == 4 {
-                    DropboxConfiguration::new(strings[3].clone())
+                let dbxc = if strings.len() == 5 && strings[4] != "" {
+                    DropboxConfiguration::new(strings[4].clone())
                 } else {
                     Ok(DropboxConfiguration::default())
                 };
