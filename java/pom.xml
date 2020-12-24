@@ -42,7 +42,7 @@
         <dependency>
             <groupId>io.github.astonbitecode</groupId>
             <artifactId>j4rs</artifactId>
-            <version>0.13.0-java7</version>
+            <version>0.13.1-java7</version>
         </dependency>
         <dependency>
             <groupId>com.dropbox.core</groupId>
