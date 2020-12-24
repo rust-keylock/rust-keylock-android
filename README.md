@@ -7,6 +7,10 @@ ___rust-keylock___ is a password manager and its goals are to be:
 * Portable
 * Extensible
 
+---
+
+[![Build Status](https://travis-ci.org/rust-keylock/rust-keylock-android.svg?branch=master)](https://travis-ci.org/rust-keylock/rust-keylock-android)
+
 ___rust-keylock-android___ is an Android app that provides access to [rust-keylock-lib](https://github.com/rust-keylock/rust-keylock-lib).
 
 The minimum supported Android API level is __16__ (4.1.2 is tested as a minimum version).
