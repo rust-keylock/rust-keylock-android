@@ -83,6 +83,13 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String appKey = getString(R.string.dbx_app_key);
             Log.d(TAG, "Clicked Get Dropbox token in configuration. App key: " + appKey);
             Auth.startOAuth2Authentication(getActivity(), appKey);
+        } else if (view.getId() == R.id.clearConfigurationsButton) {
+            Log.d(TAG, "Clicked clear configurations in configuration.");
+            nextcloudUrlText.setText("");
+            nextcloudUsernameText.setText("");
+            nextcloudPasswordText.setText("");
+            useSelfSignedCert.setChecked(false);
+            strings.set(5, "");
         }
     }
 
@@ -107,6 +114,8 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         cb.setOnClickListener(this);
         Button gt = (Button) v.findViewById(R.id.editConfigurationGetTokenButton);
         gt.setOnClickListener(this);
+        Button cc = (Button) v.findViewById(R.id.clearConfigurationsButton);
+        cc.setOnClickListener(this);
 
         EditText urlText = (EditText) v.findViewById(R.id.editNextcloudUrl);
         urlText.setText(strings.get(0));
