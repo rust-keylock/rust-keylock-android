@@ -1,0 +1,17 @@
+<ul>
+<li>Migrated to async/await.</li>
+<li>Update Entries and highlight with meta about leaked password.</li>
+<li>Zeroizing sensitive data after usage.</li>
+<li>Increased dropbox setup timeout to 10 minutes.</li>
+<li>Ability to clean all the synchronization configurations.</li>
+<li>Using j4rs_derive.</li>
+<li>Updated Rust dependencies.</li>
+</ul>
+
+Bugfixes:
+
+
+<ul>
+<li>Handle very high salt positions.</li>
+<li>Correctly handling dropbox configurations on save.</li>
+</ul>
