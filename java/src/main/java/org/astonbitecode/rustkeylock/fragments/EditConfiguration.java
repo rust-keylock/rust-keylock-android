@@ -43,6 +43,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     private transient EditText nextcloudUrlText;
     private transient EditText nextcloudUsernameText;
     private transient EditText nextcloudPasswordText;
+    private transient TextView dbxTokenLabel;
 
     public EditConfiguration(List<String> strings) {
         this.strings = new ArrayList<>(strings);
@@ -71,11 +72,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String useSelfSignedCertString = Boolean.valueOf(useSelfSignedCert.isChecked()).toString();
             Log.d(TAG, "Saving configuration (password not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
 
-            boolean errorsOccured = false;
-
-            if (!errorsOccured) {
-                InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5)));
-            }
+            InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5)));
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
@@ -96,14 +93,14 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     @Override
     public void onResume() {
         super.onResume();
-        String token = strings.get(5);
 
-        if (token == null || token.isEmpty()) {
-            String retrieved_token_from_shared_preferences = Auth.getOAuth2Token();
-            if (retrieved_token_from_shared_preferences != null) {
-                token = retrieved_token_from_shared_preferences;
-                InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.SetDbToken(token));
-            }
+        String retrieved_token_from_shared_preferences = Auth.getOAuth2Token();
+        if (retrieved_token_from_shared_preferences != null) {
+            strings.set(5, retrieved_token_from_shared_preferences);
+            dbxTokenLabel.setText((strings.get(5) == null || strings.get(5).isEmpty()) ?
+                    "Press the button below to acquire a new authentication token." :
+                    "A token is acquired. Press the button below if you want to renew."
+            );
         }
     }
 
@@ -135,6 +132,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
                 "Press the button below to acquire a new authentication token." :
                 "A token is acquired. Press the button below if you want to renew."
         );
+        this.dbxTokenLabel = dbxTokenLabel;
     }
 
     @Override

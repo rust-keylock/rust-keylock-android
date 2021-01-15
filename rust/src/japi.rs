@@ -240,7 +240,7 @@ pub(crate) enum JavaMenu {
     ExportEntries,
     ShowConfiguration,
     WaitForDbxTokenCallback { s: String },
-    SetDbxToken { s: String },
+    SetDbxToken { token: String },
     Current,
 }
 
