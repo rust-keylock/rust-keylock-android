@@ -37,4 +37,5 @@ public class Defs {
     public static final String EMPTY_ARG = "null";
     public static final String CHECK_PASSWORDS = "CheckPasswords";
     public static final int BACKROUND_ERROR = Color.argb(255, 246, 147, 100);
+    public static final int BACKROUND_NO_ERROR = Color.TRANSPARENT;
 }

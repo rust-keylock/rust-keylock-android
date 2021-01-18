@@ -56,9 +56,11 @@ public class EntriesAdapter extends ArrayAdapter<JavaEntry> {
 
             if (tvn != null) {
                 tvn.setText(i.getName());
+                LinearLayout ll = (LinearLayout) v.findViewById(R.id.entrynamecontainer);
                 if (i.getMeta().isLeakedpassword()) {
-                    LinearLayout ll = (LinearLayout) v.findViewById(R.id.entrynamecontainer);
                     ll.setBackgroundColor(Defs.BACKROUND_ERROR);
+                } else {
+                    ll.setBackgroundColor(Defs.BACKROUND_NO_ERROR);
                 }
             }
         }
