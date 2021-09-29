@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
@@ -79,7 +80,8 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         } else if (view.getId() == R.id.editConfigurationGetTokenButton) {
             String appKey = getString(R.string.dbx_app_key);
             Log.d(TAG, "Clicked Get Dropbox token in configuration. App key: " + appKey);
-            Auth.startOAuth2Authentication(getActivity(), appKey);
+            DbxRequestConfig config = new DbxRequestConfig(this.getClass().getName());
+            Auth.startOAuth2PKCE(getActivity(), appKey, config);
         } else if (view.getId() == R.id.clearConfigurationsButton) {
             Log.d(TAG, "Clicked clear configurations in configuration.");
             nextcloudUrlText.setText("");
@@ -94,7 +96,8 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     public void onResume() {
         super.onResume();
 
-        String retrieved_token_from_shared_preferences = Auth.getOAuth2Token();
+        String retrieved_token_from_shared_preferences = Auth.getDbxCredential() != null ?
+                Auth.getDbxCredential().getRefreshToken() : null;
         if (retrieved_token_from_shared_preferences != null) {
             strings.set(5, retrieved_token_from_shared_preferences);
             dbxTokenLabel.setText((strings.get(5) == null || strings.get(5).isEmpty()) ?

@@ -4,7 +4,7 @@
 
     <groupId>org.astonbitecode.rustkeylock</groupId>
     <artifactId>rust-keylock-android</artifactId>
-    <version>0.13.0</version>
+    <version>0.14.0</version>
     <packaging>apk</packaging>
 
     <name>rust-keylock-android</name>
@@ -16,7 +16,7 @@
         <android.plugin.version>4.1.1.4</android.plugin.version>
         <junit.version>4.13.1</junit.version>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
-        <dropbox.version>3.0.11</dropbox.version>
+        <dropbox.version>4.0.1</dropbox.version>
     </properties>
 
     <repositories>
@@ -76,6 +76,7 @@
                     <androidManifestFile>${basedir}/AndroidManifest.xml</androidManifestFile>
                     <nativeLibrariesDirectory>${basedir}/libs</nativeLibrariesDirectory>
                     <assetsDirectory>${basedir}/assets</assetsDirectory>
+                    <dexMultiDex>true</dexMultiDex>
                 </configuration>
             </plugin>
             <plugin>
