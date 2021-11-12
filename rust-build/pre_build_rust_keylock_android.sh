@@ -24,34 +24,27 @@ CARGO_HOME=$BASEDIR/tools/.cargo RUSTUP_HOME=$BASEDIR/tools/.rustup sh tools/rus
 $CARGO_HOME/bin/rustup default stable
 $CARGO_HOME/bin/rustup target add arm-linux-androideabi
 
-# Create an Android toolchain
 cd $BASEDIR
 
-# Get the appropriate env variable in order to create the needed toolchain
-
+# Get the appropriate env variable in order to find the needed toolchain
 if [ -n "${ANDROID_NDK}" ]; then
 	echo "Found a pre-installed NDK in ${ANDROID_NDK}"
 else
 	# If the NDK does not exist, download it
 	echo "Did not find a pre-installed NDK... Downloading one"
-	curl -L http://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin -O
-	chmod u+x android-ndk-r10e-linux-x86_64.bin
-	./android-ndk-r10e-linux-x86_64.bin > /dev/null
-	rm android-ndk-r10e-linux-x86_64.bin
-	ANDROID_NDK=`pwd`/android-ndk-r10e
+	curl -L https://dl.google.com/android/repository/android-ndk-r22b-linux-x86_64.zip -O
+	unzip android-ndk-r22b-linux-x86_64.zip
+	rm android-ndk-r22b-linux-x86_64.zip
+	ANDROID_NDK=`pwd`/android-ndk-r22b
 	PATH=$PATH:${ANDROID_NDK}
 fi
 
-ANDROID_NDK_HOME=${ANDROID_NDK}
+echo Using NDK: $ANDROID_NDK
 
-echo Installing the Android toolchain using NDK: $ANDROID_NDK
+# Prepare the env vars
+. ./rust-build/setenv-android.sh
 
-$ANDROID_NDK/build/tools/make-standalone-toolchain.sh --platform=android-16 --arch=arm --install-dir=android-toolchain  > /dev/null
-
-cd android-toolchain
-ANDROID_TOOLCHAIN_DIR=`pwd`
-
-echo Android toolchain installed in $ANDROID_TOOLCHAIN_DIR
+echo Android toolchain is in $ANDROID_TOOLCHAIN_DIR
 
 # Go to the .cargo directory
 cd $BASEDIR/rust
@@ -64,33 +57,23 @@ echo Entered directory $CURR_DIR
 cat > config << EOF
 [target]
 [target.arm-linux-androideabi]
-linker = "${ANDROID_TOOLCHAIN_DIR}/bin/arm-linux-androideabi-gcc"
+# Choose for android-16
+linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi16-clang"
 EOF
 
 # Get and build the openssl
-
-# Export the ANDROID_TOOLCHAIN variable to be used for building the openssl
-export ANDROID_TOOLCHAIN=$ANDROID_TOOLCHAIN_DIR/bin
-export ANDROID_NDK_ROOT=${ANDROID_NDK}
-
 cd $BASEDIR/tools
 
-curl -O https://www.openssl.org/source/openssl-1.1.0g.tar.gz
-tar xzf openssl-1.1.0g.tar.gz
+curl -O https://www.openssl.org/source/openssl-1.1.1l.tar.gz
+tar xzf openssl-1.1.1l.tar.gz
 
-export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.0g
-
-# Delete the mandroid flag as clang does not recognize it
-sed -i 's/-mandroid //g' ${OPENSSL_SRC_DIR}/Configurations/10-main.conf
-
-. ../rust-build/setenv-android.sh
+export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.1l
 
 cd $OPENSSL_SRC_DIR
 
 echo Building openssl
-#./config android shared no-ssl3 no-comp no-hw no-engine --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
-./Configure android-armeabi shared no-ssl3 no-comp no-hw no-asm --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
-make all > /dev/null
-make install CC=$ANDROID_TOOLCHAIN/arm-linux-androideabi-clang RANLIB=$ANDROID_TOOLCHAIN/arm-linux-androideabi-ranlib > /dev/null
+./Configure ${architecture} -D__ANDROID_API__=$ANDROID_API --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
+make
+make install
 
 echo openssl build success
