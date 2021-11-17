@@ -1,0 +1,5 @@
+<ul>
+<li>Use PKCE for the dropbox synchronizer.</li>
+<li>Use Openssl 1.1.1l.</li>
+<li>Use NKD r22b.</li>
+</ul>
