@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
     private String message;
     private List<JavaUserOption> optionsList;
 
+    @SuppressLint("ValidFragment")
     public ShowMessage(String severity, String message, List<JavaUserOption> optionsList) {
         this.optionsList = optionsList;
         this.message = message;

@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -70,6 +71,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
      * @param edit
      * @param delete
      */
+    @SuppressLint("ValidFragment")
     public ShowEntry(JavaEntry entry, int entryIndex, boolean edit, boolean delete) {
         this.entry = entry;
         this.entryName = entry.getName();

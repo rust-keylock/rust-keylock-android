@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -56,6 +57,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
     public SelectPath() {
     }
 
+    @SuppressLint("ValidFragment")
     public SelectPath(boolean export) {
         this.export = export;
     }

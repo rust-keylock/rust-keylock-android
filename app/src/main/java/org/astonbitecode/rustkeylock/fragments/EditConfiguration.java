@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
     private transient EditText nextcloudPasswordText;
     private transient TextView dbxTokenLabel;
 
+    @SuppressLint("ValidFragment")
     public EditConfiguration(List<String> strings) {
         this.strings = new ArrayList<>(strings);
     }

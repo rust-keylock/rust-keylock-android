@@ -22,7 +22,8 @@ chmod +x tools/rustup.sh
 CARGO_HOME=$BASEDIR/tools/.cargo RUSTUP_HOME=$BASEDIR/tools/.rustup sh tools/rustup.sh --no-modify-path -y
 
 $CARGO_HOME/bin/rustup default stable
-$CARGO_HOME/bin/rustup target add arm-linux-androideabi
+$CARGO_HOME/bin/rustup target add aarch64-linux-android
+$CARGO_HOME/bin/rustup target add armv7-linux-androideabi
 
 cd $BASEDIR
 
@@ -32,10 +33,10 @@ if [ -n "${ANDROID_NDK}" ]; then
 else
 	# If the NDK does not exist, download it
 	echo "Did not find a pre-installed NDK... Downloading one"
-	curl -L https://dl.google.com/android/repository/android-ndk-r22b-linux-x86_64.zip -O
-	unzip android-ndk-r22b-linux-x86_64.zip
-	rm android-ndk-r22b-linux-x86_64.zip
-	ANDROID_NDK=`pwd`/android-ndk-r22b
+	curl -L https://dl.google.com/android/repository/android-ndk-r25c-linux.zip -O
+	unzip android-ndk-r25c-linux.zip
+	rm android-ndk-r25c-linux.zip
+	ANDROID_NDK=`pwd`/android-ndk-r25c
 	PATH=$PATH:${ANDROID_NDK}
 fi
 
@@ -56,24 +57,9 @@ echo Entered directory $CURR_DIR
 # Create a config file
 cat > config << EOF
 [target]
-[target.arm-linux-androideabi]
-# Choose for android-16
-linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi16-clang"
+[target.armv7-linux-androideabi]
+linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi24-clang"
+[target.aarch64-linux-android]
+linker = "${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android24-clang"
 EOF
 
-# Get and build the openssl
-cd $BASEDIR/tools
-
-curl -O https://www.openssl.org/source/openssl-1.1.1l.tar.gz
-tar xzf openssl-1.1.1l.tar.gz
-
-export OPENSSL_SRC_DIR=$BASEDIR/tools/openssl-1.1.1l
-
-cd $OPENSSL_SRC_DIR
-
-echo Building openssl
-./Configure ${architecture} -D__ANDROID_API__=$ANDROID_API --openssldir=$OPENSSL_SRC_DIR/build --prefix=$OPENSSL_SRC_DIR/build
-make
-make install
-
-echo openssl build success

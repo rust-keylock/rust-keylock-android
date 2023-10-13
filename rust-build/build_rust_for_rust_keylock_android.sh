@@ -13,10 +13,13 @@ RUSTUP_HOME=$BASEDIR/tools/.rustup
 PATH=$CARGO_HOME/bin:$PATH
 
 ANDROID_RUST="$BASEDIR/rust"
-ANDROID_RUST_KEYLOCK_LIB="$ANDROID_RUST/target/arm-linux-androideabi/release/librustkeylockandroid.so"
-ANDROID_JAVA_NATIVE="$BASEDIR/java/libs/armeabi/"
+ANDROID_RUST_KEYLOCK_LIB_AARCH64="$ANDROID_RUST/target/aarch64-linux-android/release/librustkeylockandroid.so"
+ANDROID_RUST_KEYLOCK_LIB_ARMV7="$ANDROID_RUST/target/armv7-linux-androideabi/release/librustkeylockandroid.so"
+ANDROID_JAVA_NATIVE_AARCH64="$BASEDIR/app/src/main/jniLibs/arm64-v8a/"
+ANDROID_JAVA_NATIVE_ARMV7="$BASEDIR/app/src/main/jniLibs/armeabi-v7a/"
 
-mkdir -p $ANDROID_JAVA_NATIVE
+mkdir -p $ANDROID_JAVA_NATIVE_AARCH64
+mkdir -p $ANDROID_JAVA_NATIVE_ARMV7
 cd $ANDROID_RUST
 
 # ANDROID_TOOLCHAIN_DIR should be already set by the pre_build_rust_keylock_android.sh
@@ -36,10 +39,18 @@ fi
 echo "ANDROID_TOOLCHAIN_DIR: $ANDROID_TOOLCHAIN_DIR"
 echo "CARGO_HOME: $CARGO_HOME"
 
-CC_arm_linux_androideabi="${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi16-clang" AR_arm_linux_androideabi="${ANDROID_TOOLCHAIN_DIR}/bin/llvm-ar" OPENSSL_STATIC=true $CARGO_HOME/bin/cargo build --target=arm-linux-androideabi --release
+export RANLIB=${ANDROID_TOOLCHAIN_DIR}/bin/llvm-ranlib
+export AR=${ANDROID_TOOLCHAIN_DIR}/bin/llvm-ar
+export CC=${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi24-clang
 
+$CARGO_HOME/bin/cargo build --target=armv7-linux-androideabi --release
 
-echo "Copying $ANDROID_RUST_KEYLOCK_LIB to $ANDROID_JAVA_NATIVE"
-cp $ANDROID_RUST_KEYLOCK_LIB $ANDROID_JAVA_NATIVE
+export CC=${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android24-clang
+$CARGO_HOME/bin/cargo build --target=aarch64-linux-android --release
+
+echo "Copying $ANDROID_RUST_KEYLOCK_LIB_AARCH64 to $ANDROID_JAVA_NATIVE_AARCH64"
+cp $ANDROID_RUST_KEYLOCK_LIB_AARCH64  $ANDROID_JAVA_NATIVE_AARCH64
+echo "Copying $ANDROID_RUST_KEYLOCK_LIB_ARMV7 to $ANDROID_JAVA_NATIVE_ARMV7"
+cp $ANDROID_RUST_KEYLOCK_LIB_ARMV7  $ANDROID_JAVA_NATIVE_ARMV7
 
 echo "Rust build for rust-keylock-android completed."

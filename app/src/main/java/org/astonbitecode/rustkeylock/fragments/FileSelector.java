@@ -20,6 +20,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.adapters.FilesAdapter;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
@@ -49,6 +50,7 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
     private TextView currentDirectoryTextView;
     private TextView selectedFileTextView;
 
+    @SuppressLint("ValidFragment")
     public FileSelector(String directoryFullPath) {
         currentDirectory = new File(directoryFullPath);
     }

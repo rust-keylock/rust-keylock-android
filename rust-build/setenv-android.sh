@@ -11,10 +11,8 @@ export CC=clang
 # Add toolchains bin directory to PATH
 export PATH=$ANDROID_TOOLCHAIN:$PATH
 # Set the Android API levels
-export ANDROID_API=16
+export ANDROID_API=30
 # Set the target architecture
-# Can be android-arm, android-arm64, android-x86, android-x86 etc
-export architecture=android-arm
 echo "============================ ENV SET ============================"
 echo "ANDROID_NDK: $ANDROID_NDK"
 echo "ANDROID_TOOLCHAIN_DIR: $ANDROID_TOOLCHAIN_DIR"
@@ -22,5 +20,4 @@ echo "ANDROID_TOOLCHAIN: $ANDROID_TOOLCHAIN"
 echo "CC: $CC"
 echo "PATH: $PATH"
 echo "ANDROID_API: $ANDROID_API"
-echo "architecture: $architecture"
 echo "================================================================="

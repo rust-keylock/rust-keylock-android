@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         this.entries = new ArrayList<>();
     }
 
+    @SuppressLint("ValidFragment")
     public ListEntries(List<JavaEntry> entries, String filter) {
         this.entries = entries;
         this.filter = filter;
