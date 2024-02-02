@@ -7,6 +7,7 @@ use rust_keylock::{AllConfigurations, Entry, Menu, UserOption, UserSelection, En
 use rust_keylock::dropbox::DropboxConfiguration;
 use rust_keylock::nextcloud::NextcloudConfiguration;
 use serde::{Deserialize, Serialize};
+use zeroize::Zeroize;
 
 pub fn handle_instance_receiver_result(instance_receiver_res: j4rs::errors::Result<InstanceReceiver>) -> crate::errors::Result<Receiver<UserSelection>> {
     let (tx, rx) = mpsc::channel();
@@ -67,33 +68,33 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
             }
             GuiResponse::AddEntry { entry } => {
                 debug!("add_entry");
-                let entry = Entry::new(entry.name,
-                                       entry.url,
-                                       entry.user,
-                                       entry.pass,
-                                       entry.desc,
+                let entry = Entry::new(entry.name.to_owned(),
+                                       entry.url.to_owned(),
+                                       entry.user.to_owned(),
+                                       entry.pass.to_owned(),
+                                       entry.desc.to_owned(),
                                        EntryMeta::new(entry.meta.leakedpassword));
 
                 UserSelection::NewEntry(entry)
             }
             GuiResponse::ReplaceEntry { entry, index } => {
                 debug!("replace_entry");
-                let entry = Entry::new(entry.name,
-                                       entry.url,
-                                       entry.user,
-                                       entry.pass,
-                                       entry.desc,
+                let entry = Entry::new(entry.name.to_owned(),
+                                       entry.url.to_owned(),
+                                       entry.user.to_owned(),
+                                       entry.pass.to_owned(),
+                                       entry.desc.to_owned(),
                                        EntryMeta::new(entry.meta.leakedpassword));
 
                 UserSelection::ReplaceEntry(index as usize, entry)
             }
             GuiResponse::GeneratePassphrase { entry, index } => {
                 debug!("generate_passphrase");
-                let entry = Entry::new(entry.name,
-                                       entry.url,
-                                       entry.user,
-                                       entry.pass,
-                                       entry.desc,
+                let entry = Entry::new(entry.name.to_owned(),
+                                       entry.url.to_owned(),
+                                       entry.user.to_owned(),
+                                       entry.pass.to_owned(),
+                                       entry.desc.to_owned(),
                                        EntryMeta::new(entry.meta.leakedpassword));
                 let index_opt = if index < 0 {
                     None
@@ -169,7 +170,8 @@ fn instance_to_gui_response(instance: Instance) -> UserSelection {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Zeroize)]
+#[zeroize(drop)]
 pub(crate) struct JavaEntryMeta {
     pub leakedpassword: bool,
 }
@@ -182,7 +184,8 @@ impl JavaEntryMeta {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Zeroize)]
+#[zeroize(drop)]
 pub struct JavaEntry {
     name: String,
     url: String,
