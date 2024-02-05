@@ -48,7 +48,7 @@ enum GuiResponse {
     DeleteEntry { index: usize },
     SetConfiguration { strings: Vec<String> },
     UserOptionSelected { user_option: JavaUserOption },
-    ExportImport { path: String, mode: usize, password: String, number: usize },
+    ExportImport { path: String, mode: usize, password: String, number: isize },
     Copy { data: String },
     GeneratePassphrase { entry: JavaEntry, index: isize },
     CheckPasswords,
