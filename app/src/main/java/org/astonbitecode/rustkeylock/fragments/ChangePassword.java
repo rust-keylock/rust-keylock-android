@@ -76,7 +76,7 @@ public class ChangePassword extends Fragment implements OnClickListener, BackBut
                 numberText1.setError("This Field cannot be empty");
             } else {
                 String pass = passwordText1.getText() != null ? passwordText1.getText().toString() : "";
-                int num = numberText1.getText() != null ? new Integer(numberText1.getText().toString()) : 0;
+                int num = numberText1.getText() != null ? Integer.parseInt(numberText1.getText().toString()) : 0;
                 InterfaceWithRust.INSTANCE.set_password(pass, num);
             }
         }

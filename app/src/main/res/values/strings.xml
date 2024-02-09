@@ -2,8 +2,6 @@
 <resources>
 
     <string name="app_name">rust-keylock</string>
-    <string name="welcome">Welcome to rust-keylock</string>
-    <string name="action_settings">Settings</string>
     <string name="dbx_app_key">7git6ovjwtdbfvm</string>
     <string name="clear_all_configurations">Clear all configurations</string>
 

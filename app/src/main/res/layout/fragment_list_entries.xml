@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/home"
-                android:layout_centerInParent="true"
                 android:text="Home"/>
 
         <Button
@@ -83,7 +82,6 @@
                 android:id="@+id/editFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="2"
                 android:hint="Filter the displayed passwords..."
                 android:inputType="text"/>
         <Button

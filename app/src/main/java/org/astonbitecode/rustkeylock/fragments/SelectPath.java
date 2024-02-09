@@ -49,6 +49,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
     private transient EditText editNumber;
     private String workingDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             .getAbsolutePath();
+    @SuppressLint("SimpleDateFormat")
     private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
     private int FRAGMENT_CODE_DIR = 11;
     private int FRAGMENT_CODE_FILE = 33;

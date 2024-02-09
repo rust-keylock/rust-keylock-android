@@ -80,7 +80,7 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
             numberText.setError("Required Field");
         } else {
             try {
-                int num = new Integer(numString);
+                int num = Integer.parseInt(numString);
                 InterfaceWithRust.INSTANCE.set_password(pass, num);
             } catch (Exception error) {
                 String message = "Incorrect number";
