@@ -40,6 +40,7 @@
             android:layout_gravity="center"
             android:gravity="center">
         <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/mainMenuButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +49,7 @@
                 android:text="Home"/>
 
         <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/checkPasswordsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +60,7 @@
                 android:text="Health"/>
 
         <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/addNewButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,7 +86,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Filter the displayed passwords..."
-                android:inputType="text"/>
+                android:inputType="text"
+                tools:ignore="Autofill"
+                android:layout_toStartOf="@id/filterButton"/>
         <Button
                 android:id="@+id/filterButton"
                 android:layout_width="wrap_content"

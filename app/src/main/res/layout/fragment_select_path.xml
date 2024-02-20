@@ -1,57 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/SelectPathLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:gravity="top"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.astonbitecode.rustkeylock.MainActivity" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scrollViewSelectPath"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="org.astonbitecode.rustkeylock.MainActivity">
 
-    <ScrollView
-        android:id="@+id/scrollViewSelectPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <GridLayout
+    <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="1"
             android:gravity="center|top"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <TextView
+        <TextView
                 android:id="@+id/selectPathLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10sp"
                 android:text="Select Path"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-            <TextView
+        <TextView
                 android:id="@+id/directoryLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Directory"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
-                <EditText
+            <EditText
                     android:id="@+id/editCustomPath"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    tools:ignore="Autofill" />
 
-                <ImageButton
+            <ImageButton
                     android:id="@+id/browseButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,28 +55,29 @@
                     android:layout_margin="5dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/open"
-                    android:text="Browse" />
-            </RelativeLayout>
+                    android:text="Browse"
+                    android:contentDescription="Browse" />
+        </RelativeLayout>
 
-            <TextView
+        <TextView
                 android:id="@+id/chooseFileNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="File Name"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
-                <EditText
+            <EditText
                     android:id="@+id/editFileName"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    tools:ignore="Autofill" />
 
-                <ImageButton
+            <ImageButton
                     android:id="@+id/browseFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,39 +86,42 @@
                     android:layout_margin="5dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/open"
-                    android:text="Browse" />
-            </RelativeLayout>
+                    android:text="Browse"
+                    android:contentDescription="Browse" />
+        </RelativeLayout>
 
-            <TextView
+        <TextView
                 android:id="@+id/selectPathPasswordLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10sp"
                 android:text="Use Password"
-                android:textAppearance="?android:attr/textAppearanceSmall" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceSmall">
+        </TextView>
 
-            <EditText
+        <EditText
                 android:id="@+id/selectPathPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                tools:ignore="Autofill" />
 
-            <TextView
+        <TextView
                 android:id="@+id/selectPathNumberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10sp"
                 android:text="Use favorite number"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <EditText
+        <EditText
                 android:id="@+id/selectPathFavoriteNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword" />
+                android:inputType="numberPassword"
+                tools:ignore="Autofill" />
 
-            <Button
+        <Button
                 android:id="@+id/setPathButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,8 +129,7 @@
                 android:layout_marginTop="33sp"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/tick"
-                android:text="Ok" />
-        </GridLayout>
-    </ScrollView>
+                android:text="Ok"/>
+    </GridLayout>
 
-</LinearLayout>
+</ScrollView>

@@ -1,6 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/ShowEntryLayout"
+              android:id="@+id/scrollViewShowEntry"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:layout_gravity="center"
@@ -11,11 +11,6 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context="org.astonbitecode.rustkeylock.MainActivity">
-
-    <ScrollView
-            android:id="@+id/scrollViewShowEntry"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -43,7 +38,8 @@
                     android:id="@+id/editName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    tools:ignore="Autofill" />
 
             <TextView
                     android:id="@+id/urlLabel"
@@ -57,7 +53,8 @@
                         android:id="@+id/editUrl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="textUri"
+                        tools:ignore="Autofill" />
 
                 <ImageButton
                         android:id="@+id/copyUrlButton"
@@ -67,7 +64,8 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10sp"
-                        android:background="@null"/>
+                        android:background="@null"
+                        android:contentDescription="Copy URL" />
             </RelativeLayout>
 
             <TextView
@@ -84,7 +82,8 @@
                         android:id="@+id/editUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        tools:ignore="Autofill" />
 
                 <ImageButton
                         android:id="@+id/copyUsernameButton"
@@ -94,7 +93,8 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10sp"
-                        android:background="@null"/>
+                        android:background="@null"
+                        android:contentDescription="Copy Username" />
             </RelativeLayout>
 
             <TextView
@@ -111,7 +111,8 @@
                         android:id="@+id/editPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        tools:ignore="Autofill,TextFields"/>
 
                 <ImageButton
                         android:id="@+id/copyPasswordButton"
@@ -121,7 +122,8 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10sp"
-                        android:background="@null"/>
+                        android:background="@null"
+                        android:contentDescription="Copy Password" />
             </RelativeLayout>
 
             <TextView
@@ -138,7 +140,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:gravity="left|top"
-                    android:paddingBottom="11sp"/>
+                    android:paddingBottom="11sp"
+                    tools:ignore="Autofill" />
 
             <GridLayout
                     android:layout_width="match_parent"
@@ -200,6 +203,4 @@
                         android:text="Yes, I am sure... Delete it!"/>
             </GridLayout>
         </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>

@@ -18,7 +18,6 @@ package org.astonbitecode.rustkeylock;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandlable;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 

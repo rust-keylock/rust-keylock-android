@@ -1,6 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/MainMenuLayout"
+              android:id="@+id/scrollViewMainMenu"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_gravity="center"
@@ -11,11 +11,6 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context="org.astonbitecode.rustkeylock.MainActivity">
-
-    <ScrollView
-            android:id="@+id/scrollViewMainMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
         <GridLayout
                 android:layout_width="match_parent"
@@ -94,8 +89,5 @@
                     android:drawableTop="@drawable/close"
                     android:text="Exit"/>
 
-
         </GridLayout>
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>
