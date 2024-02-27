@@ -9,7 +9,7 @@ rust-keylock is a password manager and its goals are to be:
 
 rust-keylock-android is an Android app that provides access to <p><a title="rust-keylock-lib" href="https://github.com/rust-keylock/rust-keylock-lib">rust-keylock-lib</a></p>.
 
-The minimum supported Android API level is 16 (4.1.2 is tested as a minimum version).
+The minimum supported Android API level is 30.
 
 <p><em>
 Warning:

@@ -1,0 +1,6 @@
+<ul>
+<li>Upgraded to latest versions of dependencies</li>
+<li>Use zeroize when needed</li>
+<li>Use NKD r25c</li>
+<li>Housekeeping: Migrated to using Gradle</li>
+</ul>
