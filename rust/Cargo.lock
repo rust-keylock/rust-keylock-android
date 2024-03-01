@@ -1224,6 +1224,8 @@ dependencies = [
 [[package]]
 name = "rust_keylock"
 version = "0.15.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "050a5929aacef1a81f76d2108f40b8c589d44f73fb7aa69b1b359d129784f30d"
 dependencies = [
  "aes",
  "async-trait",
