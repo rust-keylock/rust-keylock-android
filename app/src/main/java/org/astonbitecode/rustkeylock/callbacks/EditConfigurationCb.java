@@ -16,23 +16,25 @@
 package org.astonbitecode.rustkeylock.callbacks;
 
 import android.util.Log;
-import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.fragments.EditConfiguration;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class EditConfigurationCb extends NativeCallbackToRustChannelSupport {
+public class EditConfigurationCb {
     private final String TAG = getClass().getName();
 
-    public void apply(List<String> strings) {
+    public CompletableFuture<Object> apply(List<String> strings) {
         Log.d(TAG, "Callback for editing configuration");
-        InterfaceWithRust.INSTANCE.setCallback(this);
+        CompletableFuture<Object> f = new CompletableFuture<>();
+        InterfaceWithRust.INSTANCE.setCallbackFuture(f);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(strings, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);
+        return f;
     }
 
     private class UiThreadRunnable implements Runnable {

@@ -16,7 +16,6 @@
 package org.astonbitecode.rustkeylock.callbacks;
 
 import android.util.Log;
-import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
@@ -25,17 +24,20 @@ import org.astonbitecode.rustkeylock.fragments.ListEntries;
 import org.astonbitecode.rustkeylock.utils.Defs;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class ShowEntriesSetCb extends NativeCallbackToRustChannelSupport {
+public class ShowEntriesSetCb {
     private final String TAG = getClass().getName();
 
-    public void apply(List<JavaEntry> entries, String filter) {
+    public CompletableFuture<Object> apply(List<JavaEntry> entries, String filter) {
         Log.d(TAG, "ShowEntriesSetCb with filter " + filter);
-        InterfaceWithRust.INSTANCE.setCallback(this);
+        CompletableFuture<Object> f = new CompletableFuture<>();
+        InterfaceWithRust.INSTANCE.setCallbackFuture(f);
 
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(entries, filter, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);
+        return f;
     }
 
     private class UiThreadRunnable implements Runnable {

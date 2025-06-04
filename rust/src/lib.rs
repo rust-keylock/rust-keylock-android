@@ -27,20 +27,20 @@ extern crate serde_json;
 use std::ffi::CString;
 use std::str;
 
-use jni_sys::{JavaVM, jint, JNI_VERSION_1_6, JNIEnv, jobject};
-use j4rs::prelude::*;
+use j4rs::{prelude::*, InvocationArg};
 use j4rs_derive::*;
+use jni_sys::{jint, jobject, JNIEnv, JavaVM, JNI_VERSION_1_6};
 use libc::c_char;
 use log::*;
 
 mod android_editor;
-mod logger;
-mod japi;
 mod errors;
+mod japi;
+mod logger;
 
 #[allow(non_snake_case)]
 #[no_mangle]
-pub extern fn JNI_OnLoad(env: *mut JavaVM, _reserved: jobject) -> jint {
+pub extern "C" fn JNI_OnLoad(env: *mut JavaVM, _reserved: jobject) -> jint {
     logger::init();
     j4rs::set_java_vm(env);
     debug!("JNI_OnLoad completed!");
@@ -55,35 +55,65 @@ pub fn execute(cert_file_path_java_string: Instance) {
         .detach_thread_on_drop(false)
         .with_no_implicit_classpath()
         .with_native_lib_name("rustkeylockandroid")
-        .build() {
+        .build()
+    {
         Ok(jvm) => {
             debug!("JVM is created ");
-            let cert_file_path_java_string:j4rs::errors::Result<String> = jvm.to_rust(cert_file_path_java_string);
+            let cert_file_path_java_string: j4rs::errors::Result<String> =
+                jvm.to_rust(cert_file_path_java_string);
             if let Ok(cert_file_path) = cert_file_path_java_string {
                 ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
             }
 
-            match (jvm.create_instance("org.astonbitecode.rustkeylock.callbacks.ShowMenuCb", &Vec::new()),
-                   jvm.create_instance("org.astonbitecode.rustkeylock.callbacks.ShowEntryCb", &Vec::new()),
-                   jvm.create_instance("org.astonbitecode.rustkeylock.callbacks.ShowEntriesSetCb", &Vec::new()),
-                   jvm.create_instance("org.astonbitecode.rustkeylock.callbacks.ShowMessageCb", &Vec::new()),
-                   jvm.create_instance("org.astonbitecode.rustkeylock.callbacks.EditConfigurationCb", &Vec::new())) {
-                (Ok(show_menu_cb), Ok(show_entry_cb), Ok(show_entries_set_cb), Ok(show_message_cb), Ok(edit_configuration_cb)) => {
-                    let editor = android_editor::new(jvm,
-                                                     show_menu_cb,
-                                                     show_entry_cb,
-                                                     show_entries_set_cb,
-                                                     show_message_cb,
-                                                     edit_configuration_cb);
+            match (
+                jvm.create_instance(
+                    "org.astonbitecode.rustkeylock.callbacks.ShowMenuCb",
+                    InvocationArg::empty(),
+                ),
+                jvm.create_instance(
+                    "org.astonbitecode.rustkeylock.callbacks.ShowEntryCb",
+                    InvocationArg::empty(),
+                ),
+                jvm.create_instance(
+                    "org.astonbitecode.rustkeylock.callbacks.ShowEntriesSetCb",
+                    InvocationArg::empty(),
+                ),
+                jvm.create_instance(
+                    "org.astonbitecode.rustkeylock.callbacks.ShowMessageCb",
+                    InvocationArg::empty(),
+                ),
+                jvm.create_instance(
+                    "org.astonbitecode.rustkeylock.callbacks.EditConfigurationCb",
+                    InvocationArg::empty(),
+                ),
+            ) {
+                (
+                    Ok(show_menu_cb),
+                    Ok(show_entry_cb),
+                    Ok(show_entries_set_cb),
+                    Ok(show_message_cb),
+                    Ok(edit_configuration_cb),
+                ) => {
+                    let editor = android_editor::new(
+                        show_menu_cb,
+                        show_entry_cb,
+                        show_entries_set_cb,
+                        show_message_cb,
+                        edit_configuration_cb,
+                    );
                     debug!("Executing native rust_keylock!");
-                    rust_keylock::execute_async(Box::new(editor))
+                    tokio::runtime::Builder::new_multi_thread()
+                        .enable_all()
+                        .build()
+                        .unwrap()
+                        .block_on(rust_keylock::execute_async(Box::new(editor)))
                 }
                 (_, _, _, _, _) => {
                     error!("Could not instantiate the Java World callbacks")
                 }
             }
         }
-        Err(error) => error!("Could not execute native rust_keylock: {:?}", error)
+        Err(error) => error!("Could not execute native rust_keylock: {:?}", error),
     }
 }
 

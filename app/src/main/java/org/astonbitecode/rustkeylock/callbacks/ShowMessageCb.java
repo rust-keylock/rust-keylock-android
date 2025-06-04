@@ -16,7 +16,6 @@
 package org.astonbitecode.rustkeylock.callbacks;
 
 import android.util.Log;
-import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
@@ -24,16 +23,19 @@ import org.astonbitecode.rustkeylock.api.JavaUserOption;
 import org.astonbitecode.rustkeylock.fragments.ShowMessage;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class ShowMessageCb extends NativeCallbackToRustChannelSupport {
+public class ShowMessageCb {
     private final String TAG = getClass().getName();
 
-    public void apply(List<JavaUserOption> optionsList, String message, String severity) {
+    public CompletableFuture<Object> apply(List<JavaUserOption> optionsList, String message, String severity) {
         Log.d(TAG, "Callback for showing message " + message + " of severity " + severity);
-        InterfaceWithRust.INSTANCE.setCallback(this);
+        CompletableFuture<Object> f = new CompletableFuture<>();
+        InterfaceWithRust.INSTANCE.setCallbackFuture(f);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(optionsList, message, severity, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);
+        return f;
     }
 
     private class UiThreadRunnable implements Runnable {

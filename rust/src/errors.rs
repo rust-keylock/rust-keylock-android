@@ -14,8 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{fmt, result};
 use std::error::Error;
+use std::sync::TryLockError;
+use std::{fmt, result};
 
 use j4rs;
 
@@ -23,7 +24,7 @@ pub type Result<T> = result::Result<T, RklAndroidError>;
 
 #[derive(Debug)]
 pub struct RklAndroidError {
-    description: String
+    description: String,
 }
 
 impl fmt::Display for RklAndroidError {
@@ -40,6 +41,16 @@ impl Error for RklAndroidError {
 
 impl From<j4rs::errors::J4RsError> for RklAndroidError {
     fn from(err: j4rs::errors::J4RsError) -> RklAndroidError {
-        RklAndroidError { description: format!("{:?}", err) }
+        RklAndroidError {
+            description: format!("{:?}", err),
+        }
+    }
+}
+
+impl<T> From<TryLockError<T>> for RklAndroidError {
+    fn from(err: TryLockError<T>) -> RklAndroidError {
+        RklAndroidError {
+            description: format!("{:?}", err),
+        }
     }
 }

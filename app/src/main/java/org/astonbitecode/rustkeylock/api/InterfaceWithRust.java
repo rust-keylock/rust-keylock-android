@@ -18,17 +18,17 @@ package org.astonbitecode.rustkeylock.api;
 import android.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.j4rs.api.Instance;
-import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class InterfaceWithRust {
     private final String TAG = getClass().getName();
     public static final InterfaceWithRust INSTANCE = new InterfaceWithRust();
-    private AtomicReference<NativeCallbackToRustChannelSupport> callback = new AtomicReference<>(null);
+    private AtomicReference<CompletableFuture> callbackFuture = new AtomicReference<>(null);
     private AtomicReference<Fragment> previousFragment = new AtomicReference<>(null);
 
     private InterfaceWithRust() {
@@ -40,7 +40,7 @@ public class InterfaceWithRust {
     public native void execute(Instance<String> certFilePath);
 
     private void call(Object obj) {
-        callback.get().doCallback(obj);
+        callbackFuture.get().complete(obj);
     }
 
     public void set_password(String password, int number) {
@@ -103,8 +103,8 @@ public class InterfaceWithRust {
         call(GuiResponse.CheckPasswords());
     }
 
-    public void setCallback(NativeCallbackToRustChannelSupport newCallback) {
-        callback.set(newCallback);
+    public void setCallbackFuture(CompletableFuture newCallbackFuture) {
+        callbackFuture.set(newCallbackFuture);
     }
 
     public void updateState(Fragment newFragment) {

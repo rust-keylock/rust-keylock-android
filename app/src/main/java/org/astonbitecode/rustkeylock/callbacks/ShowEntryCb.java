@@ -16,22 +16,24 @@
 package org.astonbitecode.rustkeylock.callbacks;
 
 import android.util.Log;
-import org.astonbitecode.j4rs.api.invocation.NativeCallbackToRustChannelSupport;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.fragments.ShowEntry;
+import java.util.concurrent.CompletableFuture;
 
-public class ShowEntryCb extends NativeCallbackToRustChannelSupport {
+public class ShowEntryCb {
     private final String TAG = getClass().getName();
 
-    public void apply(JavaEntry anEntry, Integer entryIndex, Boolean edit, Boolean delete) {
+    public CompletableFuture<Object> apply(JavaEntry anEntry, Integer entryIndex, Boolean edit, Boolean delete) {
         Log.d(TAG, "ShowEntryCb");
-        InterfaceWithRust.INSTANCE.setCallback(this);
+        CompletableFuture<Object> f = new CompletableFuture<>();
+        InterfaceWithRust.INSTANCE.setCallbackFuture(f);
         MainActivity mainActivity = MainActivity.getActiveActivity();
         Runnable uiRunnable = new UiThreadRunnable(anEntry, entryIndex, edit, delete, mainActivity);
         mainActivity.runOnUiThread(uiRunnable);
+        return f;
     }
 
     private class UiThreadRunnable implements Runnable {
