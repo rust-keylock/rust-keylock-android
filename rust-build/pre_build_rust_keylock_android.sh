@@ -33,10 +33,10 @@ if [ -n "${ANDROID_NDK}" ]; then
 else
 	# If the NDK does not exist, download it
 	echo "Did not find a pre-installed NDK... Downloading one"
-	curl -L https://dl.google.com/android/repository/android-ndk-r25c-linux.zip -O
-	unzip android-ndk-r25c-linux.zip
-	rm android-ndk-r25c-linux.zip
-	ANDROID_NDK=`pwd`/android-ndk-r25c
+	curl -L https://dl.google.com/android/repository/android-ndk-r26d-linux.zip -O
+	unzip android-ndk-r26d-linux.zip
+	rm android-ndk-r26d-linux.zip
+	ANDROID_NDK=`pwd`/android-ndk-r26d
 	PATH=$PATH:${ANDROID_NDK}
 fi
 
@@ -55,11 +55,17 @@ CURR_DIR=`pwd`
 echo Entered directory $CURR_DIR
 
 # Create a config file
-cat > config << EOF
+cat > config.toml << EOF
 [target]
-[target.armv7-linux-androideabi]
-linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi24-clang"
-[target.aarch64-linux-android]
-linker = "${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android24-clang"
+ [target.armv7-linux-androideabi]
+ linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi32-clang"
+ [target.arm-linux-androideabi]
+ linker = "${ANDROID_TOOLCHAIN_DIR}/bin/armv7a-linux-androideabi32-clang"
+ [target.aarch64-linux-android]
+ linker = "${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android32-clang"
+ [target.x86_64-linux-android]
+ linker = "${ANDROID_TOOLCHAIN_DIR}/bin/x86_64-linux-android32-clang"
+ [target.i686-linux-android]
+ linker = "${ANDROID_TOOLCHAIN_DIR}/bin/i686-linux-android32-clang"
 EOF
 
