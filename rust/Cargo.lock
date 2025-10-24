@@ -988,7 +988,9 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "j4rs"
-version = "0.23.0-SNAPSHOT"
+version = "0.23.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95319514d46c6566b4bbf31883163688ec758f3544c9d7c8e1dc40de9961e772"
 dependencies = [
  "cesu8",
  "dunce",
@@ -1605,6 +1607,8 @@ dependencies = [
 [[package]]
 name = "rust_keylock"
 version = "0.16.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "718a674a27dc1a0629ce2c732989784e77e843fdd1ae7de6d9100f84ccab8f54"
 dependencies = [
  "aes",
  "aes-gcm",

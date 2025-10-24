@@ -16,9 +16,9 @@ ANDROID_RUST="$BASEDIR/rust"
 ANDROID_RUST_KEYLOCK_LIB_AARCH64="$ANDROID_RUST/target/aarch64-linux-android/release/librustkeylockandroid.so"
 ANDROID_RUST_KEYLOCK_LIB_ARMV7="$ANDROID_RUST/target/armv7-linux-androideabi/release/librustkeylockandroid.so"
 ANDROID_RUST_KEYLOCK_LIB_x86="$ANDROID_RUST/target/x86_64-linux-android/release/librustkeylockandroid.so"
-ANDROID_JAVA_NATIVE_AARCH64="$BASEDIR/app/src/main/jniLibs/arm64-v8a/"
-ANDROID_JAVA_NATIVE_ARMV7="$BASEDIR/app/src/main/jniLibs/armeabi-v7a/"
-ANDROID_JAVA_NATIVE_x86="$BASEDIR/app/src/main/jniLibs/x86_64/"
+ANDROID_JAVA_NATIVE_AARCH64="$BASEDIR/App/src/main/jniLibs/arm64-v8a/"
+ANDROID_JAVA_NATIVE_ARMV7="$BASEDIR/App/src/main/jniLibs/armeabi-v7a/"
+ANDROID_JAVA_NATIVE_x86="$BASEDIR/App/src/main/jniLibs/x86_64/"
 
 mkdir -p $ANDROID_JAVA_NATIVE_AARCH64
 mkdir -p $ANDROID_JAVA_NATIVE_ARMV7
@@ -71,5 +71,5 @@ echo "Rust build for rust-keylock-android completed."
 
 # emulator -list-avds
 # emulator -avd $AVD_NAME
-# adb install $REPO_BASE/rust-keylock-android/app/build/outputs/apk/debug/app-debug.apk
+# adb install $REPO_BASE/App/build/outputs/apk/debug/App-debug.apk
 # adb logcat | grep rustkeylock

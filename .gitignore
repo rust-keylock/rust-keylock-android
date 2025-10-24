@@ -20,5 +20,5 @@
 .cxx
 local.properties
 /.idea/
-/app/build
-/app/src/main/jniLibs
+/App/build
+/App/src/main/jniLibs

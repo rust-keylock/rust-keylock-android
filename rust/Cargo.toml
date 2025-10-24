@@ -9,8 +9,8 @@ name = "rustkeylockandroid"
 crate-type = ["cdylib"]
 
 [dependencies]
-rust_keylock = { path = "../../rust-keylock-lib" }
-j4rs = { path = "../../../j4rs/rust" }
+rust_keylock = "0.16"
+j4rs = "0.23"
 j4rs_derive = "0.1"
 libc = "0.2"
 jni-sys = "0.4"
