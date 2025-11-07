@@ -73,9 +73,9 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String user = nextcloudUsernameText.getText() != null ? nextcloudUsernameText.getText().toString() : "";
             String password = nextcloudPasswordText.getText() != null ? nextcloudPasswordText.getText().toString() : "";
             String useSelfSignedCertString = Boolean.valueOf(useSelfSignedCert.isChecked()).toString();
-            Log.d(TAG, "Saving configuration (password not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
+            Log.d(TAG, "Saving configuration (passwords not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
 
-            InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5)));
+            InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5), strings.get(6)));
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
