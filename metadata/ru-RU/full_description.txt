@@ -1,0 +1,4 @@
+<b>rust-keylock-android</b> это менеджер паролей для Android, часть <b>rust-keylock</b>. Приложение предоставляет доступ к <p><a title="rust-keylock-lib" href="https://github.com/rust-keylock/rust-keylock-lib">rust-keylock-lib</a></p>.
+
+<b>Его цели:</b><ul><li>безопасность;</li><li>простота использования;</li><li>портативность;</li><li>расширяемость.</li></ul>
+<em><b>Внимание</b>: проект пока не прошёл формальных или официальных проверок безопасности. Используйте его на свой страх и риск!</em>
