@@ -1601,9 +1601,7 @@ dependencies = [
 
 [[package]]
 name = "rust_keylock"
-version = "0.16.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "718a674a27dc1a0629ce2c732989784e77e843fdd1ae7de6d9100f84ccab8f54"
+version = "0.17.0"
 dependencies = [
  "aes",
  "aes-gcm",
@@ -1621,7 +1619,6 @@ dependencies = [
  "hyper 1.7.0",
  "hyper-tls 0.6.0",
  "hyper-util",
- "lazy_static",
  "log",
  "native-tls",
  "openssl-probe",
@@ -1667,7 +1664,7 @@ dependencies = [
 
 [[package]]
 name = "rustkeylockandroid"
-version = "0.16.4"
+version = "0.17.0"
 dependencies = [
  "android_logger",
  "async-trait",

@@ -48,7 +48,7 @@ pub extern "C" fn JNI_OnLoad(env: *mut JavaVM, _reserved: jobject) -> jint {
 
 #[allow(non_snake_case)]
 #[call_from_java("org.astonbitecode.rustkeylock.api.InterfaceWithRust.execute")]
-pub fn execute(cert_file_path_java_string: Instance) {
+pub fn execute() {
     debug!("Executing rust-keylock native");
     match j4rs::JvmBuilder::new()
         .detach_thread_on_drop(false)
@@ -58,12 +58,6 @@ pub fn execute(cert_file_path_java_string: Instance) {
     {
         Ok(jvm) => {
             debug!("JVM is created ");
-            let cert_file_path_java_string: j4rs::errors::Result<String> =
-                jvm.to_rust(cert_file_path_java_string);
-            if let Ok(cert_file_path) = cert_file_path_java_string {
-                ::std::env::set_var("SSL_CERT_FILE", cert_file_path);
-            }
-
             match (
                 jvm.create_instance(
                     "org.astonbitecode.rustkeylock.callbacks.ShowMenuCb",
