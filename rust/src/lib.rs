@@ -17,7 +17,6 @@
 extern crate android_logger;
 extern crate j4rs;
 extern crate jni_sys;
-extern crate lazy_static;
 extern crate libc;
 extern crate log;
 extern crate rust_keylock;

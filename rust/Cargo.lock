@@ -1675,7 +1675,6 @@ dependencies = [
  "j4rs",
  "j4rs_derive",
  "jni-sys",
- "lazy_static",
  "libc",
  "log",
  "openssl",
