@@ -26,6 +26,29 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <TextView
+                android:id="@+id/generalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:text="General"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+                android:id="@+id/browserExtensionTokenLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:text="Browser extension token"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        <EditText
+                android:id="@+id/browserExtensionToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                tools:ignore="Autofill" />
+
+        <TextView
                 android:id="@+id/nextcloudLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

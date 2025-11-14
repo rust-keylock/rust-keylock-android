@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "org.astonbitecode.rustkeylock"
         minSdk 30
-        targetSdk 34
+        targetSdk 35
         versionCode 1700
         versionName "0.17.0"
 
