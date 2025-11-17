@@ -15,7 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,16 +44,16 @@ public class ChangePassword extends Fragment implements OnClickListener, BackBut
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_change_password, container, false);
 
-        EditText passwordText1 = (EditText) rootView.findViewById(R.id.editPasswordChangePassword1);
+        EditText passwordText1 = rootView.findViewById(R.id.editPasswordChangePassword1);
         this.passwordText1 = passwordText1;
-        EditText numberText1 = (EditText) rootView.findViewById(R.id.editFavoriteNumberChangePassword1);
+        EditText numberText1 = rootView.findViewById(R.id.editFavoriteNumberChangePassword1);
         this.numberText1 = numberText1;
-        EditText passwordText2 = (EditText) rootView.findViewById(R.id.editPasswordChangePassword2);
+        EditText passwordText2 = rootView.findViewById(R.id.editPasswordChangePassword2);
         this.passwordText2 = passwordText2;
-        EditText numberText2 = (EditText) rootView.findViewById(R.id.editFavoriteNumberChangePassword2);
+        EditText numberText2 = rootView.findViewById(R.id.editFavoriteNumberChangePassword2);
         this.numberText2 = numberText2;
 
-        Button b = (Button) rootView.findViewById(R.id.buttonApplyChanges);
+        Button b = rootView.findViewById(R.id.buttonApplyChanges);
         b.setOnClickListener(this);
 
         restore(savedInstanceState);

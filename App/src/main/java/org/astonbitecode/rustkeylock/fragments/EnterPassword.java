@@ -19,7 +19,7 @@ import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,9 +57,9 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
 			image.setImageResource(R.drawable.unmbrella);
 		}
 		*/
-        EditText passwordText = (EditText) rootView.findViewById(R.id.editPassword);
+        EditText passwordText = rootView.findViewById(R.id.editPassword);
         this.passwordText = passwordText;
-        EditText numberText = (EditText) rootView.findViewById(R.id.editFavoriteNumber);
+        EditText numberText = rootView.findViewById(R.id.editFavoriteNumber);
         this.numberText = numberText;
         Button b = (Button) rootView.findViewById(R.id.buttonDecrypt);
         b.setOnClickListener(this);

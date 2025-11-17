@@ -16,7 +16,6 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.adapters.FilesAdapter;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
-import android.app.ListFragment;
+import androidx.fragment.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,12 +60,12 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_file_selector, container, false);
-        Button sdb = (Button) rootView.findViewById(R.id.selectFileButton);
+        Button sdb = rootView.findViewById(R.id.selectFileButton);
         sdb.setOnClickListener(this);
-        TextView cdtv = (TextView) rootView.findViewById(R.id.fileSelectorCurrent);
+        TextView cdtv = rootView.findViewById(R.id.fileSelectorCurrent);
         cdtv.setText("Showing files in \"" + currentDirectory.getName() + "\"");
         currentDirectoryTextView = cdtv;
-        TextView sftv = (TextView) rootView.findViewById(R.id.fileSelectorSelectedFile);
+        TextView sftv = rootView.findViewById(R.id.fileSelectorSelectedFile);
         sftv.setText(NO_FILE_SELECTED);
         selectedFileTextView = sftv;
 
@@ -115,12 +114,7 @@ public class FileSelector extends ListFragment implements OnClickListener, BackB
     }
 
     private List<FileEntry> getFilesOfDirectory() {
-        String[] files = currentDirectory.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File current, String name) {
-                return new File(current, name).isFile();
-            }
-        });
+        String[] files = currentDirectory.list((current, name) -> new File(current, name).isFile());
 
         List<FileEntry> fileEntries = new ArrayList<>();
         if (currentDirectory != null) {

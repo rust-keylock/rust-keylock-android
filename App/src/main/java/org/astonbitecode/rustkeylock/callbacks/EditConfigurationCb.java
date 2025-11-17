@@ -50,7 +50,7 @@ public class EditConfigurationCb {
         public void run() {
             EditConfiguration ec = new EditConfiguration(strings);
             mainActivity.setBackButtonHandler(ec);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, ec).commitAllowingStateLoss();
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, ec).commitAllowingStateLoss();
             InterfaceWithRust.INSTANCE.updateState(ec);
         }
     }

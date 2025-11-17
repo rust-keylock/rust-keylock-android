@@ -16,7 +16,7 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,7 +131,7 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         passwordText.setText(strings.get(2));
         this.nextcloudPasswordText = passwordText;
         CheckBox useSsc = (CheckBox) v.findViewById(R.id.editNextcloudUseSelfSignedCert);
-        useSsc.setChecked(Boolean.valueOf(strings.get(3)));
+        useSsc.setChecked(Boolean.parseBoolean(strings.get(3)));
         this.useSelfSignedCert = useSsc;
 
         TextView dbxTokenLabel = (TextView) v.findViewById(R.id.editConfigurationTokenLabel);

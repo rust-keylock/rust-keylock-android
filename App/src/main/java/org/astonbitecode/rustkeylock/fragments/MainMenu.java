@@ -15,7 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,19 +49,19 @@ public class MainMenu extends Fragment implements OnClickListener, BackButtonHan
     }
 
     private void addButtonListeners(View rootView) {
-        Button bl = (Button) rootView.findViewById(R.id.listButton);
+        Button bl = rootView.findViewById(R.id.listButton);
         bl.setOnClickListener(this);
-        Button bs = (Button) rootView.findViewById(R.id.saveButton);
+        Button bs = rootView.findViewById(R.id.saveButton);
         bs.setOnClickListener(this);
-        Button bcp = (Button) rootView.findViewById(R.id.changePasswordButton);
+        Button bcp = rootView.findViewById(R.id.changePasswordButton);
         bcp.setOnClickListener(this);
-        Button be = (Button) rootView.findViewById(R.id.exitButton);
+        Button be = rootView.findViewById(R.id.exitButton);
         be.setOnClickListener(this);
-        Button bexp = (Button) rootView.findViewById(R.id.exportButton);
+        Button bexp = rootView.findViewById(R.id.exportButton);
         bexp.setOnClickListener(this);
-        Button binp = (Button) rootView.findViewById(R.id.importButton);
+        Button binp = rootView.findViewById(R.id.importButton);
         binp.setOnClickListener(this);
-        Button bcfg = (Button) rootView.findViewById(R.id.mmEditConfigurationButton);
+        Button bcfg = rootView.findViewById(R.id.mmEditConfigurationButton);
         bcfg.setOnClickListener(this);
     }
 

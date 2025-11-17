@@ -16,7 +16,7 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.ListFragment;
+import androidx.fragment.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +35,7 @@ import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
 import org.astonbitecode.rustkeylock.api.stubs.JavaMenu;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,7 @@ import java.util.List;
 public class ListEntries extends ListFragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 8765819759487480794L;
     private final String TAG = getClass().getName();
-    private List<JavaEntry> entries;
-    private transient EntriesAdapter entriesAdapter;
+    private final List<JavaEntry> entries;
     private String filter;
     private transient EditText filterEditText;
 
@@ -58,24 +58,24 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         restore(savedInstanceState);
         if (savedInstanceState != null) {
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(filter));
         }
         View rootView = inflater.inflate(R.layout.fragment_list_entries, container, false);
-        Button nb = (Button) rootView.findViewById(R.id.addNewButton);
+        Button nb = rootView.findViewById(R.id.addNewButton);
         nb.setOnClickListener(this);
-        Button mmb = (Button) rootView.findViewById(R.id.mainMenuButton);
+        Button mmb = rootView.findViewById(R.id.mainMenuButton);
         mmb.setOnClickListener(this);
-        Button cp = (Button) rootView.findViewById(R.id.checkPasswordsButton);
+        Button cp = rootView.findViewById(R.id.checkPasswordsButton);
         cp.setOnClickListener(this);
-        Button fb = (Button) rootView.findViewById(R.id.filterButton);
+        Button fb = rootView.findViewById(R.id.filterButton);
         fb.setOnClickListener(this);
 
-        filterEditText = (EditText) rootView.findViewById(R.id.editFilter);
+        filterEditText = rootView.findViewById(R.id.editFilter);
         filterEditText.setText(filter);
-        if (filter.length() > 0) {
+        if (!filter.isEmpty()) {
             filterEditText.setFocusableInTouchMode(true);
             filterEditText.requestFocus();
         } else {
@@ -91,12 +91,12 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        entriesAdapter = new EntriesAdapter(getActivity(), R.layout.entry_element, entries);
+        EntriesAdapter entriesAdapter = new EntriesAdapter(getActivity(), R.layout.entry_element, entries);
         setListAdapter(entriesAdapter);
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int pos, long id) {
+    public void onListItemClick(@NotNull ListView l, @NotNull View v, int pos, long id) {
         Log.d(TAG, "Clicked entry with index " + pos + " in the list of entries");
         super.onListItemClick(l, v, pos, id);
         InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.ShowEntry(pos));
@@ -137,8 +137,8 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         }
     }
 
-    private class PleaseWaitRunnable implements Runnable {
-        private MainActivity mainActivity = null;
+    private static class PleaseWaitRunnable implements Runnable {
+        private final MainActivity mainActivity;
 
         public PleaseWaitRunnable() {
             this.mainActivity = MainActivity.getActiveActivity();
@@ -148,7 +148,7 @@ public class ListEntries extends ListFragment implements OnClickListener, BackBu
         public void run() {
             PleaseWait pw = new PleaseWait();
             mainActivity.setBackButtonHandler(null);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, pw).commitAllowingStateLoss();
         }
     }
 }

@@ -15,7 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.rustkeylock.api.stubs.GuiResponse;
 

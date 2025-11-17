@@ -24,7 +24,7 @@ import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.adapters.DirectoriesAdapter;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
-import android.app.ListFragment;
+import androidx.fragment.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jetbrains.annotations.NotNull;
 
 public class DirectorySelector extends ListFragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = 1382314701594691684L;
@@ -51,16 +52,15 @@ public class DirectorySelector extends ListFragment implements OnClickListener, 
     private TextView currentDirectoryTextView;
 
     public DirectorySelector() {
-        File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        currentDirectory = downloads;
+        currentDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_directory_selector, container, false);
-        Button sdb = (Button) rootView.findViewById(R.id.selectDirectoryButton);
+        Button sdb = rootView.findViewById(R.id.selectDirectoryButton);
         sdb.setOnClickListener(this);
-        TextView cdtv = (TextView) rootView.findViewById(R.id.directorySelectorCurrent);
+        TextView cdtv = rootView.findViewById(R.id.directorySelectorCurrent);
         currentDirectoryTextView = cdtv;
 
         // Hide the soft keyboard
@@ -75,7 +75,7 @@ public class DirectorySelector extends ListFragment implements OnClickListener, 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         directoriesAdapter = new DirectoriesAdapter(getActivity(), R.layout.directory_element,
-                new ArrayList<DirectoryEntry>());
+                new ArrayList<>());
         setListAdapter(directoriesAdapter);
         currentDirectoryTextView.setText(CURR_DIR_PREFIX + currentDirectory.getAbsolutePath());
         applyCurrentDirectory();
@@ -94,7 +94,7 @@ public class DirectorySelector extends ListFragment implements OnClickListener, 
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int pos, long id) {
+    public void onListItemClick(@NotNull ListView l, @NotNull View v, int pos, long id) {
         Log.d(TAG, "Clicked directory with index " + pos + " in the list of directories");
         super.onListItemClick(l, v, pos, id);
 

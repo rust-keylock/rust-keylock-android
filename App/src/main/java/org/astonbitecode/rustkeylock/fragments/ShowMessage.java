@@ -16,7 +16,7 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,7 +85,7 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
     }
 
     private void prepareUiElements(View v) {
-        ImageView iv = (ImageView) v.findViewById(R.id.messageImage);
+        ImageView iv = v.findViewById(R.id.messageImage);
         if (severity.equals("Info")) {
             iv.setImageResource(R.drawable.infoimage);
         } else if (severity.equals("Warning")) {
@@ -95,13 +95,13 @@ public class ShowMessage extends Fragment implements OnClickListener, BackButton
         } else {
             iv.setVisibility(View.GONE);
         }
-        TextView severityTextView = (TextView) v.findViewById(R.id.messageSeverity);
+        TextView severityTextView = v.findViewById(R.id.messageSeverity);
         severityTextView.setText(severity);
-        TextView messageTextView = (TextView) v.findViewById(R.id.message);
+        TextView messageTextView = v.findViewById(R.id.message);
         messageTextView.setText(message);
-        Button b1 = (Button) v.findViewById(R.id.button1);
-        Button b2 = (Button) v.findViewById(R.id.button2);
-        Button b3 = (Button) v.findViewById(R.id.button3);
+        Button b1 = v.findViewById(R.id.button1);
+        Button b2 = v.findViewById(R.id.button2);
+        Button b3 = v.findViewById(R.id.button3);
 
         if (optionsList.size() > 0) {
             JavaUserOption juo = optionsList.get(0);

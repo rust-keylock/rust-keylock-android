@@ -15,7 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.callbacks;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import org.astonbitecode.rustkeylock.MainActivity;
 import org.astonbitecode.rustkeylock.R;
@@ -71,7 +71,7 @@ public class ShowMenuCb {
             if (fragment instanceof BackButtonHandler) {
                 mainActivity.setBackButtonHandler((BackButtonHandler) fragment);
             }
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, fragment)
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)
                     .commitAllowingStateLoss();
 
             InterfaceWithRust.INSTANCE.updateState(fragment);

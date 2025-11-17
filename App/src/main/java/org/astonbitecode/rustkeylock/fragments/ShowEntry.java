@@ -16,7 +16,6 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -32,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.api.JavaEntry;
@@ -194,39 +194,39 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
 
     private void prepareUiElements(View v) {
         if (!(edit || delete)) {
-            TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
+            TextView passTitle = v.findViewById(R.id.passwordLabel);
             passTitle.append(" (tap here to reveal or hide)");
             passTitle.setOnClickListener(this);
         } else if (edit) {
-            TextView passTitle = (TextView) v.findViewById(R.id.passwordLabel);
+            TextView passTitle = v.findViewById(R.id.passwordLabel);
             passTitle.append(" (tap here to generate new passphrase)");
             passTitle.setOnClickListener(this);
         }
-        Button eb = (Button) v.findViewById(R.id.editButton);
+        Button eb = v.findViewById(R.id.editButton);
         eb.setOnClickListener(this);
         eb.setVisibility((edit || delete) ? View.GONE : View.VISIBLE);
-        Button db = (Button) v.findViewById(R.id.deleteButton);
+        Button db = v.findViewById(R.id.deleteButton);
         db.setOnClickListener(this);
         db.setVisibility((edit || delete) ? View.GONE : View.VISIBLE);
 
-        TextView title = (TextView) v.findViewById(R.id.showEntryLabel);
+        TextView title = v.findViewById(R.id.showEntryLabel);
         if (delete) {
             title.setText("Deleting Password! Are you sure?");
         }
 
-        EditText nameText = (EditText) v.findViewById(R.id.editName);
+        EditText nameText = v.findViewById(R.id.editName);
         nameText.setText(entry.getName());
         nameText.setEnabled(edit);
         this.nameText = nameText;
-        EditText urlText = (EditText) v.findViewById(R.id.editUrl);
+        EditText urlText = v.findViewById(R.id.editUrl);
         urlText.setText(entry.getUrl());
         urlText.setEnabled(edit);
         this.urlText = urlText;
-        EditText userText = (EditText) v.findViewById(R.id.editUser);
+        EditText userText = v.findViewById(R.id.editUser);
         userText.setText(entry.getUser());
         userText.setEnabled(edit);
         this.userText = userText;
-        EditText passwordText = (EditText) v.findViewById(R.id.editPassword);
+        EditText passwordText = v.findViewById(R.id.editPassword);
         passwordText.setText(entry.getPass());
         passwordText.setEnabled(edit);
         if (!edit) {
@@ -237,22 +237,22 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
             passwordText.setTextColor(Color.BLACK);
         }
         this.passwordText = passwordText;
-        EditText descriptionText = (EditText) v.findViewById(R.id.editDescriptionArea);
+        EditText descriptionText = v.findViewById(R.id.editDescriptionArea);
         descriptionText.setText(entry.getDesc());
         descriptionText.setEnabled(edit);
         this.descriptionText = descriptionText;
 
-        Button ub = (Button) v.findViewById(R.id.updateButton);
+        Button ub = v.findViewById(R.id.updateButton);
         ub.setOnClickListener(this);
         ub.setVisibility((edit && !delete) ? View.VISIBLE : View.GONE);
-        Button aysb = (Button) v.findViewById(R.id.areYouSureButton);
+        Button aysb = v.findViewById(R.id.areYouSureButton);
         aysb.setOnClickListener(this);
         aysb.setVisibility((!edit && delete) ? View.VISIBLE : View.GONE);
-        ImageButton cub = (ImageButton) v.findViewById(R.id.copyUrlButton);
+        ImageButton cub = v.findViewById(R.id.copyUrlButton);
         cub.setOnClickListener(this);
-        ImageButton cuserb = (ImageButton) v.findViewById(R.id.copyUsernameButton);
+        ImageButton cuserb = v.findViewById(R.id.copyUsernameButton);
         cuserb.setOnClickListener(this);
-        ImageButton cpb = (ImageButton) v.findViewById(R.id.copyPasswordButton);
+        ImageButton cpb = v.findViewById(R.id.copyPasswordButton);
         cpb.setOnClickListener(this);
     }
 

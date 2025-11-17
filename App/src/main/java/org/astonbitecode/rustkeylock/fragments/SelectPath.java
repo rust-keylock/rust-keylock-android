@@ -16,8 +16,8 @@
 package org.astonbitecode.rustkeylock.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,8 +51,8 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
             .getAbsolutePath();
     @SuppressLint("SimpleDateFormat")
     private String filename = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + "_rust_keylock";
-    private int FRAGMENT_CODE_DIR = 11;
-    private int FRAGMENT_CODE_FILE = 33;
+    private final int FRAGMENT_CODE_DIR = 11;
+    private final int FRAGMENT_CODE_FILE = 33;
     private transient BackButtonHandler backButtonHandler = this;
 
     public SelectPath() {
@@ -98,41 +98,41 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
             title.setText("What to import?");
         }
 
-        ImageButton bib = (ImageButton) view.findViewById(R.id.browseButton);
+        ImageButton bib = view.findViewById(R.id.browseButton);
         bib.setOnClickListener(this);
-        ImageButton bfb = (ImageButton) view.findViewById(R.id.browseFileButton);
+        ImageButton bfb = view.findViewById(R.id.browseFileButton);
         bfb.setOnClickListener(this);
         bfb.setVisibility(export ? View.GONE : View.VISIBLE);
 
-        EditText editPath = (EditText) view.findViewById(R.id.editCustomPath);
+        EditText editPath = view.findViewById(R.id.editCustomPath);
         editPath.setText(workingDirectoryPath);
         this.editPath = editPath;
 
-        EditText editFilename = (EditText) view.findViewById(R.id.editFileName);
+        EditText editFilename = view.findViewById(R.id.editFileName);
         editFilename.setText(filename);
         editFilename.setEnabled(export);
         this.editFileName = editFilename;
 
-        TextView editPasswordLabel = (TextView) view.findViewById(R.id.selectPathPasswordLabel);
+        TextView editPasswordLabel = view.findViewById(R.id.selectPathPasswordLabel);
         editPasswordLabel.setVisibility(export ? View.GONE : View.VISIBLE);
-        EditText editPassword = (EditText) view.findViewById(R.id.selectPathPassword);
+        EditText editPassword = view.findViewById(R.id.selectPathPassword);
         editPassword.setVisibility(export ? View.GONE : View.VISIBLE);
         this.editPassword = editPassword;
 
-        TextView editNumberLabel = (TextView) view.findViewById(R.id.selectPathNumberLabel);
+        TextView editNumberLabel = view.findViewById(R.id.selectPathNumberLabel);
         editNumberLabel.setVisibility(export ? View.GONE : View.VISIBLE);
-        EditText editNumber = (EditText) view.findViewById(R.id.selectPathFavoriteNumber);
+        EditText editNumber = view.findViewById(R.id.selectPathFavoriteNumber);
         editNumber.setVisibility(export ? View.GONE : View.VISIBLE);
         this.editNumber = editNumber;
 
-        Button setPathButton = (Button) view.findViewById(R.id.setPathButton);
+        Button setPathButton = view.findViewById(R.id.setPathButton);
         setPathButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.browseButton) {
-            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.addToBackStack(this.getClass().getName());
             DirectorySelector ds = new DirectorySelector();
             ds.setTargetFragment(this, FRAGMENT_CODE_DIR);
@@ -140,7 +140,7 @@ public class SelectPath extends Fragment implements BackButtonHandler, OnClickLi
             ft.commit();
             backButtonHandler = ds;
         } else if (view.getId() == R.id.browseFileButton) {
-            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
             ft.addToBackStack(this.getClass().getName());
             FileSelector fs = new FileSelector(workingDirectoryPath);
             fs.setTargetFragment(this, FRAGMENT_CODE_FILE);

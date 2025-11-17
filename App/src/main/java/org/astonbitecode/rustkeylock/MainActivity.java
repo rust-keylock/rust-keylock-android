@@ -15,13 +15,13 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.fragment.app.FragmentActivity;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandlable;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
 
-public class MainActivity extends Activity implements BackButtonHandlable {
+public class MainActivity extends FragmentActivity implements BackButtonHandlable {
     private static MainActivity ACTIVE_ACTIVITY;
 
     public static MainActivity getActiveActivity() {

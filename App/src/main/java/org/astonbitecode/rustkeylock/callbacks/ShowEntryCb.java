@@ -36,12 +36,12 @@ public class ShowEntryCb {
         return f;
     }
 
-    private class UiThreadRunnable implements Runnable {
-        private MainActivity mainActivity = null;
-        private JavaEntry entry = null;
-        private int entryIndex;
-        private boolean edit = false;
-        private boolean delete = false;
+    private static class UiThreadRunnable implements Runnable {
+        private final MainActivity mainActivity;
+        private final JavaEntry entry;
+        private final int entryIndex;
+        private final boolean edit;
+        private final boolean delete;
 
         public UiThreadRunnable(JavaEntry entry, int entryIndex, boolean edit, boolean delete, MainActivity mainActivity) {
             this.entry = entry;
@@ -55,7 +55,7 @@ public class ShowEntryCb {
         public void run() {
             ShowEntry se = new ShowEntry(entry, entryIndex, edit, delete);
             mainActivity.setBackButtonHandler(se);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, se).commitAllowingStateLoss();
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, se).commitAllowingStateLoss();
             InterfaceWithRust.INSTANCE.updateState(se);
         }
     }

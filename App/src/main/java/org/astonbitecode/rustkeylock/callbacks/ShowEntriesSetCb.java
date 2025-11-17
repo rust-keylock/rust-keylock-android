@@ -55,7 +55,7 @@ public class ShowEntriesSetCb {
         public void run() {
             ListEntries le = new ListEntries(entries, filter);
             mainActivity.setBackButtonHandler(le);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, le).commitAllowingStateLoss();
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, le).commitAllowingStateLoss();
             InterfaceWithRust.INSTANCE.updateState(le);
         }
     }

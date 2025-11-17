@@ -56,7 +56,7 @@ public class ShowMessageCb {
         public void run() {
             ShowMessage sm = new ShowMessage(severity, message, optionsList);
             mainActivity.setBackButtonHandler(sm);
-            mainActivity.getFragmentManager().beginTransaction().replace(R.id.container, sm).commitAllowingStateLoss();
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.container, sm).commitAllowingStateLoss();
         }
     }
 
