@@ -259,7 +259,7 @@ public class ShowEntry extends Fragment implements OnClickListener, BackButtonHa
     @Override
     public void onBackButton() {
         Log.d(TAG, "Back button pressed");
-        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(""));
+        InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.EntriesList(null));
     }
 
     @Override

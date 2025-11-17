@@ -255,7 +255,7 @@ pub(crate) enum JavaMenu {
     TryPass { b: bool },
     ChangePass,
     Main,
-    EntriesList { filter: String },
+    EntriesList { filter: Option<String> },
     NewEntry,
     ShowEntry { idx: usize },
     EditEntry { idx: usize },
