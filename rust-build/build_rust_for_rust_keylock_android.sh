@@ -73,3 +73,7 @@ echo "Rust build for rust-keylock-android completed."
 # emulator -avd $AVD_NAME
 # adb install $REPO_BASE/App/build/outputs/apk/debug/App-debug.apk
 # adb logcat | grep rustkeylock
+# Log in and have access to the app files via adb
+# adb shell
+# run-as org.astonbitecode.rustkeylock
+# cd /data/data/org.astonbitecode.rustkeylock
