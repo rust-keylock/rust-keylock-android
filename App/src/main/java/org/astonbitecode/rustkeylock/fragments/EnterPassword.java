@@ -15,6 +15,7 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.widget.ProgressBar;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
@@ -29,11 +30,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static android.view.View.VISIBLE;
+
 public class EnterPassword extends Fragment implements OnClickListener, BackButtonHandler {
     private static final long serialVersionUID = -9046678064745197531L;
     private final String TAG = getClass().getName();
     private transient EditText passwordText;
     private transient EditText numberText;
+    private transient ProgressBar progressBarDecrypting;
+    private transient Button buttonDecrypt;
 
     public EnterPassword() {
     }
@@ -61,8 +66,10 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
         this.passwordText = passwordText;
         EditText numberText = rootView.findViewById(R.id.editFavoriteNumber);
         this.numberText = numberText;
-        Button b = (Button) rootView.findViewById(R.id.buttonDecrypt);
+        Button b = rootView.findViewById(R.id.buttonDecrypt);
         b.setOnClickListener(this);
+        this.progressBarDecrypting = rootView.findViewById(R.id.progressBar_decrypting);
+        this.buttonDecrypt = rootView.findViewById(R.id.buttonDecrypt);
 
         return rootView;
     }
@@ -81,6 +88,8 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
         } else {
             try {
                 int num = Integer.parseInt(numString);
+                this.progressBarDecrypting.setVisibility(VISIBLE);
+                this.buttonDecrypt.setEnabled(false);
                 InterfaceWithRust.INSTANCE.set_password(pass, num);
             } catch (Exception error) {
                 String message = "Incorrect number";
