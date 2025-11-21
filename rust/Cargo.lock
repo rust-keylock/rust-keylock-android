@@ -1602,6 +1602,8 @@ dependencies = [
 [[package]]
 name = "rust_keylock"
 version = "0.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "58bbac027a8ded337042846892072ca133abe8c16b493673f8a71eac0d9c96ab"
 dependencies = [
  "aes",
  "aes-gcm",
