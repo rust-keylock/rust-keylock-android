@@ -15,6 +15,8 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.fragments;
 
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import org.astonbitecode.rustkeylock.R;
 import org.astonbitecode.rustkeylock.api.InterfaceWithRust;
@@ -30,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class EnterPassword extends Fragment implements OnClickListener, BackButtonHandler {
@@ -38,6 +41,7 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
     private transient EditText passwordText;
     private transient EditText numberText;
     private transient ProgressBar progressBarDecrypting;
+    private transient ImageView rklLogo;
     private transient Button buttonDecrypt;
 
     public EnterPassword() {
@@ -70,6 +74,9 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
         b.setOnClickListener(this);
         this.progressBarDecrypting = rootView.findViewById(R.id.progressBar_decrypting);
         this.buttonDecrypt = rootView.findViewById(R.id.buttonDecrypt);
+        this.rklLogo = rootView.findViewById(R.id.changableImage);
+        this.rklLogo.setVisibility(VISIBLE);
+        this.progressBarDecrypting.setVisibility(INVISIBLE);
 
         return rootView;
     }
@@ -88,6 +95,7 @@ public class EnterPassword extends Fragment implements OnClickListener, BackButt
         } else {
             try {
                 int num = Integer.parseInt(numString);
+                this.rklLogo.setVisibility(INVISIBLE);
                 this.progressBarDecrypting.setVisibility(VISIBLE);
                 this.buttonDecrypt.setEnabled(false);
                 InterfaceWithRust.INSTANCE.set_password(pass, num);
