@@ -1,0 +1,38 @@
+name: Build & Publish Rust Keylock Release APK
+on:
+  push:
+    tags:
+      - '*'
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: setup JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Build native
+        run: bash ./buildall.sh
+      - name: Build android
+        run: bash ./gradlew build
+      - name: Create keystore
+        env:
+          FS_KEYSTORE_FILE: ${{ secrets.RKL_KEYSTORE_FILE }}
+        run: |
+          echo "$FS_KEYSTORE_FILE" >> rkl.jks.base64
+          base64 --decode rkl.jks.base64 > ./rkl.jks
+      - name: Sign apk
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.RKL_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.RKL_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.RKL_KEY_PASSWORD }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          bash ./gradlew assembleRelease
+          jarsigner -verbose -sigalg SHA256withECDSA -digestalg SHA-512 -keystore ./rkl.jks ./App/build/outputs/apk/release/App-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
+          zipalign -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/rust-keylock-andrtoid-$TAG_NAME.apk

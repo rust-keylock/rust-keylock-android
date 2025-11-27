@@ -54,16 +54,22 @@ echo "********* BUILDING for aarch64-linux-android *********"
 export CC=${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android32-clang
 $CARGO_HOME/bin/cargo build --target=aarch64-linux-android --release
 
-echo "********* BUILDING for x86_64-linux-android *********"
-export CC=${ANDROID_TOOLCHAIN_DIR}/bin/x86_64-linux-android32-clang
-$CARGO_HOME/bin/cargo build --target=x86_64-linux-android --release
-
 echo "Copying $ANDROID_RUST_KEYLOCK_LIB_AARCH64 to $ANDROID_JAVA_NATIVE_AARCH64"
 cp $ANDROID_RUST_KEYLOCK_LIB_AARCH64  $ANDROID_JAVA_NATIVE_AARCH64
 echo "Copying $ANDROID_RUST_KEYLOCK_LIB_ARMV7 to $ANDROID_JAVA_NATIVE_ARMV7"
 cp $ANDROID_RUST_KEYLOCK_LIB_ARMV7  $ANDROID_JAVA_NATIVE_ARMV7
-echo "Copying $ANDROID_RUST_KEYLOCK_LIB_x86 to $ANDROID_JAVA_NATIVE_x86"
-cp $ANDROID_RUST_KEYLOCK_LIB_x86  $ANDROID_JAVA_NATIVE_x86
+
+if [ -n "${BUILD_x86}" ]; then
+	  echo "********* BUILDING for x86_64-linux-android *********"
+    export CC=${ANDROID_TOOLCHAIN_DIR}/bin/x86_64-linux-android32-clang
+    $CARGO_HOME/bin/cargo build --target=x86_64-linux-android --release
+    echo "Copying $ANDROID_RUST_KEYLOCK_LIB_x86 to $ANDROID_JAVA_NATIVE_x86"
+    cp $ANDROID_RUST_KEYLOCK_LIB_x86  $ANDROID_JAVA_NATIVE_x86
+  else
+    echo "********************* INFO *********************"
+    echo "       Skip building for x86"
+    echo "*************************************************"
+fi
 
 echo "Rust build for rust-keylock-android completed."
 
