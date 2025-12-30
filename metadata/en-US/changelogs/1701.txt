@@ -1,0 +1,7 @@
+<ul>
+<li>Increase bcrypt cost</li>
+<li>Do not accept certificates with wrong DN etc</li>
+<li>Fix synchronization issues</li>
+<li>Usability improvements</li>
+<li>Use lazylock instead of lazy_static</li>
+</ul>
