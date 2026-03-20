@@ -41,7 +41,7 @@ import java.util.List;
 public class EditConfiguration extends Fragment implements OnClickListener, BackButtonHandler {
     private final String TAG = getClass().getName();
     private transient ArrayList<String> strings;
-    private transient EditText browserExtensionTokenText;
+    private transient EditText browserExtensionPassphraseText;
     private transient CheckBox useSelfSignedCert;
     private transient EditText nextcloudUrlText;
     private transient EditText nextcloudUsernameText;
@@ -74,10 +74,10 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
             String user = nextcloudUsernameText.getText() != null ? nextcloudUsernameText.getText().toString() : "";
             String password = nextcloudPasswordText.getText() != null ? nextcloudPasswordText.getText().toString() : "";
             String useSelfSignedCertString = Boolean.valueOf(useSelfSignedCert.isChecked()).toString();
-            String browserExtensionTokenString = browserExtensionTokenText.getText() != null ? browserExtensionTokenText.getText().toString() : "";
+            String browserExtensionPassphraseString = browserExtensionPassphraseText.getText() != null ? browserExtensionPassphraseText.getText().toString() : "";
             Log.d(TAG, "Saving configuration (passwords not shown here): " + url + ", " + user + ", " + useSelfSignedCertString);
 
-            InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5), browserExtensionTokenString));
+            InterfaceWithRust.INSTANCE.set_configuration(Arrays.asList(url, user, password, useSelfSignedCertString, strings.get(5), browserExtensionPassphraseString));
         } else if (view.getId() == R.id.editConfigurationCancelButton) {
             Log.d(TAG, "Clicked Cancel in configuration");
             InterfaceWithRust.INSTANCE.go_to_menu(JavaMenu.Main());
@@ -141,9 +141,9 @@ public class EditConfiguration extends Fragment implements OnClickListener, Back
         );
         this.dbxTokenLabel = dbxTokenLabel;
 
-        EditText browserExtensionTokenText = (EditText) v.findViewById(R.id.browserExtensionToken);
-        browserExtensionTokenText.setText(strings.get(6));
-        this.browserExtensionTokenText = browserExtensionTokenText;
+        EditText browserExtensionPassphraseText = (EditText) v.findViewById(R.id.browserExtensionPassphrase);
+        browserExtensionPassphraseText.setText(strings.get(6));
+        this.browserExtensionPassphraseText = browserExtensionPassphraseText;
     }
 
     @Override

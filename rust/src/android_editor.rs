@@ -321,7 +321,7 @@ async fn show_configuration(
         nextcloud.use_self_signed_certificate.to_string(),
         DropboxConfiguration::dropbox_url(),
         dropbox.decrypted_token().unwrap().to_string(),
-        general.browser_extension_token.unwrap_or_default(),
+        general.browser_extension_passphrase.unwrap_or_default(),
     ];
 
     let instance_res_future = Jvm::invoke_into_sendable_async(
