@@ -15,11 +15,13 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.fragment.app.FragmentActivity;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandlable;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
+import org.astonbitecode.rustkeylock.service.RklForegroundService;
 
 public class MainActivity extends FragmentActivity implements BackButtonHandlable {
     private static MainActivity ACTIVE_ACTIVITY;
@@ -39,6 +41,8 @@ public class MainActivity extends FragmentActivity implements BackButtonHandlabl
         ACTIVE_ACTIVITY = this;
         if (savedInstanceState == null) {
             initializeRust();
+            Intent intent = new Intent(this, RklForegroundService.class);
+            startForegroundService(intent);
         } else {
             // Restore the back button handler
             backButtonHandler = (BackButtonHandler) savedInstanceState.get("backButtonHandler");
