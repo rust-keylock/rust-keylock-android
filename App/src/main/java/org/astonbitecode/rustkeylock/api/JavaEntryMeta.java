@@ -15,7 +15,9 @@
 // along with rust-keylock.  If not, see <http://www.gnu.org/licenses/>.
 package org.astonbitecode.rustkeylock.api;
 
-public class JavaEntryMeta {
+import java.io.Serializable;
+
+public class JavaEntryMeta implements Serializable {
     public boolean leakedpassword;
 
     public boolean isLeakedpassword() {
