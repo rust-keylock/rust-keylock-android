@@ -18,6 +18,7 @@ package org.astonbitecode.rustkeylock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentActivity;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandlable;
 import org.astonbitecode.rustkeylock.handlers.back.BackButtonHandler;
@@ -47,6 +48,15 @@ public class MainActivity extends FragmentActivity implements BackButtonHandlabl
             // Restore the back button handler
             backButtonHandler = (BackButtonHandler) savedInstanceState.get("backButtonHandler");
         }
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (backButtonHandler != null) {
+                    backButtonHandler.onBackButton();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(callback);
     }
 
     @Override
@@ -68,15 +78,6 @@ public class MainActivity extends FragmentActivity implements BackButtonHandlabl
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "resuming rust-keylock...");
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (backButtonHandler != null) {
-            backButtonHandler.onBackButton();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override

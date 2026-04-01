@@ -83,3 +83,7 @@ echo "Rust build for rust-keylock-android completed."
 # adb shell
 # run-as org.astonbitecode.rustkeylock
 # cd /data/data/org.astonbitecode.rustkeylock
+
+# Debug browser extension
+# adb devices
+# web-ext run -t firefox-android --android-device=emulator-5554 --adb-remove-old-artifacts

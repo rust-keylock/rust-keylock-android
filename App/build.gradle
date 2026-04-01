@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId "org.astonbitecode.rustkeylock"
         minSdk 30
-        targetSdk 35
-        versionCode 1701
+        targetSdk 36
+        versionCode 1800
         versionName "0.18.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
