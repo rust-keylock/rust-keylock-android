@@ -26,6 +26,11 @@ jobs:
         run: |
           echo "$FS_KEYSTORE_FILE" >> rkl.jks.base64
           base64 --decode rkl.jks.base64 > ./rkl.jks
+      - name: Add zipalign to PATH
+        run: |
+          # Locate the build-tools directory and add it to GITHUB_PATH
+          BUILD_TOOLS_VERSION=$(ls $ANDROID_HOME/build-tools | tail -n 1)
+          echo "$ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION" >> $GITHUB_PATH
       - name: Sign apk
         env:
           KEYSTORE_PASSWORD: ${{ secrets.RKL_KEYSTORE_PASSWORD }}
