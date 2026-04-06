@@ -44,5 +44,5 @@ jobs:
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: Publish apk
+          name: signed-apk
           path: ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk
