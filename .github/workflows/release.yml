@@ -46,6 +46,6 @@ jobs:
           ls -la ./App/build/outputs/apk/release/
           echo `ls -la ./App/build/outputs/apk/release/`
       - name: Publish APK to Release
-        run: gh release create ${{ github.ref_name }} /App/build/outputs/apk/release/rust-keylock-android-v0.18.0.apk
+        run: gh release create ${{ github.ref_name }} ./App/build/outputs/apk/release/rust-keylock-android-${{ github.ref_name }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
