@@ -41,6 +41,8 @@ jobs:
           bash ./gradlew assembleRelease
           jarsigner -verbose -sigalg SHA256withECDSA -digestalg SHA-512 -keystore ./rkl.jks ./App/build/outputs/apk/release/App-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
           zipalign -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk
+          ls -la ./App/build/outputs/apk/release/
+          echo `ls -la ./App/build/outputs/apk/release/`
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
