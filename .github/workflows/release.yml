@@ -41,8 +41,8 @@ jobs:
           TAG_NAME: ${{ github.ref_name }}
         run: |
           bash ./gradlew assembleRelease
-          jarsigner -verbose -sigalg SHA256withECDSA -digestalg SHA-512 -keystore ./rkl.jks ./App/build/outputs/apk/release/App-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
-          zipalign -p -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk
+          zipalign -p -f -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/App-release-aligned.apk
+          jarsigner -verbose -sigalg SHA256withECDSA -digestalg SHA-512 -keystore ./rkl.jks ./App/build/outputs/apk/release/App-release-aligned.apk --out ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
           ls -la ./App/build/outputs/apk/release/
           echo `ls -la ./App/build/outputs/apk/release/`
       - name: Publish APK to Release
