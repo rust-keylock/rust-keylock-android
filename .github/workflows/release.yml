@@ -42,7 +42,7 @@ jobs:
         run: |
           bash ./gradlew assembleRelease
           zipalign -p -f -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/App-release-aligned.apk
-          jarsigner -verbose -sigalg SHA256withECDSA -digestalg SHA-512 -keystore ./rkl.jks ./App/build/outputs/apk/release/App-release-aligned.apk --out ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
+          apksigner sign --ks ./rkl.jks --ks-key-alias $KEY_ALIAS --ks-pass pass:$KEYSTORE_PASSWORD --key-pass pass:$KEY_PASSWORD --out ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk ./App/build/outputs/apk/release/App-release-aligned.apk
           ls -la ./App/build/outputs/apk/release/
           echo `ls -la ./App/build/outputs/apk/release/`
       - name: Publish APK to Release
