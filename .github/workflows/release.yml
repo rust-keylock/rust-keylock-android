@@ -5,6 +5,8 @@ on:
       - '*'
 env:
   CARGO_TERM_COLOR: always
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,8 +45,7 @@ jobs:
           zipalign -v 4 ./App/build/outputs/apk/release/App-release-unsigned.apk ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk
           ls -la ./App/build/outputs/apk/release/
           echo `ls -la ./App/build/outputs/apk/release/`
-      - name: Upload Signed APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: signed-apk
-          path: ./App/build/outputs/apk/release/rust-keylock-android-v0.18.0.apk
+      - name: Publish APK to Release
+        run: gh release create ${{ github.ref_name }} /App/build/outputs/apk/release/rust-keylock-android-v0.18.0.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
