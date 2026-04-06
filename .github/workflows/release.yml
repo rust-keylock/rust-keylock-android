@@ -45,8 +45,6 @@ jobs:
           echo `ls -la ./App/build/outputs/apk/release/`
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
-        env:
-          TAG_NAME: ${{ github.ref_name }}
         with:
           name: signed-apk
-          path: ./App/build/outputs/apk/release/rust-keylock-android-$TAG_NAME.apk
+          path: ./App/build/outputs/apk/release/rust-keylock-android-v0.18.0.apk
