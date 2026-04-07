@@ -1,4 +1,9 @@
-[![For Android: Get it from F-Droid](https://raw.githubusercontent.com/rust-keylock/rust-keylock.github.io/master/img/fdroid.png)](https://f-droid.org/en/packages/org.astonbitecode.rustkeylock/)
+<p align="center">
+  <a href="https://f-droid.org/en/packages/org.astonbitecode.rustkeylock/"><img src="https://raw.githubusercontent.com/rust-keylock/rust-keylock.github.io/master/img/fdroid.png" /></a>
+</p>
+<p align="center">
+  <a href="https://github.com/rust-keylock/rust-keylock-android/releases/latest"><img src="gh-images/getit.png" /></a>
+</p>
 
 [![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
 
