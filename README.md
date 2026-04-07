@@ -1,4 +1,5 @@
 [![For Android: Get it from F-Droid](https://raw.githubusercontent.com/rust-keylock/rust-keylock.github.io/master/img/fdroid.png)](https://f-droid.org/en/packages/org.astonbitecode.rustkeylock/)
+[![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
 
 ___rust-keylock___ is a password manager and its goals are to be:
 
@@ -9,7 +10,7 @@ ___rust-keylock___ is a password manager and its goals are to be:
 
 ---
 
-[![Build Status](https://app.travis-ci.com/rust-keylock/rust-keylock-android.svg?branch=master)](https://app.travis-ci.com/rust-keylock/rust-keylock-android)
+[![Build & Publish Rust Keylock Release APK](https://github.com/rust-keylock/rust-keylock-android/actions/workflows/release.yml/badge.svg)](https://github.com/rust-keylock/rust-keylock-android/actions/workflows/release.yml)
 
 ___rust-keylock-android___ is an Android app that provides access to [rust-keylock-lib](https://github.com/rust-keylock/rust-keylock-lib).
 
@@ -23,7 +24,7 @@ Instructions can be found [here](https://rust-keylock.github.io/download/rkl/).
 
 # More info
 
-* [FAQ](https://rust-keylock.github.io/faq/rkl/) 
+* [FAQ](https://rust-keylock.github.io/faq/rkl/)
 * [Wiki](https://rust-keylock.github.io/wiki/)
 
 ## Screenshots
