@@ -5,8 +5,6 @@
   <a href="https://github.com/rust-keylock/rust-keylock-android/releases/latest"><img src="gh-images/getit.png" /></a>
 </p>
 
-[![For Android: Get it from GitHub](gh-images/getit.png)](https://github.com/rust-keylock/rust-keylock-android/releases/latest)
-
 ___rust-keylock___ is a password manager and its goals are to be:
 
 * Secure
