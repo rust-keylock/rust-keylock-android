@@ -1962,7 +1962,7 @@ dependencies = [
 
 [[package]]
 name = "rustkeylockandroid"
-version = "0.18.0"
+version = "0.18.1"
 dependencies = [
  "android_logger",
  "async-trait",
