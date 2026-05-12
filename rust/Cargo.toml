@@ -1,6 +1,6 @@
 [package]
 name = "rustkeylockandroid"
-version = "0.18.0"
+version = "0.18.1"
 authors = ["aston <astonbitecode@gmail.com>"]
 edition = "2018"
 
